@@ -58,7 +58,6 @@ class FeatureExtractor:
             planting_recency=self._planting_recency(resolved, episode),
             suspended_density=len(suspended) / episode,
             broken_count=len(broken),
-            fair_clue_density=self._fair_clue_density(resolved, episode),
             sentiment_velocity=self._sentiment_velocity(series.nodes, episode),
             perceived_time_jump=self._perceived_time_jump(series.nodes, episode),
             active_thread_count=self._active_threads(open_entries),
@@ -73,23 +72,6 @@ class FeatureExtractor:
             if item.entry.origin_episode <= episode
         ]
         return episode - max(plants) if plants else episode
-
-    @staticmethod
-    def _fair_clue_density(resolved, episode: int) -> float:
-        """Share of reveals so far that had a plant before them.
-
-        Low values mean reveals keep arriving unearned -- the structural signature
-        of a story that surprises without satisfying.
-        """
-        reveals = [
-            item
-            for item in resolved
-            if item.payoff is not None and item.payoff.episode <= episode
-        ]
-        if not reveals:
-            return 1.0
-        fair = [item for item in reveals if item.entry.origin_episode < item.payoff.episode]
-        return len(fair) / len(reveals)
 
     @staticmethod
     def _sentiment_velocity(nodes: list[NarrativeNode], episode: int) -> float:

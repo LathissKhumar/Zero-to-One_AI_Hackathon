@@ -150,7 +150,6 @@ class BoundaryFeatures(BaseModel):
     planting_recency: int = 0
     suspended_density: float = 0.0
     broken_count: int = 0
-    fair_clue_density: float = 0.0
     sentiment_velocity: float = 0.0
     perceived_time_jump: float = 0.0
     active_thread_count: int = 0
@@ -159,6 +158,6 @@ class BoundaryFeatures(BaseModel):
         """Ordered mapping for the model. Key order is the training contract."""
         return {
             name: float(getattr(self, name))
-            for name in self.model_fields
+            for name in type(self).model_fields
             if name != "episode"
         }

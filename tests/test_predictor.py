@@ -24,7 +24,6 @@ def training_rows() -> list[dict]:
                     "planting_recency": chapter % 3,
                     "suspended_density": 0.1,
                     "broken_count": 0,
-                    "fair_clue_density": 0.8,
                     "sentiment_velocity": 0.0,
                     "perceived_time_jump": 0.0,
                     "active_thread_count": 2,

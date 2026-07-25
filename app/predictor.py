@@ -31,7 +31,6 @@ FEATURE_ORDER: tuple[str, ...] = (
     "planting_recency",
     "suspended_density",
     "broken_count",
-    "fair_clue_density",
     "sentiment_velocity",
     "perceived_time_jump",
     "active_thread_count",
