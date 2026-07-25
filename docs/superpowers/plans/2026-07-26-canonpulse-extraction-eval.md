@@ -67,6 +67,15 @@ A rule-based extractor that reads episode text and emits a graph. It exists beca
 
 - [ ] **Step 1: Write the failing tests**
 
+> **Corrected after review.** The fixture originally written here paraphrased
+> `twist-02` and `twist-05` from `data/manifest/last_monsoon.yaml` — same
+> characters, same swim→dive beat, same cassette reveal. Requiring the extractor
+> to pass it reintroduced, through the brief, exactly the answer-key circularity
+> this plan exists to remove. **The fixture must share no characters, objects or
+> beats with any manifest.** Invent an unrelated scenario that still exercises a
+> promise being opened, a negated capability later contradicted, and a resolution
+> that pays something off. Do not consult a manifest while writing it.
+
 ```python
 # tests/test_heuristic_extractor.py
 from __future__ import annotations
@@ -76,12 +85,9 @@ from app.heuristic_extractor import HeuristicExtractor
 
 
 def episodes() -> list[dict]:
-    return [
-        {"series_id": "s", "episode": 1, "synopsis": "Asha finds a cassette. She promises to play it when the rain returns."},
-        {"series_id": "s", "episode": 3, "synopsis": "Tara admits she never learned to swim."},
-        {"series_id": "s", "episode": 20, "synopsis": "Tara dives into the black channel water."},
-        {"series_id": "s", "episode": 30, "synopsis": "The cassette finally plays. It was never her father's voice."},
-    ]
+    """Scenario authored independently of every manifest. See the note above:
+    a fixture drawn from the answer key silently tunes the extractor to it."""
+    ...  # unrelated genre, names and props; see tests/test_heuristic_extractor.py
 
 
 def test_extraction_conforms_to_the_extractor_protocol():
@@ -390,3 +396,10 @@ git commit -m "feat: report ledger correctness and end-to-end discrimination sep
 **Type consistency.** `ExtractionResult`, `Series`, `Manifest`, `DiscriminationReport` are used with the field names defined in the committed modules. `evaluate_series` and `EndToEndReport` are used consistently across Tasks 2, 3 and 4.
 
 **Known risk.** Task 2's `test_the_extracted_score_is_strictly_weaker_than_the_authored_one` will fail if the heuristic extractor happens to recover the graph perfectly. That would mean the extractor was tuned to the answer key, which Task 1 Step 3 forbids — so the failure is informative, and the fix is to weaken the tuning, never to weaken the assertion.
+
+**Review correction, carried into Task 4.** The original Task 1 fixture was drawn
+from the manifest (see the note in Task 1 Step 1). Even after correcting it, any
+extractor rule that happens to align with `twist-02` or `twist-05` should be
+treated as an easy case by construction. When Task 4 reports the end-to-end
+number, say which manifest items the extractor recovers — a clean recovery of
+those two specifically is weaker evidence than recovery of the other nine.
