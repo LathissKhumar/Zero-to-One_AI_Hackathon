@@ -209,3 +209,145 @@ def test_correctly_identified_holes_by_content_in_the_real_extraction():
         load_series(SERIES), load_manifest(MANIFEST), extractor=HeuristicExtractor()
     )
     assert report.extracted.holes_caught == 0
+
+
+def test_the_content_gate_rejects_the_locket_coincidence_without_help_from_competition():
+    """Regression for the exact coincidence the content gate was added to
+    kill: `contradiction-88-110` and `hole-04` share five words -- {all, for,
+    his, once, with} -- none of which is a corpus-frequent series word (all
+    sit well under the 12%-of-episodes document-frequency ceiling), but every
+    one of which is an ordinary English function word. Previously this pair
+    was excluded only because a stronger candidate outbid it in the mutual-
+    best contest -- remove every intentional_twist item from the manifest so
+    there is no competing candidate left to mask the gate's real behaviour,
+    and the coincidence must still be rejected on content grounds alone."""
+    series = load_series(SERIES)
+    manifest = load_manifest(MANIFEST)
+    holes_only = Manifest(
+        series_id=manifest.series_id,
+        authored_by=manifest.authored_by,
+        items=[item for item in manifest.items if item.defect_class != "intentional_twist"],
+    )
+    from app.evaluation import _episode_rows
+
+    extraction = HeuristicExtractor().extract(_episode_rows(series))
+    mapping = _match_extracted_ids(extraction.entries, extraction.excerpts, manifest=holes_only, series=series)
+    assert mapping.get("contradiction-88-110") != "hole-04"
+
+
+def test_the_content_gate_rejects_alien_text_sharing_only_stopwords():
+    """A fabricated, out-of-domain entry bracketing a manifest anchor but
+    sharing nothing with it besides ordinary function words ("while", "the")
+    must not be credited. Before the stopword list, both of those words
+    cleared the corpus-frequency gate in a small synthetic corpus (each word
+    appears in exactly the one excerpt supplied, which sits at or under any
+    frequency ceiling) and so counted as "discriminative" agreement."""
+    manifest = Manifest(
+        series_id="s",
+        authored_by="t",
+        items=[
+            ManifestItem(
+                defect_id="hole-01",
+                defect_class="accidental_hole",
+                planted_episode=50,
+                expected_state="broken",
+            )
+        ],
+    )
+    anchor_text = "While the tide pulled back, the locket flashed silver in her palm."
+    series = Series(
+        id="s",
+        title="t",
+        genre="g",
+        total_episodes=200,
+        excerpts=[Excerpt(id="ex-50", episode=50, text=anchor_text)],
+    )
+    alien_text = "While the machine hummed, engineers debated the calibration once more."
+    entry = LedgerEntry(
+        id="contradiction-49-51",
+        kind="contradiction",
+        description="alien",
+        episodes=[49, 51],
+        excerpt_ids=["ex-alien"],
+    )
+    alien_excerpt = Excerpt(id="ex-alien", episode=50, text=alien_text)
+    mapping = _match_extracted_ids([entry], [alien_excerpt], manifest, series)
+    assert mapping.get("contradiction-49-51") != "hole-01"
+
+
+def test_small_positional_drift_still_matches_correctly():
+    """A real extractor's detected span can land a beat off the manifest's
+    exact plant episode even when it has cited the right content. A small
+    drift (here, +1) must not throw the match out when content agreement is
+    otherwise strong."""
+    manifest = Manifest(
+        series_id="s",
+        authored_by="t",
+        items=[
+            ManifestItem(
+                defect_id="hole-01",
+                defect_class="accidental_hole",
+                planted_episode=50,
+                expected_state="broken",
+            )
+        ],
+    )
+    anchor_text = "The lantern's brass hinge cracked the night the ferry sank."
+    series = Series(
+        id="s",
+        title="t",
+        genre="g",
+        total_episodes=200,
+        excerpts=[Excerpt(id="ex-50", episode=50, text=anchor_text)],
+    )
+    drifted_text = "The lantern's brass hinge, the very one that cracked, still smelled of smoke."
+    drifted_excerpt = Excerpt(id="ex-51", episode=51, text=drifted_text)
+    entry = LedgerEntry(
+        id="contradiction-51-51",
+        kind="contradiction",
+        description="",
+        episodes=[51],
+        excerpt_ids=["ex-51"],
+    )
+    mapping = _match_extracted_ids([entry], [drifted_excerpt], manifest, series)
+    assert mapping.get("contradiction-51-51") == "hole-01"
+
+
+def test_large_positional_drift_does_not_match():
+    """The same content agreement as the small-drift test above, but the
+    entry's detected span is now 5 episodes away from the manifest anchor --
+    beyond any reasonable tolerance for "the extractor found the right thing,
+    a beat late." This must still fail to match; positional tolerance is a
+    small allowance for imprecision, not a wide window that erases position
+    as a signal."""
+    manifest = Manifest(
+        series_id="s",
+        authored_by="t",
+        items=[
+            ManifestItem(
+                defect_id="hole-01",
+                defect_class="accidental_hole",
+                planted_episode=50,
+                expected_state="broken",
+            )
+        ],
+    )
+    anchor_text = "The lantern's brass hinge cracked the night the ferry sank."
+    series = Series(
+        id="s",
+        title="t",
+        genre="g",
+        total_episodes=200,
+        excerpts=[Excerpt(id="ex-50", episode=50, text=anchor_text)],
+    )
+    drifted_text = "The lantern's brass hinge, the very one that cracked, still smelled of smoke."
+    drifted_excerpt = Excerpt(id="ex-55", episode=55, text=drifted_text)
+    entry = LedgerEntry(
+        id="contradiction-55-55",
+        kind="contradiction",
+        description="",
+        episodes=[55],
+        excerpt_ids=["ex-55"],
+    )
+    mapping = _match_extracted_ids([entry], [drifted_excerpt], manifest, series)
+    assert mapping.get("contradiction-55-55") != "hole-01"

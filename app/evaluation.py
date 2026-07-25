@@ -33,30 +33,59 @@ credited with recovering manifest item ``X`` only when all three hold:
      may only match ``outstanding_obligation`` or ``clean_control`` items --
      a promise can never "recover" a plot hole no matter where it falls.
 
-  2. Position. One of ``X``'s own anchor episodes falls inside the entry's
-     detected span, inclusive (``entry.origin_episode <= anchor <=
-     entry.latest_episode``). The anchor is ``X.planted_episode``, and for an
+  2. Position, with a small tolerance. One of ``X``'s own anchor episodes
+     falls inside the entry's detected span, widened by
+     ``_POSITION_TOLERANCE`` episodes on either end (``entry.origin_episode -
+     _POSITION_TOLERANCE <= anchor <= entry.latest_episode +
+     _POSITION_TOLERANCE``). The anchor is ``X.planted_episode``, and for an
      ``intentional_twist`` also ``X.payoff_episode`` when present -- a twist
      is defined by *both* ends (the plant and the reveal that later resolves
      it), and a real detection may bracket either one depending on which pair
-     of episodes the extractor's own rules happened to pair up.
+     of episodes the extractor's own rules happened to pair up. An earlier
+     version of this rule used exact containment with zero tolerance, on the
+     reasoning that a wider window would let unrelated things match by
+     coincidence. That reasoning predates content agreement (below) doing any
+     work: with exact containment, a byte-perfect extraction whose episode
+     numbers were uniformly off by one collapsed from 20/20 correct matches
+     to 2/20 (recall 1.000 -> 0.333) with content agreement carrying none of
+     the load, because position rejected the pair before content was ever
+     consulted. Now that every candidate must also clear the content gate,
+     a couple of episodes of positional slack means "the right thing, found
+     a beat late" rather than "something unrelated happened to be nearby."
 
   3. Content agreement. Position alone is not evidence: two *unrelated*
      contradictions -- different characters, different threads -- can share
      nothing but the coincidence that one's planted episode falls between the
      other's detected span. (This happened for real: `HeuristicExtractor`
      over this series produces a contradiction spanning episodes 88 and 110 --
-     a ferry survivor's account and a sound engineer's remark, sharing no
-     content -- that used to get credited with hole-04, a locket described
-     brass at episode 2 and silver at episode 90, purely because 88 <= 90 <=
-     110.) So a match additionally requires the entry and the manifest item to
-     share at least one *discriminative* word: a lowercase content word drawn
-     from the entry's own cited excerpts, intersected with a word drawn from
-     the series' excerpts at ``X``'s own anchor episode(s), after discarding
-     words common enough across the whole series (character names who narrate
+     a ferry survivor's account and a sound engineer's remark -- that used to
+     get credited with hole-04, a locket described brass at episode 2 and
+     silver at episode 90, purely because 88 <= 90 <= 110. That pair does
+     *not* "share nothing content-wise", as an earlier version of this
+     docstring claimed: it shares five words -- "all", "for", "his", "once",
+     "with" -- every one of them an ordinary English function word, none of
+     them evidence the two passages are about the same thing. It was excluded
+     from the final report only because a stronger, unrelated candidate
+     outbid it in the mutual-best contest below, not because the content gate
+     itself caught it; remove the competing candidate and the coincidence
+     comes straight back.) So a match additionally requires the entry and the
+     manifest item to share at least ``_MIN_SHARED_DISCRIMINATIVE_WORDS``
+     *discriminative* words: lowercase content words drawn from the entry's
+     own cited excerpts, intersected with words drawn from the series'
+     excerpts at ``X``'s own anchor episode(s), after discarding (a) words
+     common enough across the whole series (character names who narrate
      constantly, recurring nouns) to carry no distinguishing signal on their
-     own. Sharing "Asha" -- present in a third of this series' episodes --
-     proves nothing; sharing "silver" or "locket" does.
+     own, and (b) ordinary English stopwords (``_STOPWORDS``), which a
+     corpus-frequency ceiling alone cannot catch -- a word can be common in
+     English generally while still being rare enough in a 220-episode corpus
+     to look "discriminative" by frequency alone. Sharing "Asha" -- present
+     in a third of this series' episodes -- proves nothing; neither does
+     sharing "his" or "once", however rare they are in this particular
+     corpus. Sharing "silver" or "locket" does. Requiring two independent
+     discriminative words rather than one is a second, orthogonal safeguard:
+     it makes a single unlucky content-word coincidence far less likely to
+     survive on its own, on top of (not instead of) the stopword and
+     frequency filters.
 
 Assignment: matching is a **stable, order-independent one-to-one assignment**,
 not first-come-first-served. Every kind-compatible, position-valid,
@@ -137,6 +166,67 @@ _WORD_PATTERN = re.compile(r"[A-Za-z']+")
 # itself out of the two texts merely being about the same series.
 _COMMON_WORD_FRACTION = 0.12
 
+# Ordinary function words (articles, pronouns, prepositions, auxiliaries,
+# conjunctions, contractions) that are "discriminative" only by the corpus-
+# frequency test above -- with 220 short excerpts, the frequency ceiling is
+# ~26 documents, and words like "while", "once" or "his" are common enough in
+# ordinary prose to sit under that ceiling without ever meaning anything.
+# Measured: two random unrelated episode excerpts share at least one such
+# word 14% of the time (42/300 probes); a fabricated alien-domain paragraph
+# ("Quantum lattice compilers...") shared only "while" with 20 real anchors
+# and would otherwise have passed the gate at every single one. No document-
+# frequency threshold can fix this because these words are frequent in
+# English generally, not in this series specifically -- some of them (e.g.
+# "his", at 7/220 episodes) are individually *rare enough* in this corpus to
+# clear a frequency ceiling entirely. They have to be named directly.
+_STOPWORDS: frozenset[str] = frozenset(
+    {
+        "a", "about", "above", "after", "again", "against", "all", "am", "an",
+        "and", "any", "are", "aren't", "as", "at", "be", "because", "been",
+        "before", "being", "below", "between", "both", "but", "by", "can",
+        "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does",
+        "doesn't", "doing", "don't", "down", "during", "each", "few", "for",
+        "from", "further", "had", "hadn't", "has", "hasn't", "have",
+        "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here",
+        "here's", "hers", "herself", "him", "himself", "his", "how", "how's",
+        "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't",
+        "it", "it's", "its", "itself", "let's", "me", "more", "most",
+        "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on",
+        "once", "only", "or", "other", "ought", "our", "ours", "ourselves",
+        "out", "over", "own", "said", "same", "shan't", "she", "she'd",
+        "she'll", "she's", "should", "shouldn't", "so", "some", "such",
+        "than", "that", "that's", "the", "their", "theirs", "them",
+        "themselves", "then", "there", "there's", "these", "they", "they'd",
+        "they'll", "they're", "they've", "this", "those", "through", "to",
+        "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd",
+        "we'll", "we're", "we've", "went", "were", "weren't", "what", "what's",
+        "when", "when's", "where", "where's", "which", "while", "who",
+        "who's", "whom", "why", "why's", "will", "with", "won't", "would",
+        "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your",
+        "yours", "yourself", "yourselves",
+    }
+)
+
+# Sharing exactly one discriminative word is still weak evidence at this
+# corpus's scale: `contradiction-88-110` and `hole-04` share five
+# after-stopword words purely by chance (`{all, for, his, once, with}` before
+# the stopword list above removes them); requiring a second, independent word
+# of agreement makes a single unlucky coincidence far less likely to survive
+# on its own, on top of (not instead of) the stopword and frequency filters.
+_MIN_SHARED_DISCRIMINATIVE_WORDS = 2
+
+# A real extractor's own episode-span detection is imprecise by a episode or
+# two even when it has correctly identified the right piece of content (its
+# rules pick the nearest sentence boundary, not the manifest's exact plant
+# line). Exact containment made that imprecision fatal: drifting every
+# detected episode number by +1 collapsed a byte-perfect extraction's recall
+# from 1.000 to 0.333, with content agreement carrying none of the load
+# because it was never consulted -- position alone threw the match out first.
+# Now that every candidate must *also* clear the content gate above, a small
+# amount of positional slack no longer means "two unrelated things happened
+# to land near each other" -- it means "the right thing, off by a beat."
+_POSITION_TOLERANCE = 2
+
 
 class EndToEndReport(BaseModel):
     """Both numbers side by side. ``extracted`` is ``None`` iff no extractor
@@ -184,9 +274,22 @@ def _document_frequencies(series: Series) -> dict[str, int]:
 
 
 def _discriminative(words: set[str], freq: dict[str, int], total_episodes: int) -> set[str]:
-    """Drop words too common across the series to distinguish anything."""
+    """Drop words too common across the series, or too common in English
+    generally, to distinguish anything.
+
+    Two independent filters, because they catch different failures:
+    corpus-frequency drops words that are common *in this series*
+    (recurring character names, setting nouns); the stopword list drops
+    words that are common in English regardless of corpus size ("his",
+    "once", "while") and that a 220-document, 26-episode frequency ceiling
+    is too permissive to ever catch on its own.
+    """
     ceiling = max(1, int(total_episodes * _COMMON_WORD_FRACTION))
-    return {word for word in words if freq.get(word, 0) <= ceiling}
+    return {
+        word
+        for word in words
+        if freq.get(word, 0) <= ceiling and word not in _STOPWORDS
+    }
 
 
 def _entry_content_words(entry: LedgerEntry, excerpt_text_by_id: dict[str, str]) -> set[str]:
@@ -277,12 +380,15 @@ def _match_extracted_ids(
                 continue
             anchors = _manifest_item_anchors(item)
             if not any(
-                entry.origin_episode <= anchor <= entry.latest_episode for anchor in anchors
+                entry.origin_episode - _POSITION_TOLERANCE
+                <= anchor
+                <= entry.latest_episode + _POSITION_TOLERANCE
+                for anchor in anchors
             ):
                 continue
             words = item_words[item.defect_id]
             shared = entry_words & words
-            if not shared:
+            if len(shared) < _MIN_SHARED_DISCRIMINATIVE_WORDS:
                 continue
             coefficient = len(shared) / min(len(entry_words), len(words))
             candidates.append((coefficient, entry.id, item.defect_id))
