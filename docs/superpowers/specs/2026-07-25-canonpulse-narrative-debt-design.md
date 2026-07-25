@@ -1,5 +1,16 @@
 # CanonPulse: Narrative Debt Engine
 
+> **SUPERSEDED (2026-07-25)** by `2026-07-25-canonpulse-dual-layer-graph-design.md`.
+>
+> Retained for history. The product changed materially: A/B ending comparison was
+> dropped in favour of whole-series analysis; the 8-episode demo grew to 220; and
+> the deliberately non-predictive "Debt Health" score was replaced by a continuation
+> regressor trained on public serial-fiction retention data.
+>
+> Note the defect this spec's plan introduced: it specified a test asserting
+> `precision == 1.0` and `recall == 1.0`, so the implementation was written to
+> satisfy it and the benchmark measures nothing. Corrected in the successor.
+
 ## Summary
 
 CanonPulse is a pre-release decision system for serialized audio fiction. It turns an uploaded story and a proposed episode ending into an evidence-cited map of **narrative debt**: mysteries, relationships, emotional wounds, causal questions, and genre promises the story has opened with listeners. It compares two creator-supplied endings by showing which debts they repay, defer, renew, or default on.
