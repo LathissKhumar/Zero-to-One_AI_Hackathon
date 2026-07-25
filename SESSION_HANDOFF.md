@@ -135,7 +135,7 @@ host `dbc-53cf8438-33aa.cloud.databricks.com`. Warehouse `c4cfcc95726ac7d5`
 | `sql/extract_graph.sql` | ✅ verified — `parse_extraction_row` accepts the output (ep 3: 1 node/1 entry; ep 47: 4 nodes/1 entry). Before the fix every row would have been rejected. Slow: nested strict schema takes minutes over 220 episodes. |
 | `databricks bundle validate` | ✅ OK |
 | `databricks bundle deploy` | ❌ never run |
-| App reading from Databricks | ❌ **`app/main.py` has no Databricks reference at all** — it reads committed JSON |
+| App reading from Databricks | ✅ **CLOSED** — `app/store.py` selects `DatabricksSeriesStore` from env; verified live loading 220 episodes from Unity Catalog, `verified` surviving as a real bool, headline identical to file mode, all endpoints 200, `/api/series` reports `"source":"databricks"` |
 
 **Three defects that only live deployment could find** (fixed in `28c852c`), all in files
 `tests/test_databricks_assets.py` asserts are parameterized but never executes:
@@ -149,15 +149,14 @@ host `dbc-53cf8438-33aa.cloud.databricks.com`. Warehouse `c4cfcc95726ac7d5`
 3. `databricks-gpt-5-6-luna` is **not supported for batch inference**. The bundle's
    `databricks-gpt-oss-20b` default is correct and works.
 
-**The honest gap:** data, SQL and inference are verified on-platform, but the *application*
-does not consume any of it. Wiring `app/main.py` to read from Unity Catalog — or deploying
-the bundle so the app runs on Databricks Apps — is the remaining work for the track prize.
+**Model availability — verified by probing every endpoint.** `databricks-gpt-5-6-luna`, `databricks-gpt-5-6-sol` and `databricks-claude-sonnet-5` all return `PERMISSION_DENIED` ("rate limit of 0") on this workspace tier — **luna is unusable**, for batch *and* direct invocation. Working: `gpt-oss-20b`, `gpt-oss-120b`, `llama-3-3-70b-instruct`, `gemma-3-12b`. `gpt-oss-120b` is the best available and is still an OpenAI-family model served by Databricks, so the OpenAI-judge story survives.
+
+**Remaining for the track prize:** `databricks bundle deploy` so the app runs on Databricks Apps rather than locally against the workspace.
 The repo vendors the AI Dev Kit's guidance at `.agents/skills/databricks-*`; read
 `databricks-apps-python`, `databricks-bundles` and `mlflow-onboarding` before deploying.
 Note the CLI suggests `databricks aitools install` for those skills.
 
-**MLflow has never run** — no experiment, no logged training run, no traces, despite the
-spec naming MLflow as one of four load-bearing primitives.
+**MLflow — CLOSED.** Experiment `4189279848712062` at `/Users/mshyamsundar.cse2024@citchennai.net/canonpulse`. Two runs logged by `scripts/log_mlflow_run.py`: `continuation-model` (held_out_mae 0.1735, tagged synthetic) and `discrimination` (`ledger_*` and `extracted_*` metrics prefixed so traversal correctness cannot be read as end-to-end performance).
 
 **Credit position:** unlimited Databricks, ~$100 OpenAI (untouched — reserved for the
 `scripts/measure_llm_extraction.py` run and cold failover), $100 Codex.
