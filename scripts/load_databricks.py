@@ -99,6 +99,7 @@ def load(warehouse: Warehouse, catalog: str, schema: str) -> dict[str, int]:
     for table in (
         "series", "episodes", "excerpts", "narrative_nodes",
         "ledger_entries", "payoff_links", "defect_manifest", "listener_cohorts",
+        "boundary_features",
     ):
         predicate = "true" if table == "listener_cohorts" else f"series_id = {sql_str(sid)}"
         warehouse.execute(f"DELETE FROM {fq}.{table} WHERE {predicate}")
@@ -173,6 +174,28 @@ def load(warehouse: Warehouse, catalog: str, schema: str) -> dict[str, int]:
              sql_str(i.planted_episode), sql_str(i.payoff_episode),
              sql_str(i.expected_state), sql_str(i.notes), sql_str(manifest.authored_by)]
             for i in manifest.items
+        ],
+    )
+
+    # boundary_features is not optional: sql/cohort_reactions.sql JOINs it, so
+    # leaving it empty makes that statement return zero rows on a workspace
+    # while every other table looks correctly populated.
+    from app.features import FeatureExtractor
+
+    feature_rows = FeatureExtractor().extract_all(series)
+    counts["boundary_features"] = warehouse.insert_batched(
+        f"{fq}.boundary_features",
+        ["series_id", "episode", "open_obligation_count", "mean_urgency",
+         "max_obligation_age", "mean_obligation_age", "overdue_count",
+         "planting_recency", "suspended_density", "broken_count",
+         "sentiment_velocity", "perceived_time_jump", "active_thread_count"],
+        [
+            [sql_str(sid), str(f.episode), str(f.open_obligation_count),
+             str(f.mean_urgency), str(f.max_obligation_age), str(f.mean_obligation_age),
+             str(f.overdue_count), str(f.planting_recency), str(f.suspended_density),
+             str(f.broken_count), str(f.sentiment_velocity), str(f.perceived_time_jump),
+             str(f.active_thread_count)]
+            for f in feature_rows
         ],
     )
 

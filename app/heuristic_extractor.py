@@ -182,18 +182,57 @@ def _salient_words(text: str) -> set[str]:
 
 
 def _proper_nouns(text: str) -> list[str]:
+    """Capitalised words, as a stand-in for named entities.
+
+    `LedgerEntry.entities` must hold names, not a bag of content words. Two
+    reasons, and the second is the load-bearing one:
+
+    * It is user-visible. Surfacing ["'because", "'everyone", "'she"] next to a
+      finding reads as broken software.
+    * `app/features.py::_active_threads` counts distinct entities across open
+      obligations, so a word bag inflates that feature into "how many different
+      words appear near an open thread" rather than "how many characters are
+      carrying one".
+
+    Crude by design -- no NER, no coreference, and it will take a
+    sentence-initial word for a name. That is consistent with the rest of this
+    extractor being a deliberate floor.
+    """
     found = {word for word in re.findall(r"\b[A-Z][a-z]+\b", text)}
-    return sorted(found)
+    return sorted(found - _SENTENCE_STARTERS)
+
+
+# Capitalised only because they open a sentence. Without this the bag fills
+# with "The", "She", "When" instead of characters.
+_SENTENCE_STARTERS = {
+    "The", "She", "He", "They", "It", "There", "Then", "When", "Where", "What",
+    "Why", "How", "But", "And", "For", "Not", "No", "Yes", "That", "This",
+    "These", "Those", "If", "As", "At", "By", "In", "On", "Of", "To", "From",
+    "With", "Without", "After", "Before", "Once", "Now", "Later", "Even",
+    "Still", "Only", "Just", "One", "Two", "Three", "Her", "His", "Their",
+    "Its", "Every", "Each", "All", "Some", "Any", "Both", "Neither", "Either",
+    "Because", "Although", "While", "Until", "Since", "So", "Or", "Nor",
+    "My", "Your", "Our", "Nobody", "Nothing", "Someone", "Somebody",
+    "Everyone", "Everybody", "Anyone", "Anybody", "Never", "Always",
+    "Maybe", "Perhaps", "Instead", "Meanwhile", "Afterwards", "Tonight",
+    "Yesterday", "Tomorrow", "Today", "Here", "Look", "Listen", "Explain",
+    "Tell", "Ask", "Let", "Get", "Come", "Go", "Stop", "Wait", "Please",
+}
 
 
 class _PendingNegation:
-    __slots__ = ("episode", "capability_stem", "words", "excerpt_id")
+    # `text` is carried so a contradiction entry can name the characters from
+    # *both* episodes it spans, not just the resolving one.
+    __slots__ = ("episode", "capability_stem", "words", "excerpt_id", "text")
 
-    def __init__(self, episode: int, capability_stem: str, words: set[str], excerpt_id: str) -> None:
+    def __init__(
+        self, episode: int, capability_stem: str, words: set[str], excerpt_id: str, text: str = ""
+    ) -> None:
         self.episode = episode
         self.capability_stem = capability_stem
         self.words = words
         self.excerpt_id = excerpt_id
+        self.text = text
 
 
 class HeuristicExtractor:
@@ -242,7 +281,7 @@ class HeuristicExtractor:
                         description=f"Episode {episode} opens an obligation ({category}).",
                         episodes=[episode],
                         excerpt_ids=[excerpt_id],
-                        entities=sorted(words),
+                        entities=_proper_nouns(text),
                     )
                     result.entries.append(entry)
                     open_entries.append(entry)
@@ -254,7 +293,7 @@ class HeuristicExtractor:
                     episodes=[episode],
                     excerpt_ids=[excerpt_id],
                     promise_kind="mystery",
-                    entities=sorted(words),
+                    entities=_proper_nouns(text),
                 )
                 result.entries.append(entry)
                 open_entries.append(entry)
@@ -284,7 +323,7 @@ class HeuristicExtractor:
                     ),
                     episodes=[earliest, latest],
                     excerpt_ids=sorted({pending.excerpt_id, excerpt_id}),
-                    entities=sorted(pending.words | words),
+                    entities=_proper_nouns(pending.text + ' ' + text),
                 )
                 result.entries.append(entry)
                 open_entries.append(entry)
@@ -300,7 +339,7 @@ class HeuristicExtractor:
                 capability_stem = "dead"
             if capability_stem is not None:
                 pending_negations.append(
-                    _PendingNegation(episode, capability_stem, words, excerpt_id)
+                    _PendingNegation(episode, capability_stem, words, excerpt_id, text)
                 )
 
             # -- payoff detection -----------------------------------------
