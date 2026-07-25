@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 import urllib.request
 from pathlib import Path
 from typing import Protocol
@@ -66,6 +67,13 @@ class Transport(Protocol):
     def __call__(self, *, endpoint: str, token: str, model: str, prompt: str) -> str: ...
 
 
+# Retry only what a retry can fix: throttling and transient gateway faults.
+# A 401 or 400 is a configuration error and must surface immediately.
+_RETRY_STATUS = frozenset({429, 500, 502, 503, 504})
+_MAX_ATTEMPTS = 5
+_BACKOFF_BASE_SECONDS = 4
+
+
 def _http_transport(*, endpoint: str, token: str, model: str, prompt: str) -> str:
     """OpenAI-compatible chat-completions POST. Used by both backends -- they
     differ only in endpoint URL, token, and model name, never in shape."""
@@ -82,9 +90,21 @@ def _http_transport(*, endpoint: str, token: str, model: str, prompt: str) -> st
         headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=120) as response:  # noqa: S310
-        payload = json.loads(response.read().decode("utf-8"))
-    return payload["choices"][0]["message"]["content"]
+    # Serving endpoints rate-limit under sustained batch load, and a 220-episode
+    # run is exactly that. Without backoff a single 429 aborts the whole
+    # measurement and discards every response already paid for.
+    last_error: Exception | None = None
+    for attempt in range(_MAX_ATTEMPTS):
+        try:
+            with urllib.request.urlopen(request, timeout=120) as response:  # noqa: S310
+                payload = json.loads(response.read().decode("utf-8"))
+            return payload["choices"][0]["message"]["content"]
+        except urllib.error.HTTPError as error:  # noqa: PERF203
+            last_error = error
+            if error.code not in _RETRY_STATUS or attempt == _MAX_ATTEMPTS - 1:
+                raise
+            time.sleep(_BACKOFF_BASE_SECONDS * (2**attempt))
+    raise last_error  # pragma: no cover - loop always returns or raises above
 
 
 def prompt_for(episode: int, text: str) -> str:
