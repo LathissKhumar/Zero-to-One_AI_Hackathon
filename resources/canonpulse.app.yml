@@ -1,0 +1,6 @@
+resources:
+  apps:
+    canonpulse:
+      name: canonpulse-${bundle.target}
+      description: Evidence-cited narrative debt analysis and simulated Audience Court.
+      source_code_path: ..

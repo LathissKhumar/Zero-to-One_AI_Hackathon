@@ -1,0 +1,32 @@
+bundle:
+  name: canonpulse
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog that owns CanonPulse data and trace tables.
+    default: main
+  schema:
+    description: Unity Catalog schema for CanonPulse assets.
+    default: canonpulse
+  warehouse_id:
+    description: Serverless SQL warehouse ID used for ai_query and Delta operations.
+    default: ""
+  court_model:
+    description: Databricks model service used by the batch Audience Court.
+    default: databricks-gpt-oss-20b
+  ai_search_index:
+    description: AI Search index over story segments.
+    default: ""
+  mlflow_experiment_id:
+    description: MLflow experiment used to trace audit and court operations.
+    default: ""
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      profile: DEFAULT
