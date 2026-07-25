@@ -1,0 +1,182 @@
+#!/usr/bin/env python3
+"""Measure end-to-end discrimination with `LLMExtractor` over a real series.
+
+This is the script a user runs, with their own credentials, to turn the
+headline from "heuristic floor 0.0" into "heuristic floor 0.0, model
+extractor X". It is not part of the test suite and must never run during
+`pytest` -- it makes real network calls and costs real money the first time
+it sees a given (model, prompt) pair.
+
+Credentials, never hardcoded, read from the environment:
+
+  Governed, on-platform path (preferred):
+    DATABRICKS_ENDPOINT   Foundation Model API serving-endpoint URL
+    DATABRICKS_TOKEN      workspace personal access token
+    DATABRICKS_MODEL      model name served at that endpoint (optional,
+                           defaults to DATABRICKS_ENDPOINT's own default)
+
+  Off-platform measurement path (only so the number can be checked before a
+  Databricks workspace is authenticated -- never presentable as the governed
+  result):
+    OPENAI_API_KEY        API key
+    OPENAI_MODEL          defaults to "gpt-4o-mini"
+    OPENAI_BASE_URL       defaults to "https://api.openai.com/v1/chat/completions"
+
+If neither is set, this script exits with a clear, actionable message --
+never a stack trace.
+
+Usage:
+  uv run --group dev python scripts/measure_llm_extraction.py [--limit N] [--cache-path PATH]
+
+`--limit N` runs only the first N episodes (by episode number), so a
+sanity check on a handful of episodes costs a handful of calls, not 220.
+The script prints an estimated call count -- episodes about to be sent
+that are not already in the cache -- before it spends anything.
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+
+from app.evaluation import _episode_rows, evaluate_series  # noqa: E402
+from app.heuristic_extractor import HeuristicExtractor  # noqa: E402
+from app.llm_extractor import LLMExtractor, cache_key  # noqa: E402
+from app.manifest import load_manifest  # noqa: E402
+from app.series_loader import load_series  # noqa: E402
+
+SERIES_PATH = REPO_ROOT / "data" / "series" / "last_monsoon.json"
+MANIFEST_PATH = REPO_ROOT / "data" / "manifest" / "last_monsoon.yaml"
+DEFAULT_CACHE_PATH = REPO_ROOT / "data" / "extraction_cache" / "last_monsoon_llm.json"
+
+_PROMPT_TEMPLATE = (
+    "Extract narrative structure as JSON. Return keys: nodes, entries, payoffs, excerpts. "
+    "A node has id, episode, perceived_index, true_time (0-1 chronological position or null), "
+    "summary, entities, valence (-1..1), excerpt_id. "
+    "An entry has id, kind (contradiction|promise), description, episodes, excerpt_ids, urgency (1-5), entities. "
+    "A payoff has node_id, target_id, episode, rationale. "
+    "Respond with JSON only, no prose, no markdown fences. "
+    "Episode {episode}: {text}"
+)
+
+
+class CredentialsError(RuntimeError):
+    pass
+
+
+def _resolve_credentials() -> tuple[str, str, str]:
+    """Returns (endpoint, token, model). Raises CredentialsError with an
+    actionable message rather than letting a KeyError/stack trace surface."""
+    databricks_endpoint = os.environ.get("DATABRICKS_ENDPOINT")
+    databricks_token = os.environ.get("DATABRICKS_TOKEN")
+    if databricks_endpoint and databricks_token:
+        model = os.environ.get("DATABRICKS_MODEL", "")
+        return databricks_endpoint, databricks_token, model
+
+    openai_key = os.environ.get("OPENAI_API_KEY")
+    if openai_key:
+        endpoint = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1/chat/completions")
+        model = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+        return endpoint, openai_key, model
+
+    raise CredentialsError(
+        "No credentials found.\n\n"
+        "Set one of:\n"
+        "  DATABRICKS_ENDPOINT + DATABRICKS_TOKEN  (governed, on-platform path)\n"
+        "  OPENAI_API_KEY                          (off-platform, measurement-only path)\n\n"
+        "Then re-run:\n"
+        "  uv run --group dev python scripts/measure_llm_extraction.py\n"
+    )
+
+
+def _estimate_uncached_calls(rows: list[dict], model: str, cache_path: Path) -> int:
+    cached_keys: set[str] = set()
+    if cache_path.exists():
+        import json
+
+        cached_keys = set(json.loads(cache_path.read_text(encoding="utf-8")).keys())
+    uncached = 0
+    for row in rows:
+        episode = row.get("episode")
+        text = row.get("synopsis") or row.get("body") or ""
+        prompt = _PROMPT_TEMPLATE.format(episode=episode, text=text)
+        if cache_key(model, prompt) not in cached_keys:
+            uncached += 1
+    return uncached
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--limit", type=int, default=None, help="only send the first N episodes")
+    parser.add_argument(
+        "--cache-path", type=Path, default=DEFAULT_CACHE_PATH, help="response cache file"
+    )
+    parser.add_argument("--series", type=Path, default=SERIES_PATH)
+    parser.add_argument("--manifest", type=Path, default=MANIFEST_PATH)
+    args = parser.parse_args()
+
+    try:
+        endpoint, token, model = _resolve_credentials()
+    except CredentialsError as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    llm_extractor = LLMExtractor(
+        endpoint=endpoint, token=token, model=model or "default", cache_path=args.cache_path
+    )
+    print(f"Backend: {llm_extractor.backend}", end="")
+    print(" (GOVERNED, on-platform path)" if llm_extractor.backend == "databricks" else " (off-platform, measurement only -- NOT the governed path)")
+    print(f"Model:   {model or '(endpoint default)'}")
+    print(f"Cache:   {args.cache_path}")
+
+    series = load_series(args.series)
+    manifest = load_manifest(args.manifest)
+    rows = _episode_rows(series)
+    if args.limit is not None:
+        rows = sorted(rows, key=lambda row: row["episode"])[: args.limit]
+
+    estimated_calls = _estimate_uncached_calls(rows, model or "default", args.cache_path)
+    print(f"Episodes to process: {len(rows)}")
+    print(f"Estimated new API calls (not already cached): {estimated_calls}")
+    if estimated_calls > 0:
+        confirm = input(f"Proceed with {estimated_calls} call(s) to {llm_extractor.backend}? [y/N] ")
+        if confirm.strip().lower() not in {"y", "yes"}:
+            print("Aborted.")
+            return 1
+
+    llm_result = llm_extractor.extract(rows)
+    limited_series = series
+    if args.limit is not None:
+        limited_series = series.model_copy(
+            update={"nodes": [node for node in series.nodes if node.episode in {r["episode"] for r in rows}]}
+        )
+
+    llm_report = evaluate_series(limited_series, manifest, extractor=llm_extractor)
+    heuristic_report = evaluate_series(limited_series, manifest, extractor=HeuristicExtractor())
+
+    print()
+    print("=" * 72)
+    print(f"{'metric':<24}{'heuristic (floor)':<22}{'LLM (' + llm_extractor.backend + ')':<22}")
+    print("-" * 72)
+    for label, attr in [("precision", "precision"), ("recall", "recall"), ("holes_caught", "holes_caught"), ("twists_protected", "twists_protected"), ("false_positives", "false_positives")]:
+        h_value = getattr(heuristic_report.extracted, attr)
+        l_value = getattr(llm_report.extracted, attr)
+        print(f"{label:<24}{str(h_value):<22}{str(l_value):<22}")
+    print("=" * 72)
+    print(f"Rejected rows (LLM): {llm_result.rejected}")
+    print(f"Backend that produced this number: {llm_extractor.backend}")
+    if llm_extractor.backend != "databricks":
+        print(
+            "NOTE: this number came from the off-platform OpenAI path and must not be "
+            "presented as the governed Databricks result."
+        )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
