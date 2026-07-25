@@ -1,7 +1,7 @@
 # Session Handoff — CanonPulse
 
 **Written:** 2026-07-26, updated after the final whole-branch review.
-**Branch:** `feat/extraction-eval` @ `a6ea65b`, 16 commits ahead of `main`.
+**Branch:** `feat/extraction-eval` @ `ce0f2c8` (pushed), 18 commits ahead of `main`.
 **Suite:** 124 passing (`uv run --group dev pytest -q`). Working tree clean except two untracked files — see §7.
 **Plan status:** all 4 tasks of `2026-07-26-canonpulse-extraction-eval.md` complete; final review's blocking findings fixed.
 
@@ -17,7 +17,7 @@ You are picking up a hackathon build mid-flight. Read §1 and §3 before touchin
 brainstorming → writing-plans → subagent-driven-development
 ```
 
-with `test-driven-development` inside every task. Do not skip to implementation; three separate defects in this repo were caused by skipping a gate, and each is documented below.
+with `test-driven-development` inside every task. Do not skip to implementation. Every defect documented below was found by a review gate, and several would have shipped without one -- including three that only a live Databricks deployment could catch (§6).
 
 **Check the progress ledger first — it is the recovery map:**
 
@@ -29,7 +29,7 @@ Tasks marked complete there are done. Do not re-dispatch them. The ledger names 
 
 **`AGENTS.md`** (repo root) carries build/test/style conventions. Codex reads it natively.
 
-**Active plan:** `docs/superpowers/plans/2026-07-26-canonpulse-extraction-eval.md` — Tasks 1–3 complete, **Task 4 not started**.
+**Active plan:** `docs/superpowers/plans/2026-07-26-canonpulse-extraction-eval.md` — **all 4 tasks complete**, final whole-branch review done, its blocking findings fixed. Remaining work is in §5 and §6.
 
 ---
 
@@ -55,7 +55,7 @@ These were each established by a review that caught a live violation. They are n
 6. **100% of product runtime inference runs on Databricks Foundation Model APIs.** A direct vendor call generates no Unity Catalog lineage and no MLflow trace, and erodes the sponsor track prize. `LLMExtractor`'s OpenAI path exists *only* for offline measurement and must never be presented as the governed path — that is why `ExtractionResult.backend` exists.
 7. **Generators stay deterministic and offline.** Regenerating must be byte-identical.
 
-### The circularity trap — it came back three times
+### The circularity trap — it has come back five times
 
 This is the single most important thing to understand about this repo.
 
