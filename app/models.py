@@ -57,6 +57,8 @@ class EvaluationCase(BaseModel):
     category: Literal["contradiction", "debt"]
     expected_debt_id: str
     expected_evidence_id: str
+    probe_action: DebtAction
+    expected_flag: bool
 
 
 class Story(BaseModel):

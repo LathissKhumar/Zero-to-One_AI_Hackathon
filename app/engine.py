@@ -27,15 +27,22 @@ class NarrativeDebtEngine:
 
     def run_benchmark(self, story: Story) -> BenchmarkResult:
         debt_by_id = {debt.id: debt for debt in story.debts}
-        detected = [case for case in story.evaluation_cases if case.expected_debt_id in debt_by_id]
-        supported = [case for case in detected if case.expected_evidence_id in {evidence.id for debt in story.debts for evidence in debt.evidence}]
+        evidence_ids = {evidence.id for debt in story.debts for evidence in debt.evidence}
+        outcomes = [
+            (case, case.expected_debt_id in debt_by_id and self._is_risky(case.probe_action))
+            for case in story.evaluation_cases
+        ]
+        true_positive = [case for case, flagged in outcomes if flagged and case.expected_flag]
+        false_positive = [case for case, flagged in outcomes if flagged and not case.expected_flag]
+        false_negative = [case for case, flagged in outcomes if not flagged and case.expected_flag]
+        supported = [case for case in true_positive if case.expected_evidence_id in evidence_ids]
         total = len(story.evaluation_cases)
         return BenchmarkResult(
             evaluated_cases=total,
-            detected_cases=len(detected),
-            precision=round(len(detected) / total, 2) if total else 0.0,
-            recall=round(len(detected) / total, 2) if total else 0.0,
-            citation_support_rate=round(len(supported) / len(detected), 2) if detected else 0.0,
+            detected_cases=len(true_positive),
+            precision=round(len(true_positive) / (len(true_positive) + len(false_positive)), 2) if true_positive or false_positive else 0.0,
+            recall=round(len(true_positive) / (len(true_positive) + len(false_negative)), 2) if true_positive or false_negative else 0.0,
+            citation_support_rate=round(len(supported) / len(true_positive), 2) if true_positive else 0.0,
             structured_output_rate=1.0,
         )
 
@@ -93,3 +100,7 @@ class NarrativeDebtEngine:
             "Let Tara name one consequence of abandoning Asha before the inspector arrives.",
             "End on the inspector's boat light, not a second reveal, to preserve a single clean question.",
         ]
+
+    @staticmethod
+    def _is_risky(action: DebtAction) -> bool:
+        return action in {"default", "ignore", "defer"}

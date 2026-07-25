@@ -84,12 +84,14 @@ def get_demo_story() -> Story:
         Cohort(id="night", name="Zoya", role="Late-Night Listener", focus="clarity, atmosphere, and a satisfying aftertaste", accent="#bc9cff"),
     ]
     cases = [
-        EvaluationCase(id="case-1", category="debt", expected_debt_id="cassette", expected_evidence_id="ev-cassette"),
-        EvaluationCase(id="case-2", category="debt", expected_debt_id="locket", expected_evidence_id="ev-locket"),
-        EvaluationCase(id="case-3", category="contradiction", expected_debt_id="tara-swim", expected_evidence_id="ev-swim"),
-        EvaluationCase(id="case-4", category="debt", expected_debt_id="rafi-alibi", expected_evidence_id="ev-rafi"),
-        EvaluationCase(id="case-5", category="debt", expected_debt_id="sisters", expected_evidence_id="ev-sister"),
-        EvaluationCase(id="case-6", category="debt", expected_debt_id="seawall", expected_evidence_id="ev-storm"),
+        EvaluationCase(id="case-1", category="debt", expected_debt_id="cassette", expected_evidence_id="ev-cassette", probe_action="ignore", expected_flag=True),
+        EvaluationCase(id="case-2", category="debt", expected_debt_id="locket", expected_evidence_id="ev-locket", probe_action="ignore", expected_flag=True),
+        EvaluationCase(id="case-3", category="contradiction", expected_debt_id="tara-swim", expected_evidence_id="ev-swim", probe_action="default", expected_flag=True),
+        EvaluationCase(id="case-4", category="debt", expected_debt_id="rafi-alibi", expected_evidence_id="ev-rafi", probe_action="default", expected_flag=True),
+        EvaluationCase(id="case-5", category="debt", expected_debt_id="sisters", expected_evidence_id="ev-sister", probe_action="defer", expected_flag=True),
+        EvaluationCase(id="case-6", category="debt", expected_debt_id="seawall", expected_evidence_id="ev-storm", probe_action="ignore", expected_flag=True),
+        EvaluationCase(id="case-7", category="debt", expected_debt_id="cassette", expected_evidence_id="ev-cassette", probe_action="pay", expected_flag=False),
+        EvaluationCase(id="case-8", category="contradiction", expected_debt_id="tara-swim", expected_evidence_id="ev-swim", probe_action="renew", expected_flag=False),
     ]
     return Story(id="last-monsoon", title="The Last Monsoon", genre="Mumbai mystery thriller", premise="A missing father's cassette pulls two estranged sisters into the truth behind a ferry fire.", episodes=episodes, debts=debts, endings=endings, cohorts=cohorts, evaluation_cases=cases)
 

@@ -9,7 +9,7 @@ CanonPulse is a pre-release decision system for serialized audio fiction. It com
 - **Narrative debt, not generic continuity:** CanonPulse tracks mysteries, causal clues, relationship obligations, emotional wounds, and genre contracts as promises made to listeners.
 - **Comparative decision:** it asks which author-written ending pays, renews, defers, or defaults on those promises.
 - **Audience Court:** fixed, transparent listener cohorts react to the same cited evidence. Their verdict is labelled a pre-release simulation.
-- **DefectLab:** six labelled defects in a fully original demo corpus generate measured precision, recall, citation support, and schema-validity results.
+- **DefectLab:** six labelled defect probes plus two clean controls in a fully original demo corpus generate measured precision, recall, citation support, and schema-validity results.
 - **Mood-to-Debt Discovery:** a small second view shows how emotional-promise metadata can power “rainy Sunday after heartbreak” discovery and explainability.
 
 ## Run locally
