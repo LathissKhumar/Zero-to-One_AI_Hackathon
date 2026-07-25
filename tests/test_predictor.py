@@ -71,3 +71,69 @@ def test_model_property_exposes_fitted_estimator_after_training():
     predictor.train(training_rows())
     assert predictor.model is not None
     assert hasattr(predictor.model, "predict")
+
+
+def rows_with_known_rates() -> list[dict]:
+    """Rows carrying raw continue_rate so calibration has real data to derive
+    a centre and scale from, instead of an unexplained constant."""
+    rows = []
+    for book in range(6):
+        for chapter in range(10):
+            open_count = chapter % 5
+            rate = 0.4 + 0.05 * open_count
+            rows.append(
+                {
+                    "book_id": f"b{book}",
+                    "continue_rate": rate,
+                    "open_obligation_count": open_count,
+                    "mean_urgency": 3.0,
+                    "max_obligation_age": chapter,
+                    "mean_obligation_age": float(chapter),
+                    "overdue_count": 1 if chapter > 7 else 0,
+                    "planting_recency": chapter % 3,
+                    "suspended_density": 0.1,
+                    "broken_count": 0,
+                    "sentiment_velocity": 0.0,
+                    "perceived_time_jump": 0.0,
+                    "active_thread_count": 2,
+                    "continue_z": float(open_count) - 2.0,
+                }
+            )
+    return rows
+
+
+def test_calibration_is_derived_from_the_corpus_not_a_magic_constant():
+    """The old transform was `0.65 + 0.12 * z` with both constants unexplained.
+    The centre/scale must now come from the training corpus's own continue_rate
+    distribution, so two corpora with different rate distributions calibrate
+    differently."""
+    low_predictor = ContinuationPredictor()
+    low_predictor.train(rows_with_known_rates())
+
+    shifted_rows = [{**row, "continue_rate": row["continue_rate"] + 0.3} for row in rows_with_known_rates()]
+    high_predictor = ContinuationPredictor()
+    high_predictor.train(shifted_rows)
+
+    features = FeatureExtractor().extract(build_series(), episode=5)
+    low_value = low_predictor.predict(features).value
+    high_value = high_predictor.predict(features).value
+    assert high_value > low_value
+
+
+def test_prediction_reports_whether_clamping_fired():
+    predictor = ContinuationPredictor()
+    predictor.train(rows_with_known_rates())
+    prediction = predictor.predict(FeatureExtractor().extract(build_series(), episode=5))
+    assert isinstance(prediction.clamped, bool)
+
+
+def test_confidence_interval_is_named_and_not_mae_over_four():
+    """MAE is not a standard deviation; `/4` had no justification. The interval
+    must now be derived from an empirical quantile of held-out residuals, and
+    the method must be named on the report so a caller knows what it is."""
+    predictor = ContinuationPredictor()
+    report = predictor.train(rows_with_known_rates())
+    assert report.ci_method
+    assert report.residual_quantile_z >= 0.0
+    prediction = predictor.predict(FeatureExtractor().extract(build_series(), episode=5))
+    assert prediction.ci_method == report.ci_method
