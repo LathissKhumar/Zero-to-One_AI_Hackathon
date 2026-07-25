@@ -1,81 +1,57 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CanonPulse — Narrative Debt Engine</title>
-    <link rel="stylesheet" href="/styles.css">
-  </head>
-  <body>
-    <main class="shell">
-      <nav>
-        <a class="brand" href="#top"><span>◉</span> CANONPULSE</a>
-        <div class="nav-meta">DEMO MODE <i></i> ORIGINAL SYNTHETIC DATA</div>
-      </nav>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CanonPulse</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <p class="brand">CANONPULSE</p>
+    <h1>CanonPulse</h1>
+    <p id="series-line">Loading series…</p>
+  </header>
 
-      <header id="top" class="hero">
-        <div>
-          <p class="eyebrow">PRE-RELEASE STORY WIND TUNNEL</p>
-          <h1>Know what your<br><em>story owes.</em></h1>
-          <p class="lede">Every clue, wound, vow, and threat borrows listener attention. CanonPulse shows which ending repays that narrative debt—and which audience will call it unfair.</p>
-        </div>
-        <aside class="truth-card">
-          <span class="label">THE PRODUCT CLAIM</span>
-          <strong>Not a plot-hole checker.</strong>
-          <p>A creator decision system for promises the audience is still waiting on.</p>
-          <span class="simulation">Audience Court is a pre-release simulation, not real listener data.</span>
-        </aside>
-      </header>
+  <section class="split">
+    <article class="panel baseline">
+      <h2>Baseline checker</h2>
+      <p class="count" id="baseline-count">—</p>
+      <p class="caption">Every contradiction flagged, intentional or not.</p>
+    </article>
+    <article class="panel canonpulse">
+      <h2>CanonPulse</h2>
+      <ul class="breakdown">
+        <li><span class="n" id="real-holes">—</span><span class="label">real holes</span></li>
+        <li><span class="n" id="twists">—</span><span class="label">twists protected</span></li>
+        <li><span class="n" id="overdue">—</span><span class="label">obligations overdue</span></li>
+      </ul>
+      <p class="caption">Same story. The payoff test tells them apart.</p>
+    </article>
+  </section>
 
-      <section class="story-strip" aria-label="Current story">
-        <div><span class="label">SERIES</span><strong id="story-title">Loading story…</strong></div>
-        <div><span class="label">FORMAT</span><strong id="story-genre">—</strong></div>
-        <div><span class="label">OPEN DEBT</span><strong id="open-debt">—</strong></div>
-        <div><span class="label">DEFECTLAB</span><strong id="benchmark-chip">—</strong></div>
-      </section>
+  <section class="findings-heading">
+    <h2>Every finding, with its evidence</h2>
+    <p>Click a card to see the citations behind the verdict.</p>
+    <ul class="legend">
+      <li class="broken">Real hole</li>
+      <li class="suspended">Protected</li>
+      <li class="outstanding">Overdue</li>
+    </ul>
+  </section>
 
-      <section class="section-heading">
-        <div><p class="eyebrow">01 / ENDING COMPARATOR</p><h2>Which promise does each ending keep?</h2></div>
-        <button id="compare-button">Run Audience Court <span>→</span></button>
-      </section>
+  <section id="findings"></section>
 
-      <section class="ending-grid" id="ending-grid"></section>
+  <aside id="evidence" hidden>
+    <button id="evidence-close" aria-label="Close evidence">×</button>
+    <div id="evidence-body"></div>
+  </aside>
 
-      <section class="results" id="results" hidden>
-        <div class="verdict-banner">
-          <div><span class="label">PRODUCER VERDICT</span><h2 id="winner-title">—</h2><p id="winner-reason">—</p></div>
-          <div class="score-big"><span>DEBT HEALTH</span><strong id="winner-score">—</strong><small>/100</small></div>
-        </div>
-        <div class="compare-columns" id="comparison-cards"></div>
-      </section>
+  <footer>
+    <p>Original synthetic series. Continuation model trained on public
+       serialized fiction, not platform telemetry.</p>
+  </footer>
 
-      <section class="section-heading court-heading" id="court-section" hidden>
-        <div><p class="eyebrow">02 / AUDIENCE COURT</p><h2>Five listeners. One hard choice.</h2></div>
-        <p class="court-note">Each verdict is constrained by the same source evidence and a fixed listener preference profile.</p>
-      </section>
-      <section class="court-grid" id="court-grid"></section>
-
-      <section class="lower-grid">
-        <article class="defect-lab">
-          <p class="eyebrow">03 / DEFECTLAB</p>
-          <h2>Measured reliability,<br>not invented uplift.</h2>
-          <p>Known debt failures and contradictions are seeded into the original demo corpus. The scorecard measures whether the audit finds and cites them.</p>
-          <div class="metric-grid" id="metric-grid"><span>Loading benchmark…</span></div>
-        </article>
-        <article class="discovery">
-          <p class="eyebrow">04 / MOOD-TO-DEBT DISCOVERY</p>
-          <h2>Find the promise<br>you need to feel.</h2>
-          <form id="discovery-form"><input id="mood-input" value="rainy Sunday after heartbreak" aria-label="Mood search"><button>Search</button></form>
-          <div id="discovery-results" class="discovery-results"></div>
-        </article>
-      </section>
-    </main>
-    <template id="ending-template">
-      <article class="ending-card">
-        <span class="ending-tag"></span><h3></h3><p class="hook"></p><p class="ending-text"></p>
-        <div class="debt-actions"></div>
-      </article>
-    </template>
-    <script src="/app.js"></script>
-  </body>
+  <script src="/app.js"></script>
+</body>
 </html>

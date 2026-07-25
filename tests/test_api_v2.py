@@ -35,3 +35,10 @@ def test_root_serves_the_dashboard(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "CanonPulse" in response.text
+
+
+def test_dashboard_shows_the_baseline_comparison(client):
+    body = client.get("/").text
+    assert "Baseline checker" in body
+    assert "CanonPulse" in body
+    assert "Protected" in body
