@@ -24,6 +24,11 @@ class ExtractionResult(BaseModel):
     payoffs: list[PayoffLink] = Field(default_factory=list)
     excerpts: list[Excerpt] = Field(default_factory=list)
     rejected: int = 0
+    # None for extractors with no notion of a backend (FakeExtractor,
+    # HeuristicExtractor, DatabricksExtractor's own SQL path). LLMExtractor
+    # sets this to "databricks" or "openai" so a number produced off-platform
+    # can never be silently presented as the governed on-platform result.
+    backend: str | None = None
 
 
 class Extractor(Protocol):
