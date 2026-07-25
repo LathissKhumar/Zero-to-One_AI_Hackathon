@@ -14,7 +14,8 @@
         "Asha",
         "Vikram"
       ],
-      "valence": 0.0,
+      "valence": 0.35,
+      "true_time": 0.0,
       "excerpt_id": "ex-001"
     },
     {
@@ -25,7 +26,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.05,
+      "true_time": 0.0022,
       "excerpt_id": "ex-002"
     },
     {
@@ -37,7 +39,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.15,
+      "true_time": 0.0081,
       "excerpt_id": "ex-003"
     },
     {
@@ -49,7 +52,8 @@
         "Tara",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.125,
+      "true_time": 0.014,
       "excerpt_id": "ex-004"
     },
     {
@@ -61,7 +65,8 @@
         "Rao",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.2,
+      "true_time": 0.0068,
       "excerpt_id": "ex-005"
     },
     {
@@ -73,7 +78,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.43,
+      "true_time": 0.0305,
       "excerpt_id": "ex-006"
     },
     {
@@ -85,7 +91,8 @@
         "Rao",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.204,
+      "true_time": 0.0297,
       "excerpt_id": "ex-007"
     },
     {
@@ -97,7 +104,8 @@
         "Tara",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.267,
+      "true_time": 0.0369,
       "excerpt_id": "ex-008"
     },
     {
@@ -109,7 +117,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.093,
+      "true_time": 0.029,
       "excerpt_id": "ex-009"
     },
     {
@@ -121,7 +130,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.149,
+      "true_time": 0.0458,
       "excerpt_id": "ex-010"
     },
     {
@@ -133,7 +143,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.258,
+      "true_time": 0.0346,
       "excerpt_id": "ex-011"
     },
     {
@@ -144,7 +155,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.5,
+      "true_time": 0.0559,
       "excerpt_id": "ex-012"
     },
     {
@@ -156,7 +168,8 @@
         "Rao",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.214,
+      "true_time": 0.0485,
       "excerpt_id": "ex-013"
     },
     {
@@ -168,7 +181,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.133,
+      "true_time": 0.0637,
       "excerpt_id": "ex-014"
     },
     {
@@ -180,7 +194,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.08,
+      "true_time": 0.0607,
       "excerpt_id": "ex-015"
     },
     {
@@ -192,7 +207,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.553,
+      "true_time": 0.068,
       "excerpt_id": "ex-016"
     },
     {
@@ -204,7 +220,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.392,
+      "true_time": 0.083,
       "excerpt_id": "ex-017"
     },
     {
@@ -216,7 +233,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.563,
+      "true_time": 0.0844,
       "excerpt_id": "ex-018"
     },
     {
@@ -228,7 +246,8 @@
         "Meera",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.433,
+      "true_time": 0.0715,
       "excerpt_id": "ex-019"
     },
     {
@@ -240,7 +259,8 @@
         "Meera",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.533,
+      "true_time": 0.0836,
       "excerpt_id": "ex-020"
     },
     {
@@ -252,7 +272,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.451,
+      "true_time": 0.083,
       "excerpt_id": "ex-021"
     },
     {
@@ -263,9 +284,9 @@
       "entities": [
         "Tara"
       ],
-      "valence": 0.0,
-      "excerpt_id": "ex-022",
-      "true_time": 0.05
+      "valence": -0.1,
+      "true_time": 0.02,
+      "excerpt_id": "ex-022"
     },
     {
       "id": "ep-023",
@@ -276,7 +297,8 @@
         "Rao",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.379,
+      "true_time": 0.0974,
       "excerpt_id": "ex-023"
     },
     {
@@ -288,7 +310,8 @@
         "Meera",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.179,
+      "true_time": 0.1014,
       "excerpt_id": "ex-024"
     },
     {
@@ -300,7 +323,8 @@
         "Rafi",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.206,
+      "true_time": 0.1033,
       "excerpt_id": "ex-025"
     },
     {
@@ -312,7 +336,8 @@
         "Meera",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.095,
+      "true_time": 0.1091,
       "excerpt_id": "ex-026"
     },
     {
@@ -324,7 +349,8 @@
         "Meera",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.031,
+      "true_time": 0.1069,
       "excerpt_id": "ex-027"
     },
     {
@@ -336,7 +362,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.5,
+      "true_time": 0.1291,
       "excerpt_id": "ex-028"
     },
     {
@@ -348,7 +375,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.258,
+      "true_time": 0.1241,
       "excerpt_id": "ex-029"
     },
     {
@@ -360,7 +388,8 @@
         "Rao",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.15,
+      "true_time": 0.1292,
       "excerpt_id": "ex-030"
     },
     {
@@ -372,7 +401,8 @@
         "Asha",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.445,
+      "true_time": 0.146,
       "excerpt_id": "ex-031"
     },
     {
@@ -384,7 +414,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.351,
+      "true_time": 0.1313,
       "excerpt_id": "ex-032"
     },
     {
@@ -396,7 +427,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.164,
+      "true_time": 0.1409,
       "excerpt_id": "ex-033"
     },
     {
@@ -407,7 +439,8 @@
       "entities": [
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.1,
+      "true_time": 0.1607,
       "excerpt_id": "ex-034"
     },
     {
@@ -419,7 +452,8 @@
         "Zoya",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.507,
+      "true_time": 0.1591,
       "excerpt_id": "ex-035"
     },
     {
@@ -431,7 +465,8 @@
         "Rao",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.354,
+      "true_time": 0.1533,
       "excerpt_id": "ex-036"
     },
     {
@@ -443,7 +478,8 @@
         "Meera",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.418,
+      "true_time": 0.1667,
       "excerpt_id": "ex-037"
     },
     {
@@ -455,7 +491,8 @@
         "Meera",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.36,
+      "true_time": 0.1663,
       "excerpt_id": "ex-038"
     },
     {
@@ -467,7 +504,8 @@
         "Tara",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.042,
+      "true_time": 0.1808,
       "excerpt_id": "ex-039"
     },
     {
@@ -479,7 +517,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.3,
+      "true_time": 0.1798,
       "excerpt_id": "ex-040"
     },
     {
@@ -491,7 +530,8 @@
         "Rafi",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.196,
+      "true_time": 0.187,
       "excerpt_id": "ex-041"
     },
     {
@@ -503,7 +543,8 @@
         "Meera",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.229,
+      "true_time": 0.1803,
       "excerpt_id": "ex-042"
     },
     {
@@ -515,7 +556,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.104,
+      "true_time": 0.1896,
       "excerpt_id": "ex-043"
     },
     {
@@ -527,7 +569,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.156,
+      "true_time": 0.194,
       "excerpt_id": "ex-044"
     },
     {
@@ -539,7 +582,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.047,
+      "true_time": 0.1966,
       "excerpt_id": "ex-045"
     },
     {
@@ -551,7 +595,8 @@
         "Asha",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.074,
+      "true_time": 0.1989,
       "excerpt_id": "ex-046"
     },
     {
@@ -562,7 +607,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.75,
+      "true_time": 0.2031,
       "excerpt_id": "ex-047"
     },
     {
@@ -574,7 +620,8 @@
         "Zoya",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.146,
+      "true_time": 0.2091,
       "excerpt_id": "ex-048"
     },
     {
@@ -586,7 +633,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.449,
+      "true_time": 0.2126,
       "excerpt_id": "ex-049"
     },
     {
@@ -598,7 +646,8 @@
         "Rafi",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.317,
+      "true_time": 0.2263,
       "excerpt_id": "ex-050"
     },
     {
@@ -610,7 +659,8 @@
         "Tara",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.046,
+      "true_time": 0.2345,
       "excerpt_id": "ex-051"
     },
     {
@@ -621,7 +671,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.3,
+      "true_time": 0.2219,
       "excerpt_id": "ex-052"
     },
     {
@@ -633,7 +684,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.335,
+      "true_time": 0.2323,
       "excerpt_id": "ex-053"
     },
     {
@@ -645,7 +697,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.168,
+      "true_time": 0.2419,
       "excerpt_id": "ex-054"
     },
     {
@@ -657,7 +710,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.4,
+      "true_time": 0.2448,
       "excerpt_id": "ex-055"
     },
     {
@@ -669,7 +723,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.335,
+      "true_time": 0.249,
       "excerpt_id": "ex-056"
     },
     {
@@ -681,7 +736,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.124,
+      "true_time": 0.2626,
       "excerpt_id": "ex-057"
     },
     {
@@ -693,7 +749,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.151,
+      "true_time": 0.2554,
       "excerpt_id": "ex-058"
     },
     {
@@ -705,7 +762,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.137,
+      "true_time": 0.2602,
       "excerpt_id": "ex-059"
     },
     {
@@ -716,7 +774,8 @@
       "entities": [
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.2,
+      "true_time": 0.2609,
       "excerpt_id": "ex-060"
     },
     {
@@ -728,7 +787,8 @@
         "Rafi",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.104,
+      "true_time": 0.266,
       "excerpt_id": "ex-061"
     },
     {
@@ -740,7 +800,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.374,
+      "true_time": 0.2861,
       "excerpt_id": "ex-062"
     },
     {
@@ -752,7 +813,8 @@
         "Rafi",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.21,
+      "true_time": 0.2905,
       "excerpt_id": "ex-063"
     },
     {
@@ -764,7 +826,8 @@
         "Rafi",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.314,
+      "true_time": 0.2855,
       "excerpt_id": "ex-064"
     },
     {
@@ -776,7 +839,8 @@
         "Rafi",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.453,
+      "true_time": 0.2842,
       "excerpt_id": "ex-065"
     },
     {
@@ -787,7 +851,8 @@
       "entities": [
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.1,
+      "true_time": 0.307,
       "excerpt_id": "ex-066"
     },
     {
@@ -799,7 +864,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.437,
+      "true_time": 0.3019,
       "excerpt_id": "ex-067"
     },
     {
@@ -811,7 +877,8 @@
         "Meera",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.086,
+      "true_time": 0.3074,
       "excerpt_id": "ex-068"
     },
     {
@@ -823,7 +890,8 @@
         "Meera",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.04,
+      "true_time": 0.308,
       "excerpt_id": "ex-069"
     },
     {
@@ -835,7 +903,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.177,
+      "true_time": 0.3205,
       "excerpt_id": "ex-070"
     },
     {
@@ -846,7 +915,8 @@
       "entities": [
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.05,
+      "true_time": 0.3099,
       "excerpt_id": "ex-071"
     },
     {
@@ -858,7 +928,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.279,
+      "true_time": 0.3222,
       "excerpt_id": "ex-072"
     },
     {
@@ -870,7 +941,8 @@
         "Rao",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.248,
+      "true_time": 0.3348,
       "excerpt_id": "ex-073"
     },
     {
@@ -882,7 +954,8 @@
         "Zoya",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.044,
+      "true_time": 0.3234,
       "excerpt_id": "ex-074"
     },
     {
@@ -894,7 +967,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.379,
+      "true_time": 0.3368,
       "excerpt_id": "ex-075"
     },
     {
@@ -906,7 +980,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.012,
+      "true_time": 0.3389,
       "excerpt_id": "ex-076"
     },
     {
@@ -918,7 +993,8 @@
         "Rao",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.332,
+      "true_time": 0.3444,
       "excerpt_id": "ex-077"
     },
     {
@@ -930,7 +1006,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.217,
+      "true_time": 0.3461,
       "excerpt_id": "ex-078"
     },
     {
@@ -942,7 +1019,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.095,
+      "true_time": 0.3652,
       "excerpt_id": "ex-079"
     },
     {
@@ -954,7 +1032,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.405,
+      "true_time": 0.3511,
       "excerpt_id": "ex-080"
     },
     {
@@ -966,7 +1045,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.372,
+      "true_time": 0.3672,
       "excerpt_id": "ex-081"
     },
     {
@@ -978,7 +1058,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.226,
+      "true_time": 0.3687,
       "excerpt_id": "ex-082"
     },
     {
@@ -990,7 +1071,8 @@
         "Rafi",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.582,
+      "true_time": 0.3696,
       "excerpt_id": "ex-083"
     },
     {
@@ -1002,7 +1084,8 @@
         "Meera",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.225,
+      "true_time": 0.3881,
       "excerpt_id": "ex-084"
     },
     {
@@ -1014,7 +1097,8 @@
         "Tara",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.213,
+      "true_time": 0.3911,
       "excerpt_id": "ex-085"
     },
     {
@@ -1026,7 +1110,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.214,
+      "true_time": 0.3774,
       "excerpt_id": "ex-086"
     },
     {
@@ -1038,7 +1123,8 @@
         "Tara",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.121,
+      "true_time": 0.3921,
       "excerpt_id": "ex-087"
     },
     {
@@ -1049,7 +1135,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.6,
+      "true_time": 0.3904,
       "excerpt_id": "ex-088"
     },
     {
@@ -1061,7 +1148,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.457,
+      "true_time": 0.4138,
       "excerpt_id": "ex-089"
     },
     {
@@ -1072,7 +1160,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.2,
+      "true_time": 0.4146,
       "excerpt_id": "ex-090"
     },
     {
@@ -1084,7 +1173,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.362,
+      "true_time": 0.4074,
       "excerpt_id": "ex-091"
     },
     {
@@ -1096,7 +1186,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.015,
+      "true_time": 0.4214,
       "excerpt_id": "ex-092"
     },
     {
@@ -1108,7 +1199,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.508,
+      "true_time": 0.4129,
       "excerpt_id": "ex-093"
     },
     {
@@ -1120,7 +1212,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.393,
+      "true_time": 0.4342,
       "excerpt_id": "ex-094"
     },
     {
@@ -1132,7 +1225,8 @@
         "Zoya",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.286,
+      "true_time": 0.4257,
       "excerpt_id": "ex-095"
     },
     {
@@ -1144,7 +1238,8 @@
         "Rao",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.191,
+      "true_time": 0.4236,
       "excerpt_id": "ex-096"
     },
     {
@@ -1156,7 +1251,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.043,
+      "true_time": 0.427,
       "excerpt_id": "ex-097"
     },
     {
@@ -1168,7 +1264,8 @@
         "Rao",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.518,
+      "true_time": 0.4544,
       "excerpt_id": "ex-098"
     },
     {
@@ -1180,7 +1277,8 @@
         "Rafi",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.193,
+      "true_time": 0.4386,
       "excerpt_id": "ex-099"
     },
     {
@@ -1192,7 +1290,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.585,
+      "true_time": 0.4567,
       "excerpt_id": "ex-100"
     },
     {
@@ -1203,7 +1302,8 @@
       "entities": [
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.15,
+      "true_time": 0.461,
       "excerpt_id": "ex-101"
     },
     {
@@ -1215,7 +1315,8 @@
         "Tara",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.51,
+      "true_time": 0.4721,
       "excerpt_id": "ex-102"
     },
     {
@@ -1227,7 +1328,8 @@
         "Meera",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.217,
+      "true_time": 0.4752,
       "excerpt_id": "ex-103"
     },
     {
@@ -1239,7 +1341,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.333,
+      "true_time": 0.4594,
       "excerpt_id": "ex-104"
     },
     {
@@ -1251,7 +1354,8 @@
         "Zoya",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.39,
+      "true_time": 0.4695,
       "excerpt_id": "ex-105"
     },
     {
@@ -1263,7 +1367,8 @@
         "Meera",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.177,
+      "true_time": 0.4827,
       "excerpt_id": "ex-106"
     },
     {
@@ -1275,7 +1380,8 @@
         "Tara",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.287,
+      "true_time": 0.4888,
       "excerpt_id": "ex-107"
     },
     {
@@ -1287,7 +1393,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.585,
+      "true_time": 0.4912,
       "excerpt_id": "ex-108"
     },
     {
@@ -1299,7 +1406,8 @@
         "Rao",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.512,
+      "true_time": 0.4895,
       "excerpt_id": "ex-109"
     },
     {
@@ -1310,7 +1418,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.25,
+      "true_time": 0.492,
       "excerpt_id": "ex-110"
     },
     {
@@ -1322,7 +1431,8 @@
         "Tara",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.104,
+      "true_time": 0.5139,
       "excerpt_id": "ex-111"
     },
     {
@@ -1334,7 +1444,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.567,
+      "true_time": 0.4997,
       "excerpt_id": "ex-112"
     },
     {
@@ -1346,7 +1457,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.432,
+      "true_time": 0.5008,
       "excerpt_id": "ex-113"
     },
     {
@@ -1358,7 +1470,8 @@
         "Tara",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.568,
+      "true_time": 0.5188,
       "excerpt_id": "ex-114"
     },
     {
@@ -1370,7 +1483,8 @@
         "Rao",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.054,
+      "true_time": 0.5213,
       "excerpt_id": "ex-115"
     },
     {
@@ -1382,7 +1496,8 @@
         "Meera",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.313,
+      "true_time": 0.5262,
       "excerpt_id": "ex-116"
     },
     {
@@ -1394,7 +1509,8 @@
         "Tara",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.233,
+      "true_time": 0.5339,
       "excerpt_id": "ex-117"
     },
     {
@@ -1406,7 +1522,8 @@
         "Meera",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.553,
+      "true_time": 0.5422,
       "excerpt_id": "ex-118"
     },
     {
@@ -1418,7 +1535,8 @@
         "Rao",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.406,
+      "true_time": 0.5478,
       "excerpt_id": "ex-119"
     },
     {
@@ -1430,7 +1548,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.2,
+      "true_time": 0.5402,
       "excerpt_id": "ex-120"
     },
     {
@@ -1442,7 +1561,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.577,
+      "true_time": 0.5593,
       "excerpt_id": "ex-121"
     },
     {
@@ -1454,7 +1574,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.265,
+      "true_time": 0.5535,
       "excerpt_id": "ex-122"
     },
     {
@@ -1466,7 +1587,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.365,
+      "true_time": 0.5467,
       "excerpt_id": "ex-123"
     },
     {
@@ -1478,7 +1600,8 @@
         "Rao",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.265,
+      "true_time": 0.5497,
       "excerpt_id": "ex-124"
     },
     {
@@ -1490,7 +1613,8 @@
         "Tara",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.054,
+      "true_time": 0.577,
       "excerpt_id": "ex-125"
     },
     {
@@ -1502,7 +1626,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.489,
+      "true_time": 0.5592,
       "excerpt_id": "ex-126"
     },
     {
@@ -1514,7 +1639,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.499,
+      "true_time": 0.5686,
       "excerpt_id": "ex-127"
     },
     {
@@ -1526,7 +1652,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.263,
+      "true_time": 0.5784,
       "excerpt_id": "ex-128"
     },
     {
@@ -1538,7 +1665,8 @@
         "Zoya",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.346,
+      "true_time": 0.589,
       "excerpt_id": "ex-129"
     },
     {
@@ -1550,7 +1678,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.397,
+      "true_time": 0.586,
       "excerpt_id": "ex-130"
     },
     {
@@ -1562,7 +1691,8 @@
         "Rao",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.381,
+      "true_time": 0.5894,
       "excerpt_id": "ex-131"
     },
     {
@@ -1574,7 +1704,8 @@
         "Rafi",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.481,
+      "true_time": 0.6039,
       "excerpt_id": "ex-132"
     },
     {
@@ -1586,7 +1717,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.35,
+      "true_time": 0.6016,
       "excerpt_id": "ex-133"
     },
     {
@@ -1599,7 +1731,8 @@
         "Meera",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.4,
+      "true_time": 0.5998,
       "excerpt_id": "ex-134"
     },
     {
@@ -1611,7 +1744,8 @@
         "Meera",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.129,
+      "true_time": 0.6175,
       "excerpt_id": "ex-135"
     },
     {
@@ -1623,7 +1757,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.016,
+      "true_time": 0.6086,
       "excerpt_id": "ex-136"
     },
     {
@@ -1635,7 +1770,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.548,
+      "true_time": 0.6205,
       "excerpt_id": "ex-137"
     },
     {
@@ -1647,7 +1783,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.561,
+      "true_time": 0.6149,
       "excerpt_id": "ex-138"
     },
     {
@@ -1659,7 +1796,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.115,
+      "true_time": 0.6367,
       "excerpt_id": "ex-139"
     },
     {
@@ -1670,7 +1808,8 @@
       "entities": [
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.1,
+      "true_time": 0.6261,
       "excerpt_id": "ex-140"
     },
     {
@@ -1682,7 +1821,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.483,
+      "true_time": 0.6463,
       "excerpt_id": "ex-141"
     },
     {
@@ -1694,7 +1834,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.529,
+      "true_time": 0.6366,
       "excerpt_id": "ex-142"
     },
     {
@@ -1706,7 +1847,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.304,
+      "true_time": 0.6598,
       "excerpt_id": "ex-143"
     },
     {
@@ -1718,7 +1860,8 @@
         "Rafi",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.553,
+      "true_time": 0.6428,
       "excerpt_id": "ex-144"
     },
     {
@@ -1730,7 +1873,8 @@
         "Rafi",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.566,
+      "true_time": 0.6682,
       "excerpt_id": "ex-145"
     },
     {
@@ -1742,7 +1886,8 @@
         "Tara",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.582,
+      "true_time": 0.6564,
       "excerpt_id": "ex-146"
     },
     {
@@ -1754,7 +1899,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.12,
+      "true_time": 0.6767,
       "excerpt_id": "ex-147"
     },
     {
@@ -1766,7 +1912,8 @@
         "Rafi",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.51,
+      "true_time": 0.6647,
       "excerpt_id": "ex-148"
     },
     {
@@ -1778,7 +1925,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.176,
+      "true_time": 0.6866,
       "excerpt_id": "ex-149"
     },
     {
@@ -1790,7 +1938,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.597,
+      "true_time": 0.6817,
       "excerpt_id": "ex-150"
     },
     {
@@ -1802,7 +1951,8 @@
         "Meera",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.088,
+      "true_time": 0.6837,
       "excerpt_id": "ex-151"
     },
     {
@@ -1814,7 +1964,8 @@
         "Rafi",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.463,
+      "true_time": 0.683,
       "excerpt_id": "ex-152"
     },
     {
@@ -1826,7 +1977,8 @@
         "Rafi",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.238,
+      "true_time": 0.7005,
       "excerpt_id": "ex-153"
     },
     {
@@ -1838,7 +1990,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.18,
+      "true_time": 0.7057,
       "excerpt_id": "ex-154"
     },
     {
@@ -1850,7 +2003,8 @@
         "Zoya",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.59,
+      "true_time": 0.6973,
       "excerpt_id": "ex-155"
     },
     {
@@ -1862,7 +2016,8 @@
         "Rafi",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.054,
+      "true_time": 0.7107,
       "excerpt_id": "ex-156"
     },
     {
@@ -1874,7 +2029,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.292,
+      "true_time": 0.7077,
       "excerpt_id": "ex-157"
     },
     {
@@ -1886,7 +2042,8 @@
         "Meera",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.08,
+      "true_time": 0.7105,
       "excerpt_id": "ex-158"
     },
     {
@@ -1898,7 +2055,8 @@
         "Rafi",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.006,
+      "true_time": 0.7254,
       "excerpt_id": "ex-159"
     },
     {
@@ -1909,7 +2067,8 @@
       "entities": [
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.3,
+      "true_time": 0.7309,
       "excerpt_id": "ex-160"
     },
     {
@@ -1921,7 +2080,8 @@
         "Zoya",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.024,
+      "true_time": 0.7284,
       "excerpt_id": "ex-161"
     },
     {
@@ -1933,7 +2093,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.005,
+      "true_time": 0.743,
       "excerpt_id": "ex-162"
     },
     {
@@ -1945,7 +2106,8 @@
         "Zoya",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.2,
+      "true_time": 0.7488,
       "excerpt_id": "ex-163"
     },
     {
@@ -1957,7 +2119,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.025,
+      "true_time": 0.7334,
       "excerpt_id": "ex-164"
     },
     {
@@ -1969,7 +2132,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.461,
+      "true_time": 0.7538,
       "excerpt_id": "ex-165"
     },
     {
@@ -1981,7 +2145,8 @@
         "Tara",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.595,
+      "true_time": 0.7566,
       "excerpt_id": "ex-166"
     },
     {
@@ -1993,7 +2158,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.289,
+      "true_time": 0.7477,
       "excerpt_id": "ex-167"
     },
     {
@@ -2005,7 +2171,8 @@
         "Meera",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.547,
+      "true_time": 0.7689,
       "excerpt_id": "ex-168"
     },
     {
@@ -2017,7 +2184,8 @@
         "Rao",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.21,
+      "true_time": 0.7662,
       "excerpt_id": "ex-169"
     },
     {
@@ -2029,7 +2197,8 @@
         "Rao",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.164,
+      "true_time": 0.7675,
       "excerpt_id": "ex-170"
     },
     {
@@ -2041,7 +2210,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.268,
+      "true_time": 0.7877,
       "excerpt_id": "ex-171"
     },
     {
@@ -2053,7 +2223,8 @@
         "Rao",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.246,
+      "true_time": 0.7709,
       "excerpt_id": "ex-172"
     },
     {
@@ -2065,7 +2236,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.422,
+      "true_time": 0.7825,
       "excerpt_id": "ex-173"
     },
     {
@@ -2077,7 +2249,8 @@
         "Asha",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.429,
+      "true_time": 0.7854,
       "excerpt_id": "ex-174"
     },
     {
@@ -2088,7 +2261,8 @@
       "entities": [
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.1,
+      "true_time": 0.7863,
       "excerpt_id": "ex-175"
     },
     {
@@ -2100,7 +2274,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.46,
+      "true_time": 0.8073,
       "excerpt_id": "ex-176"
     },
     {
@@ -2112,7 +2287,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.221,
+      "true_time": 0.8072,
       "excerpt_id": "ex-177"
     },
     {
@@ -2124,9 +2300,9 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
-      "excerpt_id": "ex-178",
-      "true_time": 0.05
+      "valence": 0.15,
+      "true_time": 0.8062,
+      "excerpt_id": "ex-178"
     },
     {
       "id": "ep-179",
@@ -2137,7 +2313,8 @@
         "Tara",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.141,
+      "true_time": 0.8127,
       "excerpt_id": "ex-179"
     },
     {
@@ -2148,7 +2325,8 @@
       "entities": [
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.1,
+      "true_time": 0.8189,
       "excerpt_id": "ex-180"
     },
     {
@@ -2160,7 +2338,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.117,
+      "true_time": 0.8118,
       "excerpt_id": "ex-181"
     },
     {
@@ -2172,7 +2351,8 @@
         "Rafi",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.076,
+      "true_time": 0.8328,
       "excerpt_id": "ex-182"
     },
     {
@@ -2184,7 +2364,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.544,
+      "true_time": 0.8302,
       "excerpt_id": "ex-183"
     },
     {
@@ -2196,7 +2377,8 @@
         "Rao",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": -0.084,
+      "true_time": 0.8253,
       "excerpt_id": "ex-184"
     },
     {
@@ -2208,7 +2390,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.328,
+      "true_time": 0.8419,
       "excerpt_id": "ex-185"
     },
     {
@@ -2220,7 +2403,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.155,
+      "true_time": 0.8437,
       "excerpt_id": "ex-186"
     },
     {
@@ -2232,7 +2416,8 @@
         "Rao",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.234,
+      "true_time": 0.8376,
       "excerpt_id": "ex-187"
     },
     {
@@ -2244,7 +2429,8 @@
         "Meera",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.445,
+      "true_time": 0.8437,
       "excerpt_id": "ex-188"
     },
     {
@@ -2256,7 +2442,8 @@
         "Rafi",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.589,
+      "true_time": 0.8634,
       "excerpt_id": "ex-189"
     },
     {
@@ -2268,7 +2455,8 @@
         "Tara",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.55,
+      "true_time": 0.8686,
       "excerpt_id": "ex-190"
     },
     {
@@ -2280,7 +2468,8 @@
         "Zoya",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.273,
+      "true_time": 0.8588,
       "excerpt_id": "ex-191"
     },
     {
@@ -2292,7 +2481,8 @@
         "Rao",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.279,
+      "true_time": 0.8754,
       "excerpt_id": "ex-192"
     },
     {
@@ -2304,7 +2494,8 @@
         "Zoya",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.358,
+      "true_time": 0.8759,
       "excerpt_id": "ex-193"
     },
     {
@@ -2316,7 +2507,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.073,
+      "true_time": 0.8902,
       "excerpt_id": "ex-194"
     },
     {
@@ -2328,7 +2520,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.3,
+      "true_time": 0.886,
       "excerpt_id": "ex-195"
     },
     {
@@ -2340,7 +2533,8 @@
         "Meera",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.463,
+      "true_time": 0.902,
       "excerpt_id": "ex-196"
     },
     {
@@ -2352,7 +2546,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.326,
+      "true_time": 0.8846,
       "excerpt_id": "ex-197"
     },
     {
@@ -2364,7 +2559,8 @@
         "Asha",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": 0.222,
+      "true_time": 0.8916,
       "excerpt_id": "ex-198"
     },
     {
@@ -2375,7 +2571,8 @@
       "entities": [
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": -0.3,
+      "true_time": 0.8993,
       "excerpt_id": "ex-199"
     },
     {
@@ -2387,7 +2584,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.549,
+      "true_time": 0.913,
       "excerpt_id": "ex-200"
     },
     {
@@ -2399,7 +2597,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": -0.426,
+      "true_time": 0.9234,
       "excerpt_id": "ex-201"
     },
     {
@@ -2411,7 +2610,8 @@
         "Rafi",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.17,
+      "true_time": 0.9106,
       "excerpt_id": "ex-202"
     },
     {
@@ -2423,7 +2623,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.368,
+      "true_time": 0.9216,
       "excerpt_id": "ex-203"
     },
     {
@@ -2435,7 +2636,8 @@
         "Rafi",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.472,
+      "true_time": 0.9251,
       "excerpt_id": "ex-204"
     },
     {
@@ -2446,7 +2648,8 @@
       "entities": [
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.1,
+      "true_time": 0.9249,
       "excerpt_id": "ex-205"
     },
     {
@@ -2458,7 +2661,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.187,
+      "true_time": 0.9245,
       "excerpt_id": "ex-206"
     },
     {
@@ -2470,7 +2674,8 @@
         "Zoya",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.16,
+      "true_time": 0.9317,
       "excerpt_id": "ex-207"
     },
     {
@@ -2482,7 +2687,8 @@
         "Rao",
         "Meera"
       ],
-      "valence": 0.0,
+      "valence": -0.528,
+      "true_time": 0.9351,
       "excerpt_id": "ex-208"
     },
     {
@@ -2494,7 +2700,8 @@
         "Zoya",
         "Asha"
       ],
-      "valence": 0.0,
+      "valence": 0.049,
+      "true_time": 0.9513,
       "excerpt_id": "ex-209"
     },
     {
@@ -2506,7 +2713,8 @@
         "Asha",
         "Salim"
       ],
-      "valence": 0.0,
+      "valence": -0.85,
+      "true_time": 0.9585,
       "excerpt_id": "ex-210"
     },
     {
@@ -2518,7 +2726,8 @@
         "Zoya",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.426,
+      "true_time": 0.9678,
       "excerpt_id": "ex-211"
     },
     {
@@ -2529,7 +2738,8 @@
       "entities": [
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.25,
+      "true_time": 0.9565,
       "excerpt_id": "ex-212"
     },
     {
@@ -2541,7 +2751,8 @@
         "Tara",
         "Zoya"
       ],
-      "valence": 0.0,
+      "valence": 0.187,
+      "true_time": 0.9635,
       "excerpt_id": "ex-213"
     },
     {
@@ -2553,7 +2764,8 @@
         "Zoya",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.096,
+      "true_time": 0.9788,
       "excerpt_id": "ex-214"
     },
     {
@@ -2565,7 +2777,8 @@
         "Asha",
         "Rafi"
       ],
-      "valence": 0.0,
+      "valence": 0.351,
+      "true_time": 0.9761,
       "excerpt_id": "ex-215"
     },
     {
@@ -2577,7 +2790,8 @@
         "Tara",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.433,
+      "true_time": 0.9914,
       "excerpt_id": "ex-216"
     },
     {
@@ -2589,7 +2803,8 @@
         "Rao",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": 0.542,
+      "true_time": 0.993,
       "excerpt_id": "ex-217"
     },
     {
@@ -2601,7 +2816,8 @@
         "Asha",
         "Tara"
       ],
-      "valence": 0.0,
+      "valence": -0.35,
+      "true_time": 1.0,
       "excerpt_id": "ex-218"
     },
     {
@@ -2613,7 +2829,8 @@
         "Meera",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": -0.005,
+      "true_time": 1.0,
       "excerpt_id": "ex-219"
     },
     {
@@ -2625,7 +2842,8 @@
         "Asha",
         "Rao"
       ],
-      "valence": 0.0,
+      "valence": 0.2,
+      "true_time": 1.0,
       "excerpt_id": "ex-220"
     }
   ],
@@ -2968,49 +3186,57 @@
       "node_id": "ep-218",
       "target_id": "twist-01",
       "episode": 218,
-      "rationale": "Asha admits under questioning from Tara that she was at the hospital with her mother during the Ep 47 fire, not at the warehouse."
+      "rationale": "Asha admits under questioning from Tara that she was at the hospital with her mother during the Ep 47 fire, not at the warehouse.",
+      "verified": true
     },
     {
       "node_id": "ep-134",
       "target_id": "twist-02",
       "episode": 134,
-      "rationale": "Tara admits the Ep 60 dive was her twin sister Meera, wearing Tara's jacket, not Tara herself."
+      "rationale": "Tara admits the Ep 60 dive was her twin sister Meera, wearing Tara's jacket, not Tara herself.",
+      "verified": true
     },
     {
       "node_id": "ep-178",
       "target_id": "twist-03",
       "episode": 178,
-      "rationale": "Tara explicitly dates the Ep 22 flashback to August 2009, the night before the Konkan Rani sailed."
+      "rationale": "Tara explicitly dates the Ep 22 flashback to August 2009, the night before the Konkan Rani sailed.",
+      "verified": true
     },
     {
       "node_id": "ep-199",
       "target_id": "twist-04",
       "episode": 199,
-      "rationale": "Zoya reveals her full name, Zoya Ansari, and that she is Kabir Ansari's sister."
+      "rationale": "Zoya reveals her full name, Zoya Ansari, and that she is Kabir Ansari's sister.",
+      "verified": true
     },
     {
       "node_id": "ep-210",
       "target_id": "twist-05",
       "episode": 210,
-      "rationale": "Voiceprint analysis confirms the cassette is a performance by voice actor Salim Qureshi, not a recording of Vikram."
+      "rationale": "Voiceprint analysis confirms the cassette is a performance by voice actor Salim Qureshi, not a recording of Vikram.",
+      "verified": true
     },
     {
       "node_id": "ep-055",
       "target_id": "clean-01",
       "episode": 55,
-      "rationale": "Tara brings Asha to the harbor archivist as promised."
+      "rationale": "Tara brings Asha to the harbor archivist as promised.",
+      "verified": true
     },
     {
       "node_id": "ep-133",
       "target_id": "clean-02",
       "episode": 133,
-      "rationale": "Asha delivers the chain-of-custody log to Rao exactly thirteen days later."
+      "rationale": "Asha delivers the chain-of-custody log to Rao exactly thirteen days later.",
+      "verified": true
     },
     {
       "node_id": "ep-195",
       "target_id": "clean-03",
       "episode": 195,
-      "rationale": "Zoya explains her connection to Kabir once the tribunal session closes, as promised."
+      "rationale": "Zoya explains her connection to Kabir once the tribunal session closes, as promised.",
+      "verified": true
     }
   ],
   "excerpts": [
