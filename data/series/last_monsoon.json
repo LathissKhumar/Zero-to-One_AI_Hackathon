@@ -44,10 +44,10 @@
       "id": "ep-004",
       "episode": 4,
       "perceived_index": 4,
-      "summary": "Zoya corners a reluctant source at Rao's precinct, only to find the evidence has already been sold.",
+      "summary": "Tara and Rafi clash over whether Tara's memory of that night can be trusted; neither one gives ground.",
       "entities": [
-        "Zoya",
-        "Meera"
+        "Tara",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-004"
@@ -68,10 +68,10 @@
       "id": "ep-006",
       "episode": 6,
       "perceived_index": 6,
-      "summary": "Asha follows a lead near the Bandra sea wall, but the tape hisses out right where it matters.",
+      "summary": "Zoya follows a lead near Crawford Market, but the evidence has already been sold.",
       "entities": [
-        "Asha",
-        "Rao"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-006"
@@ -80,10 +80,10 @@
       "id": "ep-007",
       "episode": 7,
       "perceived_index": 7,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao corners a reluctant source at the All-India Radio tower, only to find the file has been resealed.",
       "entities": [
-        "Tara",
-        "Rafi"
+        "Rao",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-007"
@@ -92,10 +92,10 @@
       "id": "ep-008",
       "episode": 8,
       "perceived_index": 8,
-      "summary": "Rao spends the episode at the Fernandes family flat, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Rafi warns Tara away from whether the cassette should ever have aired, which only makes Tara dig further.",
       "entities": [
-        "Rao",
-        "Zoya"
+        "Tara",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-008"
@@ -104,7 +104,7 @@
       "id": "ep-009",
       "episode": 9,
       "perceived_index": 9,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "Rafi and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
         "Rafi",
         "Meera"
@@ -116,7 +116,7 @@
       "id": "ep-010",
       "episode": 10,
       "perceived_index": 10,
-      "summary": "Zoya corners a reluctant source at Sassoon Dock, only to find the monsoon floods the only road out.",
+      "summary": "Zoya follows a lead near the All-India Radio tower, but the ledger page is missing.",
       "entities": [
         "Zoya",
         "Asha"
@@ -128,10 +128,10 @@
       "id": "ep-011",
       "episode": 11,
       "perceived_index": 11,
-      "summary": "Tara warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Rafi corners a reluctant source at Crawford Market, only to find the ledger page is missing.",
       "entities": [
-        "Meera",
-        "Tara"
+        "Rafi",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-011"
@@ -151,10 +151,10 @@
       "id": "ep-013",
       "episode": 13,
       "perceived_index": 13,
-      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao and Rafi clash over what the union paid to keep quiet; neither one gives ground.",
       "entities": [
-        "Tara",
-        "Zoya"
+        "Rao",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-013"
@@ -163,9 +163,9 @@
       "id": "ep-014",
       "episode": 14,
       "perceived_index": 14,
-      "summary": "Rao spends the episode at Rao's precinct, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera warns Asha away from what Rao knew before the retirement papers were signed, which only makes Asha dig further.",
       "entities": [
-        "Rao",
+        "Asha",
         "Meera"
       ],
       "valence": 0.0,
@@ -175,9 +175,9 @@
       "id": "ep-015",
       "episode": 15,
       "perceived_index": 15,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the drowned warehouse at Ferry Point.",
+      "summary": "Tara and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Rafi",
+        "Tara",
         "Asha"
       ],
       "valence": 0.0,
@@ -187,10 +187,10 @@
       "id": "ep-016",
       "episode": 16,
       "perceived_index": 16,
-      "summary": "Zoya corners a reluctant source at the Bandra sea wall, only to find the file has been resealed.",
+      "summary": "Rao and Zoya clash over whether Tara's memory of that night can be trusted; neither one gives ground.",
       "entities": [
-        "Zoya",
-        "Tara"
+        "Rao",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-016"
@@ -199,10 +199,10 @@
       "id": "ep-017",
       "episode": 17,
       "perceived_index": 17,
-      "summary": "Rao warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Zoya and Rafi clash over what Rao knew before the retirement papers were signed; neither one gives ground.",
       "entities": [
-        "Meera",
-        "Rao"
+        "Zoya",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-017"
@@ -211,10 +211,10 @@
       "id": "ep-018",
       "episode": 18,
       "perceived_index": 18,
-      "summary": "Asha follows a lead near the Fernandes family flat, but the monsoon floods the only road out.",
+      "summary": "Tara and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Zoya"
+        "Tara",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-018"
@@ -223,10 +223,10 @@
       "id": "ep-019",
       "episode": 19,
       "perceived_index": 19,
-      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Meera and Asha clash over who Zoya really answers to; neither one gives ground.",
       "entities": [
-        "Tara",
-        "Meera"
+        "Meera",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-019"
@@ -235,10 +235,10 @@
       "id": "ep-020",
       "episode": 20,
       "perceived_index": 20,
-      "summary": "Rao spends the episode at Sassoon Dock, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera corners a reluctant source at the Fernandes family flat, only to find a witness changes their story overnight.",
       "entities": [
-        "Rao",
-        "Asha"
+        "Meera",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-020"
@@ -247,10 +247,10 @@
       "id": "ep-021",
       "episode": 21,
       "perceived_index": 21,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the harbor slum lanes.",
+      "summary": "Tara and Zoya clash over whether Tara's memory of that night can be trusted; neither one gives ground.",
       "entities": [
-        "Rafi",
-        "Tara"
+        "Tara",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-021"
@@ -271,10 +271,10 @@
       "id": "ep-023",
       "episode": 23,
       "perceived_index": 23,
-      "summary": "Rafi warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "A quiet stretch: Rao reflects on whether Tara's memory of that night can be trusted while the monsoon batters Sassoon Dock.",
       "entities": [
-        "Meera",
-        "Rafi"
+        "Rao",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-023"
@@ -283,10 +283,10 @@
       "id": "ep-024",
       "episode": 24,
       "perceived_index": 24,
-      "summary": "Asha follows a lead near Rao's precinct, but the file has been resealed.",
+      "summary": "Meera and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Meera"
+        "Meera",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-024"
@@ -295,9 +295,9 @@
       "id": "ep-025",
       "episode": 25,
       "perceived_index": 25,
-      "summary": "Tara and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "A quiet stretch: Rafi reflects on what the union paid to keep quiet while the monsoon batters the harbor slum lanes.",
       "entities": [
-        "Tara",
+        "Rafi",
         "Asha"
       ],
       "valence": 0.0,
@@ -307,9 +307,9 @@
       "id": "ep-026",
       "episode": 26,
       "perceived_index": 26,
-      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera corners a reluctant source at the harbor slum lanes, only to find the tape hisses out right where it matters.",
       "entities": [
-        "Rao",
+        "Meera",
         "Tara"
       ],
       "valence": 0.0,
@@ -319,10 +319,10 @@
       "id": "ep-027",
       "episode": 27,
       "perceived_index": 27,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Colaba archive.",
+      "summary": "Meera follows a lead near the Fernandes family flat, but the evidence has already been sold.",
       "entities": [
-        "Rafi",
-        "Rao"
+        "Meera",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-027"
@@ -331,10 +331,10 @@
       "id": "ep-028",
       "episode": 28,
       "perceived_index": 28,
-      "summary": "Zoya corners a reluctant source at the Fernandes family flat, only to find the evidence has already been sold.",
+      "summary": "Asha and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Zoya",
-        "Rafi"
+        "Asha",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-028"
@@ -343,10 +343,10 @@
       "id": "ep-029",
       "episode": 29,
       "perceived_index": 29,
-      "summary": "Zoya warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Zoya corners a reluctant source at the drowned warehouse at Ferry Point, only to find the evidence has already been sold.",
       "entities": [
-        "Meera",
-        "Zoya"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-029"
@@ -367,10 +367,10 @@
       "id": "ep-031",
       "episode": 31,
       "perceived_index": 31,
-      "summary": "Tara and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Zoya warns Asha away from whether the cassette should ever have aired, which only makes Asha dig further.",
       "entities": [
-        "Tara",
-        "Rao"
+        "Asha",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-031"
@@ -379,10 +379,10 @@
       "id": "ep-032",
       "episode": 32,
       "perceived_index": 32,
-      "summary": "Rao spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Asha and Rao clash over what the union paid to keep quiet; neither one gives ground.",
       "entities": [
-        "Rao",
-        "Rafi"
+        "Asha",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-032"
@@ -391,10 +391,10 @@
       "id": "ep-033",
       "episode": 33,
       "perceived_index": 33,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the dock workers' union hall.",
+      "summary": "Tara warns Zoya away from whether Tara's memory of that night can be trusted, which only makes Zoya dig further.",
       "entities": [
-        "Rafi",
-        "Zoya"
+        "Zoya",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-033"
@@ -414,10 +414,10 @@
       "id": "ep-035",
       "episode": 35,
       "perceived_index": 35,
-      "summary": "Asha warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Zoya spends the episode at Rao's precinct, turning over whether the cassette should ever have aired without resolving it.",
       "entities": [
-        "Meera",
-        "Asha"
+        "Zoya",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-035"
@@ -426,10 +426,10 @@
       "id": "ep-036",
       "episode": 36,
       "perceived_index": 36,
-      "summary": "Asha follows a lead near the Bandra sea wall, but the evidence has already been sold.",
+      "summary": "Rao follows a lead near Sassoon Dock, but the evidence has already been sold.",
       "entities": [
-        "Asha",
-        "Rao"
+        "Rao",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-036"
@@ -438,10 +438,10 @@
       "id": "ep-037",
       "episode": 37,
       "perceived_index": 37,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Meera spends the episode at the Colaba archive, turning over what the union paid to keep quiet without resolving it.",
       "entities": [
-        "Tara",
-        "Rafi"
+        "Meera",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-037"
@@ -450,10 +450,10 @@
       "id": "ep-038",
       "episode": 38,
       "perceived_index": 38,
-      "summary": "Rao spends the episode at the Fernandes family flat, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera spends the episode at the All-India Radio tower, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
-        "Rao",
-        "Zoya"
+        "Meera",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-038"
@@ -462,10 +462,10 @@
       "id": "ep-039",
       "episode": 39,
       "perceived_index": 39,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Rafi",
-        "Meera"
+        "Tara",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-039"
@@ -486,10 +486,10 @@
       "id": "ep-041",
       "episode": 41,
       "perceived_index": 41,
-      "summary": "Tara warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Rafi corners a reluctant source at the harbor slum lanes, only to find the monsoon floods the only road out.",
       "entities": [
-        "Meera",
-        "Tara"
+        "Rafi",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-041"
@@ -498,10 +498,10 @@
       "id": "ep-042",
       "episode": 42,
       "perceived_index": 42,
-      "summary": "Asha follows a lead near the All-India Radio tower, but the monsoon floods the only road out.",
+      "summary": "Meera and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Rafi"
+        "Meera",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-042"
@@ -510,10 +510,10 @@
       "id": "ep-043",
       "episode": 43,
       "perceived_index": 43,
-      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rafi warns Asha away from what Rao knew before the retirement papers were signed, which only makes Asha dig further.",
       "entities": [
-        "Tara",
-        "Zoya"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-043"
@@ -522,9 +522,9 @@
       "id": "ep-044",
       "episode": 44,
       "perceived_index": 44,
-      "summary": "Rao spends the episode at Rao's precinct, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "A quiet stretch: Rafi reflects on whether the cassette should ever have aired while the monsoon batters the Bandra sea wall.",
       "entities": [
-        "Rao",
+        "Rafi",
         "Meera"
       ],
       "valence": 0.0,
@@ -534,10 +534,10 @@
       "id": "ep-045",
       "episode": 45,
       "perceived_index": 45,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the drowned warehouse at Ferry Point.",
+      "summary": "Rao spends the episode at Crawford Market, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
-        "Rafi",
-        "Asha"
+        "Rao",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-045"
@@ -546,10 +546,10 @@
       "id": "ep-046",
       "episode": 46,
       "perceived_index": 46,
-      "summary": "Zoya corners a reluctant source at the Bandra sea wall, only to find the tape hisses out right where it matters.",
+      "summary": "Asha corners a reluctant source at Sassoon Dock, only to find the union won't talk to outsiders.",
       "entities": [
-        "Zoya",
-        "Tara"
+        "Asha",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-046"
@@ -569,10 +569,10 @@
       "id": "ep-048",
       "episode": 48,
       "perceived_index": 48,
-      "summary": "Asha follows a lead near the Fernandes family flat, but the file has been resealed.",
+      "summary": "Zoya and Rao clash over who Zoya really answers to; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Zoya"
+        "Zoya",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-048"
@@ -581,10 +581,10 @@
       "id": "ep-049",
       "episode": 49,
       "perceived_index": 49,
-      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Asha corners a reluctant source at the All-India Radio tower, only to find a witness changes their story overnight.",
       "entities": [
-        "Tara",
-        "Meera"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-049"
@@ -593,10 +593,10 @@
       "id": "ep-050",
       "episode": 50,
       "perceived_index": 50,
-      "summary": "Rao spends the episode at Sassoon Dock, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "A quiet stretch: Rafi reflects on what the union paid to keep quiet while the monsoon batters the drowned warehouse at Ferry Point.",
       "entities": [
-        "Rao",
-        "Asha"
+        "Rafi",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-050"
@@ -605,10 +605,10 @@
       "id": "ep-051",
       "episode": 51,
       "perceived_index": 51,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the harbor slum lanes.",
+      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Rafi",
-        "Tara"
+        "Tara",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-051"
@@ -628,10 +628,10 @@
       "id": "ep-053",
       "episode": 53,
       "perceived_index": 53,
-      "summary": "Rafi warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Zoya corners a reluctant source at Crawford Market, only to find the ledger page is missing.",
       "entities": [
-        "Meera",
-        "Rafi"
+        "Zoya",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-053"
@@ -640,10 +640,10 @@
       "id": "ep-054",
       "episode": 54,
       "perceived_index": 54,
-      "summary": "Asha follows a lead near Rao's precinct, but the tape hisses out right where it matters.",
+      "summary": "A quiet stretch: Tara reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Bandra sea wall.",
       "entities": [
-        "Asha",
-        "Meera"
+        "Tara",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-054"
@@ -664,10 +664,10 @@
       "id": "ep-056",
       "episode": 56,
       "perceived_index": 56,
-      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "A quiet stretch: Zoya reflects on who Zoya really answers to while the monsoon batters Crawford Market.",
       "entities": [
-        "Rao",
-        "Tara"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-056"
@@ -676,10 +676,10 @@
       "id": "ep-057",
       "episode": 57,
       "perceived_index": 57,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Colaba archive.",
+      "summary": "Asha corners a reluctant source at the dock workers' union hall, only to find the file has been resealed.",
       "entities": [
-        "Rafi",
-        "Rao"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-057"
@@ -688,10 +688,10 @@
       "id": "ep-058",
       "episode": 58,
       "perceived_index": 58,
-      "summary": "Zoya corners a reluctant source at the Fernandes family flat, only to find the monsoon floods the only road out.",
+      "summary": "Zoya and Tara clash over who really owns the silence around the sinking; neither one gives ground.",
       "entities": [
         "Zoya",
-        "Rafi"
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-058"
@@ -700,10 +700,10 @@
       "id": "ep-059",
       "episode": 59,
       "perceived_index": 59,
-      "summary": "Zoya warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Tara spends the episode at Crawford Market, turning over whether the cassette should ever have aired without resolving it.",
       "entities": [
-        "Meera",
-        "Zoya"
+        "Tara",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-059"
@@ -723,10 +723,10 @@
       "id": "ep-061",
       "episode": 61,
       "perceived_index": 61,
-      "summary": "Tara and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rafi spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
-        "Tara",
-        "Rao"
+        "Rafi",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-061"
@@ -735,10 +735,10 @@
       "id": "ep-062",
       "episode": 62,
       "perceived_index": 62,
-      "summary": "Rao spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Zoya spends the episode at the Colaba archive, turning over whether Tara's memory of that night can be trusted without resolving it.",
       "entities": [
-        "Rao",
-        "Rafi"
+        "Zoya",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-062"
@@ -747,7 +747,7 @@
       "id": "ep-063",
       "episode": 63,
       "perceived_index": 63,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the dock workers' union hall.",
+      "summary": "Zoya warns Rafi away from whether Tara's memory of that night can be trusted, which only makes Rafi dig further.",
       "entities": [
         "Rafi",
         "Zoya"
@@ -759,10 +759,10 @@
       "id": "ep-064",
       "episode": 64,
       "perceived_index": 64,
-      "summary": "Zoya corners a reluctant source at Rao's precinct, only to find the file has been resealed.",
+      "summary": "Asha warns Rafi away from who Zoya really answers to, which only makes Rafi dig further.",
       "entities": [
-        "Zoya",
-        "Meera"
+        "Rafi",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-064"
@@ -771,10 +771,10 @@
       "id": "ep-065",
       "episode": 65,
       "perceived_index": 65,
-      "summary": "Asha warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Fernandes family flat.",
       "entities": [
-        "Meera",
-        "Asha"
+        "Rafi",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-065"
@@ -794,10 +794,10 @@
       "id": "ep-067",
       "episode": 67,
       "perceived_index": 67,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Asha spends the episode at the All-India Radio tower, turning over whether Tara's memory of that night can be trusted without resolving it.",
       "entities": [
-        "Tara",
-        "Rafi"
+        "Asha",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-067"
@@ -806,10 +806,10 @@
       "id": "ep-068",
       "episode": 68,
       "perceived_index": 68,
-      "summary": "Rao spends the episode at the Fernandes family flat, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera corners a reluctant source at the Bandra sea wall, only to find a witness changes their story overnight.",
       "entities": [
-        "Rao",
-        "Zoya"
+        "Meera",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-068"
@@ -818,10 +818,10 @@
       "id": "ep-069",
       "episode": 69,
       "perceived_index": 69,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "Meera corners a reluctant source at the Colaba archive, only to find the monsoon floods the only road out.",
       "entities": [
-        "Rafi",
-        "Meera"
+        "Meera",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-069"
@@ -830,10 +830,10 @@
       "id": "ep-070",
       "episode": 70,
       "perceived_index": 70,
-      "summary": "Zoya corners a reluctant source at Sassoon Dock, only to find the tape hisses out right where it matters.",
+      "summary": "Asha spends the episode at Crawford Market, turning over whether the cassette should ever have aired without resolving it.",
       "entities": [
-        "Zoya",
-        "Asha"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-070"
@@ -853,10 +853,10 @@
       "id": "ep-072",
       "episode": 72,
       "perceived_index": 72,
-      "summary": "Asha follows a lead near the All-India Radio tower, but the file has been resealed.",
+      "summary": "Asha corners a reluctant source at Rao's precinct, only to find someone got there first.",
       "entities": [
         "Asha",
-        "Rafi"
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-072"
@@ -865,10 +865,10 @@
       "id": "ep-073",
       "episode": 73,
       "perceived_index": 73,
-      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao and Asha clash over who Zoya really answers to; neither one gives ground.",
       "entities": [
-        "Tara",
-        "Zoya"
+        "Rao",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-073"
@@ -877,9 +877,9 @@
       "id": "ep-074",
       "episode": 74,
       "perceived_index": 74,
-      "summary": "Rao spends the episode at Rao's precinct, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Zoya spends the episode at the Colaba archive, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
-        "Rao",
+        "Zoya",
         "Meera"
       ],
       "valence": 0.0,
@@ -889,10 +889,10 @@
       "id": "ep-075",
       "episode": 75,
       "perceived_index": 75,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the drowned warehouse at Ferry Point.",
+      "summary": "Meera warns Rafi away from who really owns the silence around the sinking, which only makes Rafi dig further.",
       "entities": [
         "Rafi",
-        "Asha"
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-075"
@@ -901,10 +901,10 @@
       "id": "ep-076",
       "episode": 76,
       "perceived_index": 76,
-      "summary": "Zoya corners a reluctant source at the Bandra sea wall, only to find the evidence has already been sold.",
+      "summary": "Rao follows a lead near the All-India Radio tower, but the union won't talk to outsiders.",
       "entities": [
-        "Zoya",
-        "Tara"
+        "Rao",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-076"
@@ -913,10 +913,10 @@
       "id": "ep-077",
       "episode": 77,
       "perceived_index": 77,
-      "summary": "Rao warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Rao follows a lead near the harbor slum lanes, but the union won't talk to outsiders.",
       "entities": [
-        "Meera",
-        "Rao"
+        "Rao",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-077"
@@ -925,10 +925,10 @@
       "id": "ep-078",
       "episode": 78,
       "perceived_index": 78,
-      "summary": "Asha follows a lead near the Fernandes family flat, but the tape hisses out right where it matters.",
+      "summary": "A quiet stretch: Tara reflects on what the union paid to keep quiet while the monsoon batters the Fernandes family flat.",
       "entities": [
-        "Asha",
-        "Zoya"
+        "Tara",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-078"
@@ -937,10 +937,10 @@
       "id": "ep-079",
       "episode": 79,
       "perceived_index": 79,
-      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
         "Tara",
-        "Meera"
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-079"
@@ -949,10 +949,10 @@
       "id": "ep-080",
       "episode": 80,
       "perceived_index": 80,
-      "summary": "Rao spends the episode at Sassoon Dock, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
         "Rao",
-        "Asha"
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-080"
@@ -961,10 +961,10 @@
       "id": "ep-081",
       "episode": 81,
       "perceived_index": 81,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the harbor slum lanes.",
+      "summary": "Zoya follows a lead near the drowned warehouse at Ferry Point, but the tape hisses out right where it matters.",
       "entities": [
-        "Rafi",
-        "Tara"
+        "Zoya",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-081"
@@ -973,10 +973,10 @@
       "id": "ep-082",
       "episode": 82,
       "perceived_index": 82,
-      "summary": "Zoya corners a reluctant source at the All-India Radio tower, only to find the monsoon floods the only road out.",
+      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Zoya",
-        "Rao"
+        "Tara",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-082"
@@ -985,10 +985,10 @@
       "id": "ep-083",
       "episode": 83,
       "perceived_index": 83,
-      "summary": "Rafi warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Rafi follows a lead near the Colaba archive, but the monsoon floods the only road out.",
       "entities": [
-        "Meera",
-        "Rafi"
+        "Rafi",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-083"
@@ -997,10 +997,10 @@
       "id": "ep-084",
       "episode": 84,
       "perceived_index": 84,
-      "summary": "Asha follows a lead near Rao's precinct, but the evidence has already been sold.",
+      "summary": "Meera corners a reluctant source at Sassoon Dock, only to find the ledger page is missing.",
       "entities": [
-        "Asha",
-        "Meera"
+        "Meera",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-084"
@@ -1009,10 +1009,10 @@
       "id": "ep-085",
       "episode": 85,
       "perceived_index": 85,
-      "summary": "Tara and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
         "Tara",
-        "Asha"
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-085"
@@ -1021,10 +1021,10 @@
       "id": "ep-086",
       "episode": 86,
       "perceived_index": 86,
-      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera warns Asha away from who really owns the silence around the sinking, which only makes Asha dig further.",
       "entities": [
-        "Rao",
-        "Tara"
+        "Asha",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-086"
@@ -1033,9 +1033,9 @@
       "id": "ep-087",
       "episode": 87,
       "perceived_index": 87,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Colaba archive.",
+      "summary": "Tara spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
-        "Rafi",
+        "Tara",
         "Rao"
       ],
       "valence": 0.0,
@@ -1056,10 +1056,10 @@
       "id": "ep-089",
       "episode": 89,
       "perceived_index": 89,
-      "summary": "Zoya warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha follows a lead near the Fernandes family flat, but the monsoon floods the only road out.",
       "entities": [
-        "Meera",
-        "Zoya"
+        "Asha",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-089"
@@ -1079,10 +1079,10 @@
       "id": "ep-091",
       "episode": 91,
       "perceived_index": 91,
-      "summary": "Tara and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "A quiet stretch: Asha reflects on whether Tara's memory of that night can be trusted while the monsoon batters Rao's precinct.",
       "entities": [
-        "Tara",
-        "Rao"
+        "Asha",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-091"
@@ -1091,10 +1091,10 @@
       "id": "ep-092",
       "episode": 92,
       "perceived_index": 92,
-      "summary": "Rao spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Rafi follows a lead near the dock workers' union hall, but the evidence has already been sold.",
       "entities": [
-        "Rao",
-        "Rafi"
+        "Rafi",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-092"
@@ -1103,10 +1103,10 @@
       "id": "ep-093",
       "episode": 93,
       "perceived_index": 93,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the dock workers' union hall.",
+      "summary": "Rafi spends the episode at the drowned warehouse at Ferry Point, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
         "Rafi",
-        "Zoya"
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-093"
@@ -1115,10 +1115,10 @@
       "id": "ep-094",
       "episode": 94,
       "perceived_index": 94,
-      "summary": "Zoya corners a reluctant source at Rao's precinct, only to find the tape hisses out right where it matters.",
+      "summary": "A quiet stretch: Zoya reflects on what Rao knew before the retirement papers were signed while the monsoon batters the Colaba archive.",
       "entities": [
         "Zoya",
-        "Meera"
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-094"
@@ -1127,10 +1127,10 @@
       "id": "ep-095",
       "episode": 95,
       "perceived_index": 95,
-      "summary": "Asha warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Zoya follows a lead near the Bandra sea wall, but the monsoon floods the only road out.",
       "entities": [
-        "Meera",
-        "Asha"
+        "Zoya",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-095"
@@ -1139,10 +1139,10 @@
       "id": "ep-096",
       "episode": 96,
       "perceived_index": 96,
-      "summary": "Asha follows a lead near the Bandra sea wall, but the file has been resealed.",
+      "summary": "Rao spends the episode at the All-India Radio tower, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
-        "Asha",
-        "Rao"
+        "Rao",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-096"
@@ -1151,10 +1151,10 @@
       "id": "ep-097",
       "episode": 97,
       "perceived_index": 97,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Tara follows a lead near the drowned warehouse at Ferry Point, but the file has been resealed.",
       "entities": [
         "Tara",
-        "Rafi"
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-097"
@@ -1163,10 +1163,10 @@
       "id": "ep-098",
       "episode": 98,
       "perceived_index": 98,
-      "summary": "Rao spends the episode at the Fernandes family flat, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Rao follows a lead near Sassoon Dock, but someone got there first.",
       "entities": [
         "Rao",
-        "Zoya"
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-098"
@@ -1175,10 +1175,10 @@
       "id": "ep-099",
       "episode": 99,
       "perceived_index": 99,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "Rafi and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
         "Rafi",
-        "Meera"
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-099"
@@ -1187,10 +1187,10 @@
       "id": "ep-100",
       "episode": 100,
       "perceived_index": 100,
-      "summary": "Zoya corners a reluctant source at Sassoon Dock, only to find the evidence has already been sold.",
+      "summary": "A quiet stretch: Tara reflects on what the union paid to keep quiet while the monsoon batters Crawford Market.",
       "entities": [
-        "Zoya",
-        "Asha"
+        "Tara",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-100"
@@ -1210,10 +1210,10 @@
       "id": "ep-102",
       "episode": 102,
       "perceived_index": 102,
-      "summary": "Asha follows a lead near the All-India Radio tower, but the tape hisses out right where it matters.",
+      "summary": "Meera warns Tara away from who Zoya really answers to, which only makes Tara dig further.",
       "entities": [
-        "Asha",
-        "Rafi"
+        "Tara",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-102"
@@ -1222,10 +1222,10 @@
       "id": "ep-103",
       "episode": 103,
       "perceived_index": 103,
-      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rafi warns Meera away from who Zoya really answers to, which only makes Meera dig further.",
       "entities": [
-        "Tara",
-        "Zoya"
+        "Meera",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-103"
@@ -1234,10 +1234,10 @@
       "id": "ep-104",
       "episode": 104,
       "perceived_index": 104,
-      "summary": "Rao spends the episode at Rao's precinct, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Asha follows a lead near the harbor slum lanes, but the tape hisses out right where it matters.",
       "entities": [
-        "Rao",
-        "Meera"
+        "Asha",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-104"
@@ -1246,10 +1246,10 @@
       "id": "ep-105",
       "episode": 105,
       "perceived_index": 105,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the drowned warehouse at Ferry Point.",
+      "summary": "Zoya spends the episode at the dock workers' union hall, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
-        "Rafi",
-        "Asha"
+        "Zoya",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-105"
@@ -1258,10 +1258,10 @@
       "id": "ep-106",
       "episode": 106,
       "perceived_index": 106,
-      "summary": "Zoya corners a reluctant source at the Bandra sea wall, only to find the monsoon floods the only road out.",
+      "summary": "Meera spends the episode at Sassoon Dock, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
-        "Zoya",
-        "Tara"
+        "Meera",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-106"
@@ -1270,10 +1270,10 @@
       "id": "ep-107",
       "episode": 107,
       "perceived_index": 107,
-      "summary": "Rao warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Tara spends the episode at the dock workers' union hall, turning over whether Tara's memory of that night can be trusted without resolving it.",
       "entities": [
-        "Meera",
-        "Rao"
+        "Tara",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-107"
@@ -1282,10 +1282,10 @@
       "id": "ep-108",
       "episode": 108,
       "perceived_index": 108,
-      "summary": "Asha follows a lead near the Fernandes family flat, but the evidence has already been sold.",
+      "summary": "Tara and Asha clash over whether Tara's memory of that night can be trusted; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Zoya"
+        "Tara",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-108"
@@ -1294,10 +1294,10 @@
       "id": "ep-109",
       "episode": 109,
       "perceived_index": 109,
-      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao follows a lead near Crawford Market, but the ledger page is missing.",
       "entities": [
-        "Tara",
-        "Meera"
+        "Rao",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-109"
@@ -1317,10 +1317,10 @@
       "id": "ep-111",
       "episode": 111,
       "perceived_index": 111,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the harbor slum lanes.",
+      "summary": "A quiet stretch: Tara reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
       "entities": [
-        "Rafi",
-        "Tara"
+        "Tara",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-111"
@@ -1329,10 +1329,10 @@
       "id": "ep-112",
       "episode": 112,
       "perceived_index": 112,
-      "summary": "Zoya corners a reluctant source at the All-India Radio tower, only to find the file has been resealed.",
+      "summary": "A quiet stretch: Rafi reflects on what the union paid to keep quiet while the monsoon batters the dock workers' union hall.",
       "entities": [
-        "Zoya",
-        "Rao"
+        "Rafi",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-112"
@@ -1341,9 +1341,9 @@
       "id": "ep-113",
       "episode": 113,
       "perceived_index": 113,
-      "summary": "Rafi warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha spends the episode at Sassoon Dock, turning over who Zoya really answers to without resolving it.",
       "entities": [
-        "Meera",
+        "Asha",
         "Rafi"
       ],
       "valence": 0.0,
@@ -1353,9 +1353,9 @@
       "id": "ep-114",
       "episode": 114,
       "perceived_index": 114,
-      "summary": "Asha follows a lead near Rao's precinct, but the monsoon floods the only road out.",
+      "summary": "Tara and Meera clash over what the union paid to keep quiet; neither one gives ground.",
       "entities": [
-        "Asha",
+        "Tara",
         "Meera"
       ],
       "valence": 0.0,
@@ -1365,10 +1365,10 @@
       "id": "ep-115",
       "episode": 115,
       "perceived_index": 115,
-      "summary": "Tara and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao corners a reluctant source at the Colaba archive, only to find a witness changes their story overnight.",
       "entities": [
-        "Tara",
-        "Asha"
+        "Rao",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-115"
@@ -1377,10 +1377,10 @@
       "id": "ep-116",
       "episode": 116,
       "perceived_index": 116,
-      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Zoya warns Meera away from who really owns the silence around the sinking, which only makes Meera dig further.",
       "entities": [
-        "Rao",
-        "Tara"
+        "Meera",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-116"
@@ -1389,9 +1389,9 @@
       "id": "ep-117",
       "episode": 117,
       "perceived_index": 117,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Colaba archive.",
+      "summary": "Tara and Rao clash over whether Tara's memory of that night can be trusted; neither one gives ground.",
       "entities": [
-        "Rafi",
+        "Tara",
         "Rao"
       ],
       "valence": 0.0,
@@ -1401,10 +1401,10 @@
       "id": "ep-118",
       "episode": 118,
       "perceived_index": 118,
-      "summary": "Zoya corners a reluctant source at the Fernandes family flat, only to find the tape hisses out right where it matters.",
+      "summary": "Meera spends the episode at the Fernandes family flat, turning over what the union paid to keep quiet without resolving it.",
       "entities": [
-        "Zoya",
-        "Rafi"
+        "Meera",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-118"
@@ -1413,10 +1413,10 @@
       "id": "ep-119",
       "episode": 119,
       "perceived_index": 119,
-      "summary": "Zoya warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Rao follows a lead near the Bandra sea wall, but the tape hisses out right where it matters.",
       "entities": [
-        "Meera",
-        "Zoya"
+        "Rao",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-119"
@@ -1437,9 +1437,9 @@
       "id": "ep-121",
       "episode": 121,
       "perceived_index": 121,
-      "summary": "Tara and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Asha and Rao clash over what the union paid to keep quiet; neither one gives ground.",
       "entities": [
-        "Tara",
+        "Asha",
         "Rao"
       ],
       "valence": 0.0,
@@ -1449,10 +1449,10 @@
       "id": "ep-122",
       "episode": 122,
       "perceived_index": 122,
-      "summary": "Rao spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Tara warns Zoya away from who really owns the silence around the sinking, which only makes Zoya dig further.",
       "entities": [
-        "Rao",
-        "Rafi"
+        "Zoya",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-122"
@@ -1461,10 +1461,10 @@
       "id": "ep-123",
       "episode": 123,
       "perceived_index": 123,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the dock workers' union hall.",
+      "summary": "Asha follows a lead near the Colaba archive, but the tape hisses out right where it matters.",
       "entities": [
-        "Rafi",
-        "Zoya"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-123"
@@ -1473,9 +1473,9 @@
       "id": "ep-124",
       "episode": 124,
       "perceived_index": 124,
-      "summary": "Zoya corners a reluctant source at Rao's precinct, only to find the evidence has already been sold.",
+      "summary": "A quiet stretch: Rao reflects on who really owns the silence around the sinking while the monsoon batters Sassoon Dock.",
       "entities": [
-        "Zoya",
+        "Rao",
         "Meera"
       ],
       "valence": 0.0,
@@ -1485,10 +1485,10 @@
       "id": "ep-125",
       "episode": 125,
       "perceived_index": 125,
-      "summary": "Asha warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Rao warns Tara away from who Zoya really answers to, which only makes Tara dig further.",
       "entities": [
-        "Meera",
-        "Asha"
+        "Tara",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-125"
@@ -1497,10 +1497,10 @@
       "id": "ep-126",
       "episode": 126,
       "perceived_index": 126,
-      "summary": "Asha follows a lead near the Bandra sea wall, but the tape hisses out right where it matters.",
+      "summary": "Asha warns Zoya away from whether the cassette should ever have aired, which only makes Zoya dig further.",
       "entities": [
-        "Asha",
-        "Rao"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-126"
@@ -1509,10 +1509,10 @@
       "id": "ep-127",
       "episode": 127,
       "perceived_index": 127,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Asha follows a lead near the dock workers' union hall, but a witness changes their story overnight.",
       "entities": [
-        "Tara",
-        "Rafi"
+        "Asha",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-127"
@@ -1521,9 +1521,9 @@
       "id": "ep-128",
       "episode": 128,
       "perceived_index": 128,
-      "summary": "Rao spends the episode at the Fernandes family flat, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "A quiet stretch: Tara reflects on whether the cassette should ever have aired while the monsoon batters the Bandra sea wall.",
       "entities": [
-        "Rao",
+        "Tara",
         "Zoya"
       ],
       "valence": 0.0,
@@ -1533,9 +1533,9 @@
       "id": "ep-129",
       "episode": 129,
       "perceived_index": 129,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "A quiet stretch: Zoya reflects on what the union paid to keep quiet while the monsoon batters the Fernandes family flat.",
       "entities": [
-        "Rafi",
+        "Zoya",
         "Meera"
       ],
       "valence": 0.0,
@@ -1545,10 +1545,10 @@
       "id": "ep-130",
       "episode": 130,
       "perceived_index": 130,
-      "summary": "Zoya corners a reluctant source at Sassoon Dock, only to find the monsoon floods the only road out.",
+      "summary": "A quiet stretch: Zoya reflects on what the union paid to keep quiet while the monsoon batters the Fernandes family flat.",
       "entities": [
         "Zoya",
-        "Asha"
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-130"
@@ -1557,10 +1557,10 @@
       "id": "ep-131",
       "episode": 131,
       "perceived_index": 131,
-      "summary": "Tara warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Rao spends the episode at the Bandra sea wall, turning over whether Tara's memory of that night can be trusted without resolving it.",
       "entities": [
-        "Meera",
-        "Tara"
+        "Rao",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-131"
@@ -1569,10 +1569,10 @@
       "id": "ep-132",
       "episode": 132,
       "perceived_index": 132,
-      "summary": "Asha follows a lead near the All-India Radio tower, but the evidence has already been sold.",
+      "summary": "Rafi follows a lead near the All-India Radio tower, but the file has been resealed.",
       "entities": [
-        "Asha",
-        "Rafi"
+        "Rafi",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-132"
@@ -1606,10 +1606,10 @@
       "id": "ep-135",
       "episode": 135,
       "perceived_index": 135,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the drowned warehouse at Ferry Point.",
+      "summary": "Meera spends the episode at the dock workers' union hall, turning over whether Tara's memory of that night can be trusted without resolving it.",
       "entities": [
-        "Rafi",
-        "Asha"
+        "Meera",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-135"
@@ -1618,10 +1618,10 @@
       "id": "ep-136",
       "episode": 136,
       "perceived_index": 136,
-      "summary": "Zoya corners a reluctant source at the Bandra sea wall, only to find the file has been resealed.",
+      "summary": "A quiet stretch: Zoya reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Bandra sea wall.",
       "entities": [
         "Zoya",
-        "Tara"
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-136"
@@ -1630,9 +1630,9 @@
       "id": "ep-137",
       "episode": 137,
       "perceived_index": 137,
-      "summary": "Rao warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Meera",
+        "Asha",
         "Rao"
       ],
       "valence": 0.0,
@@ -1642,9 +1642,9 @@
       "id": "ep-138",
       "episode": 138,
       "perceived_index": 138,
-      "summary": "Asha follows a lead near the Fernandes family flat, but the monsoon floods the only road out.",
+      "summary": "Tara corners a reluctant source at Crawford Market, only to find the evidence has already been sold.",
       "entities": [
-        "Asha",
+        "Tara",
         "Zoya"
       ],
       "valence": 0.0,
@@ -1654,9 +1654,9 @@
       "id": "ep-139",
       "episode": 139,
       "perceived_index": 139,
-      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Asha corners a reluctant source at the Bandra sea wall, only to find the evidence has already been sold.",
       "entities": [
-        "Tara",
+        "Asha",
         "Meera"
       ],
       "valence": 0.0,
@@ -1677,10 +1677,10 @@
       "id": "ep-141",
       "episode": 141,
       "perceived_index": 141,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the harbor slum lanes.",
+      "summary": "Zoya corners a reluctant source at the dock workers' union hall, only to find the ledger page is missing.",
       "entities": [
-        "Rafi",
-        "Tara"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-141"
@@ -1689,10 +1689,10 @@
       "id": "ep-142",
       "episode": 142,
       "perceived_index": 142,
-      "summary": "Zoya corners a reluctant source at the All-India Radio tower, only to find the tape hisses out right where it matters.",
+      "summary": "Zoya spends the episode at Rao's precinct, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
         "Zoya",
-        "Rao"
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-142"
@@ -1701,10 +1701,10 @@
       "id": "ep-143",
       "episode": 143,
       "perceived_index": 143,
-      "summary": "Rafi warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Tara and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Meera",
-        "Rafi"
+        "Tara",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-143"
@@ -1713,10 +1713,10 @@
       "id": "ep-144",
       "episode": 144,
       "perceived_index": 144,
-      "summary": "Asha follows a lead near Rao's precinct, but the file has been resealed.",
+      "summary": "Rafi and Asha clash over what the union paid to keep quiet; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Meera"
+        "Rafi",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-144"
@@ -1725,10 +1725,10 @@
       "id": "ep-145",
       "episode": 145,
       "perceived_index": 145,
-      "summary": "Tara and Asha clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Meera warns Rafi away from who really owns the silence around the sinking, which only makes Rafi dig further.",
       "entities": [
-        "Tara",
-        "Asha"
+        "Rafi",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-145"
@@ -1737,10 +1737,10 @@
       "id": "ep-146",
       "episode": 146,
       "perceived_index": 146,
-      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Tara and Rao clash over who really owns the silence around the sinking; neither one gives ground.",
       "entities": [
-        "Rao",
-        "Tara"
+        "Tara",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-146"
@@ -1749,10 +1749,10 @@
       "id": "ep-147",
       "episode": 147,
       "perceived_index": 147,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Colaba archive.",
+      "summary": "A quiet stretch: Zoya reflects on who Zoya really answers to while the monsoon batters the All-India Radio tower.",
       "entities": [
-        "Rafi",
-        "Rao"
+        "Zoya",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-147"
@@ -1761,10 +1761,10 @@
       "id": "ep-148",
       "episode": 148,
       "perceived_index": 148,
-      "summary": "Zoya corners a reluctant source at the Fernandes family flat, only to find the evidence has already been sold.",
+      "summary": "Rafi spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
-        "Zoya",
-        "Rafi"
+        "Rafi",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-148"
@@ -1773,10 +1773,10 @@
       "id": "ep-149",
       "episode": 149,
       "perceived_index": 149,
-      "summary": "Zoya warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha and Tara clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Meera",
-        "Zoya"
+        "Asha",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-149"
@@ -1785,10 +1785,10 @@
       "id": "ep-150",
       "episode": 150,
       "perceived_index": 150,
-      "summary": "Asha follows a lead near Sassoon Dock, but the tape hisses out right where it matters.",
+      "summary": "A quiet stretch: Rao reflects on what Rao knew before the retirement papers were signed while the monsoon batters the harbor slum lanes.",
       "entities": [
-        "Asha",
-        "Tara"
+        "Rao",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-150"
@@ -1797,10 +1797,10 @@
       "id": "ep-151",
       "episode": 151,
       "perceived_index": 151,
-      "summary": "Tara and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Meera spends the episode at the harbor slum lanes, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
-        "Tara",
-        "Rao"
+        "Meera",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-151"
@@ -1809,10 +1809,10 @@
       "id": "ep-152",
       "episode": 152,
       "perceived_index": 152,
-      "summary": "Rao spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Rafi corners a reluctant source at the All-India Radio tower, only to find the union won't talk to outsiders.",
       "entities": [
-        "Rao",
-        "Rafi"
+        "Rafi",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-152"
@@ -1821,10 +1821,10 @@
       "id": "ep-153",
       "episode": 153,
       "perceived_index": 153,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the dock workers' union hall.",
+      "summary": "A quiet stretch: Rafi reflects on what the union paid to keep quiet while the monsoon batters Sassoon Dock.",
       "entities": [
         "Rafi",
-        "Zoya"
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-153"
@@ -1833,10 +1833,10 @@
       "id": "ep-154",
       "episode": 154,
       "perceived_index": 154,
-      "summary": "Zoya corners a reluctant source at Rao's precinct, only to find the monsoon floods the only road out.",
+      "summary": "Tara corners a reluctant source at Crawford Market, only to find the union won't talk to outsiders.",
       "entities": [
-        "Zoya",
-        "Meera"
+        "Tara",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-154"
@@ -1845,10 +1845,10 @@
       "id": "ep-155",
       "episode": 155,
       "perceived_index": 155,
-      "summary": "Asha warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "A quiet stretch: Zoya reflects on what the union paid to keep quiet while the monsoon batters the Bandra sea wall.",
       "entities": [
-        "Meera",
-        "Asha"
+        "Zoya",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-155"
@@ -1857,10 +1857,10 @@
       "id": "ep-156",
       "episode": 156,
       "perceived_index": 156,
-      "summary": "Asha follows a lead near the Bandra sea wall, but the evidence has already been sold.",
+      "summary": "Rafi and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Rao"
+        "Rafi",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-156"
@@ -1869,9 +1869,9 @@
       "id": "ep-157",
       "episode": 157,
       "perceived_index": 157,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Zoya follows a lead near the harbor slum lanes, but the monsoon floods the only road out.",
       "entities": [
-        "Tara",
+        "Zoya",
         "Rafi"
       ],
       "valence": 0.0,
@@ -1881,10 +1881,10 @@
       "id": "ep-158",
       "episode": 158,
       "perceived_index": 158,
-      "summary": "Rao spends the episode at the Fernandes family flat, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera corners a reluctant source at the Colaba archive, only to find the file has been resealed.",
       "entities": [
-        "Rao",
-        "Zoya"
+        "Meera",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-158"
@@ -1893,10 +1893,10 @@
       "id": "ep-159",
       "episode": 159,
       "perceived_index": 159,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "Rafi and Tara clash over who Zoya really answers to; neither one gives ground.",
       "entities": [
         "Rafi",
-        "Meera"
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-159"
@@ -1916,9 +1916,9 @@
       "id": "ep-161",
       "episode": 161,
       "perceived_index": 161,
-      "summary": "Tara warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Tara warns Zoya away from whether the cassette should ever have aired, which only makes Zoya dig further.",
       "entities": [
-        "Meera",
+        "Zoya",
         "Tara"
       ],
       "valence": 0.0,
@@ -1928,10 +1928,10 @@
       "id": "ep-162",
       "episode": 162,
       "perceived_index": 162,
-      "summary": "Asha follows a lead near the All-India Radio tower, but the monsoon floods the only road out.",
+      "summary": "A quiet stretch: Asha reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Bandra sea wall.",
       "entities": [
         "Asha",
-        "Rafi"
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-162"
@@ -1940,10 +1940,10 @@
       "id": "ep-163",
       "episode": 163,
       "perceived_index": 163,
-      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Zoya spends the episode at Crawford Market, turning over whether Tara's memory of that night can be trusted without resolving it.",
       "entities": [
-        "Tara",
-        "Zoya"
+        "Zoya",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-163"
@@ -1952,10 +1952,10 @@
       "id": "ep-164",
       "episode": 164,
       "perceived_index": 164,
-      "summary": "Rao spends the episode at Rao's precinct, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Asha corners a reluctant source at the Fernandes family flat, only to find the ledger page is missing.",
       "entities": [
-        "Rao",
-        "Meera"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-164"
@@ -1964,10 +1964,10 @@
       "id": "ep-165",
       "episode": 165,
       "perceived_index": 165,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the drowned warehouse at Ferry Point.",
+      "summary": "Asha and Tara clash over whether Tara's memory of that night can be trusted; neither one gives ground.",
       "entities": [
-        "Rafi",
-        "Asha"
+        "Asha",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-165"
@@ -1976,10 +1976,10 @@
       "id": "ep-166",
       "episode": 166,
       "perceived_index": 166,
-      "summary": "Zoya corners a reluctant source at the Bandra sea wall, only to find the tape hisses out right where it matters.",
+      "summary": "Tara spends the episode at the All-India Radio tower, turning over who really owns the silence around the sinking without resolving it.",
       "entities": [
-        "Zoya",
-        "Tara"
+        "Tara",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-166"
@@ -1988,10 +1988,10 @@
       "id": "ep-167",
       "episode": 167,
       "perceived_index": 167,
-      "summary": "Rao warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha warns Tara away from what Rao knew before the retirement papers were signed, which only makes Tara dig further.",
       "entities": [
-        "Meera",
-        "Rao"
+        "Tara",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-167"
@@ -2000,10 +2000,10 @@
       "id": "ep-168",
       "episode": 168,
       "perceived_index": 168,
-      "summary": "Asha follows a lead near the Fernandes family flat, but the file has been resealed.",
+      "summary": "Meera and Asha clash over whether Tara's memory of that night can be trusted; neither one gives ground.",
       "entities": [
-        "Asha",
-        "Zoya"
+        "Meera",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-168"
@@ -2012,9 +2012,9 @@
       "id": "ep-169",
       "episode": 169,
       "perceived_index": 169,
-      "summary": "Tara and Meera clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao corners a reluctant source at the dock workers' union hall, only to find the monsoon floods the only road out.",
       "entities": [
-        "Tara",
+        "Rao",
         "Meera"
       ],
       "valence": 0.0,
@@ -2024,10 +2024,10 @@
       "id": "ep-170",
       "episode": 170,
       "perceived_index": 170,
-      "summary": "Rao spends the episode at Sassoon Dock, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Rao and Meera clash over who really owns the silence around the sinking; neither one gives ground.",
       "entities": [
         "Rao",
-        "Asha"
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-170"
@@ -2036,10 +2036,10 @@
       "id": "ep-171",
       "episode": 171,
       "perceived_index": 171,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the harbor slum lanes.",
+      "summary": "A quiet stretch: Zoya reflects on who Zoya really answers to while the monsoon batters the All-India Radio tower.",
       "entities": [
-        "Rafi",
-        "Tara"
+        "Zoya",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-171"
@@ -2048,10 +2048,10 @@
       "id": "ep-172",
       "episode": 172,
       "perceived_index": 172,
-      "summary": "Zoya corners a reluctant source at the All-India Radio tower, only to find the evidence has already been sold.",
+      "summary": "Tara warns Rao away from what Rao knew before the retirement papers were signed, which only makes Rao dig further.",
       "entities": [
-        "Zoya",
-        "Rao"
+        "Rao",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-172"
@@ -2060,10 +2060,10 @@
       "id": "ep-173",
       "episode": 173,
       "perceived_index": 173,
-      "summary": "Rafi warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "A quiet stretch: Rao reflects on whether the cassette should ever have aired while the monsoon batters the Bandra sea wall.",
       "entities": [
-        "Meera",
-        "Rafi"
+        "Rao",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-173"
@@ -2072,10 +2072,10 @@
       "id": "ep-174",
       "episode": 174,
       "perceived_index": 174,
-      "summary": "Asha follows a lead near Rao's precinct, but the tape hisses out right where it matters.",
+      "summary": "Asha follows a lead near Sassoon Dock, but the ledger page is missing.",
       "entities": [
         "Asha",
-        "Meera"
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-174"
@@ -2095,9 +2095,9 @@
       "id": "ep-176",
       "episode": 176,
       "perceived_index": 176,
-      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Tara warns Asha away from whether Tara's memory of that night can be trusted, which only makes Asha dig further.",
       "entities": [
-        "Rao",
+        "Asha",
         "Tara"
       ],
       "valence": 0.0,
@@ -2107,10 +2107,10 @@
       "id": "ep-177",
       "episode": 177,
       "perceived_index": 177,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Colaba archive.",
+      "summary": "A quiet stretch: Tara reflects on what the union paid to keep quiet while the monsoon batters the All-India Radio tower.",
       "entities": [
-        "Rafi",
-        "Rao"
+        "Tara",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-177"
@@ -2132,10 +2132,10 @@
       "id": "ep-179",
       "episode": 179,
       "perceived_index": 179,
-      "summary": "Zoya warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Tara spends the episode at the Colaba archive, turning over who Zoya really answers to without resolving it.",
       "entities": [
-        "Meera",
-        "Zoya"
+        "Tara",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-179"
@@ -2155,10 +2155,10 @@
       "id": "ep-181",
       "episode": 181,
       "perceived_index": 181,
-      "summary": "Tara and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Zoya and Asha clash over what Rao knew before the retirement papers were signed; neither one gives ground.",
       "entities": [
-        "Tara",
-        "Rao"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-181"
@@ -2167,10 +2167,10 @@
       "id": "ep-182",
       "episode": 182,
       "perceived_index": 182,
-      "summary": "Rao spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Rafi spends the episode at the harbor slum lanes, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
-        "Rao",
-        "Rafi"
+        "Rafi",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-182"
@@ -2179,10 +2179,10 @@
       "id": "ep-183",
       "episode": 183,
       "perceived_index": 183,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the dock workers' union hall.",
+      "summary": "Asha and Tara clash over what Rao knew before the retirement papers were signed; neither one gives ground.",
       "entities": [
-        "Rafi",
-        "Zoya"
+        "Asha",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-183"
@@ -2191,10 +2191,10 @@
       "id": "ep-184",
       "episode": 184,
       "perceived_index": 184,
-      "summary": "Zoya corners a reluctant source at Rao's precinct, only to find the file has been resealed.",
+      "summary": "Rao spends the episode at the harbor slum lanes, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
-        "Zoya",
-        "Meera"
+        "Rao",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-184"
@@ -2203,10 +2203,10 @@
       "id": "ep-185",
       "episode": 185,
       "perceived_index": 185,
-      "summary": "Asha warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "A quiet stretch: Asha reflects on who Zoya really answers to while the monsoon batters Rao's precinct.",
       "entities": [
-        "Meera",
-        "Asha"
+        "Asha",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-185"
@@ -2215,10 +2215,10 @@
       "id": "ep-186",
       "episode": 186,
       "perceived_index": 186,
-      "summary": "Asha follows a lead near the Bandra sea wall, but the monsoon floods the only road out.",
+      "summary": "A quiet stretch: Rao reflects on who really owns the silence around the sinking while the monsoon batters the Bandra sea wall.",
       "entities": [
-        "Asha",
-        "Rao"
+        "Rao",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-186"
@@ -2227,10 +2227,10 @@
       "id": "ep-187",
       "episode": 187,
       "perceived_index": 187,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao follows a lead near the dock workers' union hall, but the monsoon floods the only road out.",
       "entities": [
-        "Tara",
-        "Rafi"
+        "Rao",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-187"
@@ -2239,10 +2239,10 @@
       "id": "ep-188",
       "episode": 188,
       "perceived_index": 188,
-      "summary": "Rao spends the episode at the Fernandes family flat, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Meera follows a lead near the Fernandes family flat, but the file has been resealed.",
       "entities": [
-        "Rao",
-        "Zoya"
+        "Meera",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-188"
@@ -2251,10 +2251,10 @@
       "id": "ep-189",
       "episode": 189,
       "perceived_index": 189,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "Rao warns Rafi away from whether Tara's memory of that night can be trusted, which only makes Rafi dig further.",
       "entities": [
         "Rafi",
-        "Meera"
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-189"
@@ -2275,10 +2275,10 @@
       "id": "ep-191",
       "episode": 191,
       "perceived_index": 191,
-      "summary": "Tara warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Meera warns Zoya away from whether Tara's memory of that night can be trusted, which only makes Zoya dig further.",
       "entities": [
-        "Meera",
-        "Tara"
+        "Zoya",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-191"
@@ -2287,9 +2287,9 @@
       "id": "ep-192",
       "episode": 192,
       "perceived_index": 192,
-      "summary": "Asha follows a lead near the All-India Radio tower, but the file has been resealed.",
+      "summary": "A quiet stretch: Rao reflects on what Rao knew before the retirement papers were signed while the monsoon batters the Colaba archive.",
       "entities": [
-        "Asha",
+        "Rao",
         "Rafi"
       ],
       "valence": 0.0,
@@ -2299,10 +2299,10 @@
       "id": "ep-193",
       "episode": 193,
       "perceived_index": 193,
-      "summary": "Tara and Zoya clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Zoya spends the episode at Rao's precinct, turning over who Zoya really answers to without resolving it.",
       "entities": [
-        "Tara",
-        "Zoya"
+        "Zoya",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-193"
@@ -2311,10 +2311,10 @@
       "id": "ep-194",
       "episode": 194,
       "perceived_index": 194,
-      "summary": "Rao spends the episode at Rao's precinct, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "A quiet stretch: Zoya reflects on what Rao knew before the retirement papers were signed while the monsoon batters the dock workers' union hall.",
       "entities": [
-        "Rao",
-        "Meera"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-194"
@@ -2335,10 +2335,10 @@
       "id": "ep-196",
       "episode": 196,
       "perceived_index": 196,
-      "summary": "Zoya corners a reluctant source at the Bandra sea wall, only to find the evidence has already been sold.",
+      "summary": "Zoya warns Meera away from whether Tara's memory of that night can be trusted, which only makes Meera dig further.",
       "entities": [
-        "Zoya",
-        "Tara"
+        "Meera",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-196"
@@ -2347,10 +2347,10 @@
       "id": "ep-197",
       "episode": 197,
       "perceived_index": 197,
-      "summary": "Rao warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha warns Zoya away from who really owns the silence around the sinking, which only makes Zoya dig further.",
       "entities": [
-        "Meera",
-        "Rao"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-197"
@@ -2359,10 +2359,10 @@
       "id": "ep-198",
       "episode": 198,
       "perceived_index": 198,
-      "summary": "Asha follows a lead near the Fernandes family flat, but the tape hisses out right where it matters.",
+      "summary": "Meera warns Asha away from what the union paid to keep quiet, which only makes Asha dig further.",
       "entities": [
         "Asha",
-        "Zoya"
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-198"
@@ -2382,10 +2382,10 @@
       "id": "ep-200",
       "episode": 200,
       "perceived_index": 200,
-      "summary": "Rao spends the episode at Sassoon Dock, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Asha spends the episode at Sassoon Dock, turning over who Zoya really answers to without resolving it.",
       "entities": [
-        "Rao",
-        "Asha"
+        "Asha",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-200"
@@ -2394,10 +2394,10 @@
       "id": "ep-201",
       "episode": 201,
       "perceived_index": 201,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the harbor slum lanes.",
+      "summary": "Asha spends the episode at the All-India Radio tower, turning over what Rao knew before the retirement papers were signed without resolving it.",
       "entities": [
-        "Rafi",
-        "Tara"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-201"
@@ -2406,10 +2406,10 @@
       "id": "ep-202",
       "episode": 202,
       "perceived_index": 202,
-      "summary": "Zoya corners a reluctant source at the All-India Radio tower, only to find the monsoon floods the only road out.",
+      "summary": "Zoya warns Rafi away from whether the cassette should ever have aired, which only makes Rafi dig further.",
       "entities": [
-        "Zoya",
-        "Rao"
+        "Rafi",
+        "Zoya"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-202"
@@ -2418,10 +2418,10 @@
       "id": "ep-203",
       "episode": 203,
       "perceived_index": 203,
-      "summary": "Rafi warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha corners a reluctant source at Crawford Market, only to find the union won't talk to outsiders.",
       "entities": [
-        "Meera",
-        "Rafi"
+        "Asha",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-203"
@@ -2430,10 +2430,10 @@
       "id": "ep-204",
       "episode": 204,
       "perceived_index": 204,
-      "summary": "Asha follows a lead near Rao's precinct, but the evidence has already been sold.",
+      "summary": "A quiet stretch: Rafi reflects on whether the cassette should ever have aired while the monsoon batters the dock workers' union hall.",
       "entities": [
-        "Asha",
-        "Meera"
+        "Rafi",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-204"
@@ -2453,9 +2453,9 @@
       "id": "ep-206",
       "episode": 206,
       "perceived_index": 206,
-      "summary": "Rao spends the episode at the Bandra sea wall, turning over what Rao knew before the retirement papers were signed without resolving it.",
+      "summary": "Asha and Tara clash over whether the cassette should ever have aired; neither one gives ground.",
       "entities": [
-        "Rao",
+        "Asha",
         "Tara"
       ],
       "valence": 0.0,
@@ -2465,10 +2465,10 @@
       "id": "ep-207",
       "episode": 207,
       "perceived_index": 207,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the Colaba archive.",
+      "summary": "Meera warns Zoya away from who really owns the silence around the sinking, which only makes Zoya dig further.",
       "entities": [
-        "Rafi",
-        "Rao"
+        "Zoya",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-207"
@@ -2477,10 +2477,10 @@
       "id": "ep-208",
       "episode": 208,
       "perceived_index": 208,
-      "summary": "Zoya corners a reluctant source at the Fernandes family flat, only to find the file has been resealed.",
+      "summary": "Rao corners a reluctant source at the harbor slum lanes, only to find the file has been resealed.",
       "entities": [
-        "Zoya",
-        "Rafi"
+        "Rao",
+        "Meera"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-208"
@@ -2489,10 +2489,10 @@
       "id": "ep-209",
       "episode": 209,
       "perceived_index": 209,
-      "summary": "Zoya warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha warns Zoya away from who really owns the silence around the sinking, which only makes Zoya dig further.",
       "entities": [
-        "Meera",
-        "Zoya"
+        "Zoya",
+        "Asha"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-209"
@@ -2513,9 +2513,9 @@
       "id": "ep-211",
       "episode": 211,
       "perceived_index": 211,
-      "summary": "Tara and Rao clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao warns Zoya away from what Rao knew before the retirement papers were signed, which only makes Zoya dig further.",
       "entities": [
-        "Tara",
+        "Zoya",
         "Rao"
       ],
       "valence": 0.0,
@@ -2536,9 +2536,9 @@
       "id": "ep-213",
       "episode": 213,
       "perceived_index": 213,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters the dock workers' union hall.",
+      "summary": "Tara and Zoya clash over who really owns the silence around the sinking; neither one gives ground.",
       "entities": [
-        "Rafi",
+        "Tara",
         "Zoya"
       ],
       "valence": 0.0,
@@ -2548,10 +2548,10 @@
       "id": "ep-214",
       "episode": 214,
       "perceived_index": 214,
-      "summary": "Zoya corners a reluctant source at Rao's precinct, only to find the tape hisses out right where it matters.",
+      "summary": "Zoya corners a reluctant source at the All-India Radio tower, only to find the evidence has already been sold.",
       "entities": [
         "Zoya",
-        "Meera"
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-214"
@@ -2560,10 +2560,10 @@
       "id": "ep-215",
       "episode": 215,
       "perceived_index": 215,
-      "summary": "Asha warns Meera away from what the union paid to keep quiet, which only makes Meera dig further.",
+      "summary": "Asha follows a lead near the Colaba archive, but the evidence has already been sold.",
       "entities": [
-        "Meera",
-        "Asha"
+        "Asha",
+        "Rafi"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-215"
@@ -2572,9 +2572,9 @@
       "id": "ep-216",
       "episode": 216,
       "perceived_index": 216,
-      "summary": "Asha follows a lead near the Bandra sea wall, but the file has been resealed.",
+      "summary": "A quiet stretch: Tara reflects on who really owns the silence around the sinking while the monsoon batters Crawford Market.",
       "entities": [
-        "Asha",
+        "Tara",
         "Rao"
       ],
       "valence": 0.0,
@@ -2584,10 +2584,10 @@
       "id": "ep-217",
       "episode": 217,
       "perceived_index": 217,
-      "summary": "Tara and Rafi clash over whether the cassette should ever have aired; neither one gives ground.",
+      "summary": "Rao and Tara clash over what the union paid to keep quiet; neither one gives ground.",
       "entities": [
-        "Tara",
-        "Rafi"
+        "Rao",
+        "Tara"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-217"
@@ -2608,10 +2608,10 @@
       "id": "ep-219",
       "episode": 219,
       "perceived_index": 219,
-      "summary": "A quiet stretch: Rafi reflects on whether Tara's memory of that night can be trusted while the monsoon batters Crawford Market.",
+      "summary": "Rao warns Meera away from what Rao knew before the retirement papers were signed, which only makes Meera dig further.",
       "entities": [
-        "Rafi",
-        "Meera"
+        "Meera",
+        "Rao"
       ],
       "valence": 0.0,
       "excerpt_id": "ex-219"
@@ -3032,7 +3032,7 @@
     {
       "id": "ex-004",
       "episode": 4,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about who Zoya really answers to."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the Colaba archive through the rain."
     },
     {
       "id": "ex-005",
@@ -3042,32 +3042,32 @@
     {
       "id": "ex-006",
       "episode": 6,
-      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rao said. Asha just kept walking toward the Bandra sea wall."
+      "text": "\"The evidence has already been sold,\" Asha said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-007",
       "episode": 7,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Rao said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-008",
       "episode": 8,
-      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The file has been resealed and there was nothing else to do but wait it out."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-009",
       "episode": 9,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because Someone got there first and there was nothing else to do but wait it out."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the drowned warehouse at Ferry Point through the rain."
     },
     {
       "id": "ex-010",
       "episode": 10,
-      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Zoya said, looking out at Sassoon Dock through the rain."
+      "text": "\"The ledger page is missing,\" Asha said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-011",
       "episode": 11,
-      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the harbor slum lanes through the rain."
+      "text": "\"The ledger page is missing,\" Meera said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
     },
     {
       "id": "ex-012",
@@ -3077,47 +3077,47 @@
     {
       "id": "ex-013",
       "episode": 13,
-      "text": "\"A witness changes their story overnight,\" Zoya said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
+      "text": "\"The union won't talk to outsiders,\" Rafi said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
     },
     {
       "id": "ex-014",
       "episode": 14,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
+      "text": "The rain hadn't let up over the Bandra sea wall in three days. Asha stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-015",
       "episode": 15,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rafi stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-016",
       "episode": 16,
-      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Tara said. Zoya just kept walking toward the Bandra sea wall."
+      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Zoya said. Rao just kept walking toward Crawford Market."
     },
     {
       "id": "ex-017",
       "episode": 17,
-      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Meera just kept walking toward the Colaba archive."
+      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Zoya let it, because Someone got there first and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-018",
       "episode": 18,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Asha said. Tara just kept walking toward Crawford Market."
     },
     {
       "id": "ex-019",
       "episode": 19,
-      "text": "At Crawford Market, the conversation kept circling back to whether the cassette should ever have aired, and Tara let it, because The ledger page is missing and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Asha said. Meera just kept walking toward the Bandra sea wall."
     },
     {
       "id": "ex-020",
       "episode": 20,
-      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Rao said, looking out at Sassoon Dock through the rain."
+      "text": "\"A witness changes their story overnight,\" Tara said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
     },
     {
       "id": "ex-021",
       "episode": 21,
-      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
+      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Zoya said. Tara just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-022",
@@ -3127,37 +3127,37 @@
     {
       "id": "ex-023",
       "episode": 23,
-      "text": "\"The union won't talk to outsiders,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
+      "text": "At Sassoon Dock, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rao let it, because The evidence has already been sold and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-024",
       "episode": 24,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
+      "text": "\"The monsoon floods the only road out,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
     },
     {
       "id": "ex-025",
       "episode": 25,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Tara stood in it anyway, thinking about whether the cassette should ever have aired."
+      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
     },
     {
       "id": "ex-026",
       "episode": 26,
-      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Tara said. Rao just kept walking toward the Bandra sea wall."
+      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the harbor slum lanes through the rain."
     },
     {
       "id": "ex-027",
       "episode": 27,
-      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rao said. Rafi just kept walking toward the Colaba archive."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the Fernandes family flat through the rain."
     },
     {
       "id": "ex-028",
       "episode": 28,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who Zoya really answers to, and Zoya let it, because The evidence has already been sold and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rao said. Asha just kept walking toward the Bandra sea wall."
     },
     {
       "id": "ex-029",
       "episode": 29,
-      "text": "At Crawford Market, the conversation kept circling back to what the union paid to keep quiet, and Meera let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
+      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Zoya stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-030",
@@ -3167,17 +3167,17 @@
     {
       "id": "ex-031",
       "episode": 31,
-      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the harbor slum lanes through the rain."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Asha said, looking out at the Colaba archive through the rain."
     },
     {
       "id": "ex-032",
       "episode": 32,
-      "text": "\"The file has been resealed,\" Rafi said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
+      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Asha just kept walking toward Rao's precinct."
     },
     {
       "id": "ex-033",
       "episode": 33,
-      "text": "\"Someone got there first,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
+      "text": "At the harbor slum lanes, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Zoya let it, because The evidence has already been sold and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-034",
@@ -3187,27 +3187,27 @@
     {
       "id": "ex-035",
       "episode": 35,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rao said. Zoya just kept walking toward Rao's precinct."
     },
     {
       "id": "ex-036",
       "episode": 36,
-      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rao said. Asha just kept walking toward the Bandra sea wall."
+      "text": "At Sassoon Dock, the conversation kept circling back to who really owns the silence around the sinking, and Rao let it, because The evidence has already been sold and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-037",
       "episode": 37,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Zoya said. Meera just kept walking toward the Colaba archive."
     },
     {
       "id": "ex-038",
       "episode": 38,
-      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The tape hisses out right where it matters and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rafi said. Meera just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-039",
       "episode": 39,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-040",
@@ -3217,32 +3217,32 @@
     {
       "id": "ex-041",
       "episode": 41,
-      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the harbor slum lanes through the rain."
+      "text": "The rain hadn't let up over the harbor slum lanes in three days. Rafi stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
     },
     {
       "id": "ex-042",
       "episode": 42,
-      "text": "\"The monsoon floods the only road out,\" Rafi said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
+      "text": "\"The evidence has already been sold,\" Asha said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
     },
     {
       "id": "ex-043",
       "episode": 43,
-      "text": "\"The ledger page is missing,\" Zoya said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Asha said, looking out at Rao's precinct through the rain."
     },
     {
       "id": "ex-044",
       "episode": 44,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
+      "text": "\"A witness changes their story overnight,\" Meera said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
     },
     {
       "id": "ex-045",
       "episode": 45,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rafi stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
+      "text": "The rain hadn't let up over Crawford Market in three days. Rao stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-046",
       "episode": 46,
-      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Tara said. Zoya just kept walking toward the Bandra sea wall."
+      "text": "\"The union won't talk to outsiders,\" Zoya said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
     },
     {
       "id": "ex-047",
@@ -3252,22 +3252,22 @@
     {
       "id": "ex-048",
       "episode": 48,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The file has been resealed and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Rao said. Zoya just kept walking toward Rao's precinct."
     },
     {
       "id": "ex-049",
       "episode": 49,
-      "text": "At Crawford Market, the conversation kept circling back to whether the cassette should ever have aired, and Tara let it, because Someone got there first and there was nothing else to do but wait it out."
+      "text": "At the All-India Radio tower, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Asha let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-050",
       "episode": 50,
-      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Rao said, looking out at Sassoon Dock through the rain."
+      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rafi stood in it anyway, thinking about what the union paid to keep quiet."
     },
     {
       "id": "ex-051",
       "episode": 51,
-      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
+      "text": "At the Bandra sea wall, the conversation kept circling back to whether the cassette should ever have aired, and Tara let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-052",
@@ -3277,12 +3277,12 @@
     {
       "id": "ex-053",
       "episode": 53,
-      "text": "\"A witness changes their story overnight,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
+      "text": "The rain hadn't let up over Crawford Market in three days. Zoya stood in it anyway, thinking about what the union paid to keep quiet."
     },
     {
       "id": "ex-054",
       "episode": 54,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
+      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Zoya said. Tara just kept walking toward the Bandra sea wall."
     },
     {
       "id": "ex-055",
@@ -3292,22 +3292,22 @@
     {
       "id": "ex-056",
       "episode": 56,
-      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Tara said. Rao just kept walking toward the Bandra sea wall."
+      "text": "\"The evidence has already been sold,\" Asha said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-057",
       "episode": 57,
-      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rao said. Rafi just kept walking toward the Colaba archive."
+      "text": "The rain hadn't let up over the dock workers' union hall in three days. Asha stood in it anyway, thinking about whether the cassette should ever have aired."
     },
     {
       "id": "ex-058",
       "episode": 58,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who Zoya really answers to, and Zoya let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Tara said. Zoya just kept walking toward the harbor slum lanes."
     },
     {
       "id": "ex-059",
       "episode": 59,
-      "text": "At Crawford Market, the conversation kept circling back to what the union paid to keep quiet, and Meera let it, because The ledger page is missing and there was nothing else to do but wait it out."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at Crawford Market through the rain."
     },
     {
       "id": "ex-060",
@@ -3317,27 +3317,27 @@
     {
       "id": "ex-061",
       "episode": 61,
-      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the harbor slum lanes through the rain."
+      "text": "The rain hadn't let up over the Bandra sea wall in three days. Rafi stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-062",
       "episode": 62,
-      "text": "\"The tape hisses out right where it matters,\" Rafi said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
+      "text": "The rain hadn't let up over the Colaba archive in three days. Zoya stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
     },
     {
       "id": "ex-063",
       "episode": 63,
-      "text": "\"The union won't talk to outsiders,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the Fernandes family flat through the rain."
     },
     {
       "id": "ex-064",
       "episode": 64,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about who Zoya really answers to."
+      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the dock workers' union hall through the rain."
     },
     {
       "id": "ex-065",
       "episode": 65,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
+      "text": "At the Fernandes family flat, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-066",
@@ -3347,22 +3347,22 @@
     {
       "id": "ex-067",
       "episode": 67,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "At the All-India Radio tower, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Asha let it, because The ledger page is missing and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-068",
       "episode": 68,
-      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The evidence has already been sold and there was nothing else to do but wait it out."
+      "text": "\"A witness changes their story overnight,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
     },
     {
       "id": "ex-069",
       "episode": 69,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
+      "text": "The rain hadn't let up over the Colaba archive in three days. Meera stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-070",
       "episode": 70,
-      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Zoya said, looking out at Sassoon Dock through the rain."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Asha said, looking out at Crawford Market through the rain."
     },
     {
       "id": "ex-071",
@@ -3372,82 +3372,82 @@
     {
       "id": "ex-072",
       "episode": 72,
-      "text": "\"The file has been resealed,\" Rafi said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
+      "text": "At Rao's precinct, the conversation kept circling back to what the union paid to keep quiet, and Asha let it, because Someone got there first and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-073",
       "episode": 73,
-      "text": "\"Someone got there first,\" Zoya said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
+      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Asha said. Rao just kept walking toward the Bandra sea wall."
     },
     {
       "id": "ex-074",
       "episode": 74,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
+      "text": "\"Someone got there first,\" Meera said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-075",
       "episode": 75,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rafi stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
+      "text": "At the All-India Radio tower, the conversation kept circling back to who really owns the silence around the sinking, and Rafi let it, because The ledger page is missing and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-076",
       "episode": 76,
-      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Tara said. Zoya just kept walking toward the Bandra sea wall."
+      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Zoya said. Rao just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-077",
       "episode": 77,
-      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Meera just kept walking toward the Colaba archive."
+      "text": "The rain hadn't let up over the harbor slum lanes in three days. Rao stood in it anyway, thinking about whether the cassette should ever have aired."
     },
     {
       "id": "ex-078",
       "episode": 78,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The tape hisses out right where it matters and there was nothing else to do but wait it out."
+      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the Fernandes family flat through the rain."
     },
     {
       "id": "ex-079",
       "episode": 79,
-      "text": "At Crawford Market, the conversation kept circling back to whether the cassette should ever have aired, and Tara let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Zoya said. Tara just kept walking toward the drowned warehouse at Ferry Point."
     },
     {
       "id": "ex-080",
       "episode": 80,
-      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Rao said, looking out at Sassoon Dock through the rain."
+      "text": "At the Bandra sea wall, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The tape hisses out right where it matters and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-081",
       "episode": 81,
-      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
+      "text": "\"The tape hisses out right where it matters,\" Rafi said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-082",
       "episode": 82,
-      "text": "\"The monsoon floods the only road out,\" Rao said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
+      "text": "The rain hadn't let up over the Bandra sea wall in three days. Tara stood in it anyway, thinking about whether the cassette should ever have aired."
     },
     {
       "id": "ex-083",
       "episode": 83,
-      "text": "\"The ledger page is missing,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the Colaba archive through the rain."
     },
     {
       "id": "ex-084",
       "episode": 84,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
+      "text": "The rain hadn't let up over Sassoon Dock in three days. Meera stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-085",
       "episode": 85,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Tara stood in it anyway, thinking about whether the cassette should ever have aired."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Meera said. Tara just kept walking toward the Colaba archive."
     },
     {
       "id": "ex-086",
       "episode": 86,
-      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Tara said. Rao just kept walking toward the Bandra sea wall."
+      "text": "At the drowned warehouse at Ferry Point, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The file has been resealed and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-087",
       "episode": 87,
-      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rao said. Rafi just kept walking toward the Colaba archive."
+      "text": "At the Bandra sea wall, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Tara let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-088",
@@ -3457,7 +3457,7 @@
     {
       "id": "ex-089",
       "episode": 89,
-      "text": "At Crawford Market, the conversation kept circling back to what the union paid to keep quiet, and Meera let it, because Someone got there first and there was nothing else to do but wait it out."
+      "text": "\"The monsoon floods the only road out,\" Meera said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
     },
     {
       "id": "ex-090",
@@ -3467,52 +3467,52 @@
     {
       "id": "ex-091",
       "episode": 91,
-      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the harbor slum lanes through the rain."
+      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Meera said. Asha just kept walking toward Rao's precinct."
     },
     {
       "id": "ex-092",
       "episode": 92,
-      "text": "\"The evidence has already been sold,\" Rafi said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
+      "text": "At the dock workers' union hall, the conversation kept circling back to what the union paid to keep quiet, and Rafi let it, because The evidence has already been sold and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-093",
       "episode": 93,
-      "text": "\"A witness changes their story overnight,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
+      "text": "\"A witness changes their story overnight,\" Meera said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
     },
     {
       "id": "ex-094",
       "episode": 94,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about who Zoya really answers to."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Zoya said, looking out at the Colaba archive through the rain."
     },
     {
       "id": "ex-095",
       "episode": 95,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
+      "text": "\"The monsoon floods the only road out,\" Meera said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-096",
       "episode": 96,
-      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rao said. Asha just kept walking toward the Bandra sea wall."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Rao said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-097",
       "episode": 97,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "At the drowned warehouse at Ferry Point, the conversation kept circling back to who Zoya really answers to, and Tara let it, because The file has been resealed and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-098",
       "episode": 98,
-      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Meera said. Rao just kept walking toward Sassoon Dock."
     },
     {
       "id": "ex-099",
       "episode": 99,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because The ledger page is missing and there was nothing else to do but wait it out."
+      "text": "\"The monsoon floods the only road out,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
     },
     {
       "id": "ex-100",
       "episode": 100,
-      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Zoya said, looking out at Sassoon Dock through the rain."
+      "text": "The rain hadn't let up over Crawford Market in three days. Tara stood in it anyway, thinking about what the union paid to keep quiet."
     },
     {
       "id": "ex-101",
@@ -3522,42 +3522,42 @@
     {
       "id": "ex-102",
       "episode": 102,
-      "text": "\"The tape hisses out right where it matters,\" Rafi said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
+      "text": "At the drowned warehouse at Ferry Point, the conversation kept circling back to who Zoya really answers to, and Tara let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-103",
       "episode": 103,
-      "text": "\"The union won't talk to outsiders,\" Zoya said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
+      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the harbor slum lanes through the rain."
     },
     {
       "id": "ex-104",
       "episode": 104,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
+      "text": "\"The tape hisses out right where it matters,\" Rao said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
     },
     {
       "id": "ex-105",
       "episode": 105,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rafi stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
+      "text": "At the dock workers' union hall, the conversation kept circling back to who really owns the silence around the sinking, and Zoya let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-106",
       "episode": 106,
-      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Tara said. Zoya just kept walking toward the Bandra sea wall."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Meera said, looking out at Sassoon Dock through the rain."
     },
     {
       "id": "ex-107",
       "episode": 107,
-      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Meera just kept walking toward the Colaba archive."
+      "text": "\"The tape hisses out right where it matters,\" Meera said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
     },
     {
       "id": "ex-108",
       "episode": 108,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The evidence has already been sold and there was nothing else to do but wait it out."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-109",
       "episode": 109,
-      "text": "At Crawford Market, the conversation kept circling back to whether the cassette should ever have aired, and Tara let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
+      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Rao said, looking out at Crawford Market through the rain."
     },
     {
       "id": "ex-110",
@@ -3567,47 +3567,47 @@
     {
       "id": "ex-111",
       "episode": 111,
-      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
+      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Tara let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-112",
       "episode": 112,
-      "text": "\"The file has been resealed,\" Rao said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
+      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Meera said. Rafi just kept walking toward the dock workers' union hall."
     },
     {
       "id": "ex-113",
       "episode": 113,
-      "text": "\"Someone got there first,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
+      "text": "\"The ledger page is missing,\" Rafi said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
     },
     {
       "id": "ex-114",
       "episode": 114,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
+      "text": "At the Colaba archive, the conversation kept circling back to what the union paid to keep quiet, and Tara let it, because Someone got there first and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-115",
       "episode": 115,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Tara stood in it anyway, thinking about whether the cassette should ever have aired."
+      "text": "The rain hadn't let up over the Colaba archive in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-116",
       "episode": 116,
-      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Tara said. Rao just kept walking toward the Bandra sea wall."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-117",
       "episode": 117,
-      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rao said. Rafi just kept walking toward the Colaba archive."
+      "text": "At Rao's precinct, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Tara let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-118",
       "episode": 118,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who Zoya really answers to, and Zoya let it, because The tape hisses out right where it matters and there was nothing else to do but wait it out."
+      "text": "The rain hadn't let up over the Fernandes family flat in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
     },
     {
       "id": "ex-119",
       "episode": 119,
-      "text": "At Crawford Market, the conversation kept circling back to what the union paid to keep quiet, and Meera let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Tara said. Rao just kept walking toward the Bandra sea wall."
     },
     {
       "id": "ex-120",
@@ -3617,62 +3617,62 @@
     {
       "id": "ex-121",
       "episode": 121,
-      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the harbor slum lanes through the rain."
+      "text": "At the dock workers' union hall, the conversation kept circling back to what the union paid to keep quiet, and Asha let it, because The tape hisses out right where it matters and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-122",
       "episode": 122,
-      "text": "\"The monsoon floods the only road out,\" Rafi said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
+      "text": "The rain hadn't let up over the dock workers' union hall in three days. Zoya stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-123",
       "episode": 123,
-      "text": "\"The ledger page is missing,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Asha said, looking out at the Colaba archive through the rain."
     },
     {
       "id": "ex-124",
       "episode": 124,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about who Zoya really answers to."
+      "text": "The rain hadn't let up over Sassoon Dock in three days. Rao stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-125",
       "episode": 125,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
+      "text": "\"The evidence has already been sold,\" Rao said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
     },
     {
       "id": "ex-126",
       "episode": 126,
-      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rao said. Asha just kept walking toward the Bandra sea wall."
+      "text": "\"The ledger page is missing,\" Asha said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-127",
       "episode": 127,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "The rain hadn't let up over the dock workers' union hall in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-128",
       "episode": 128,
-      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The file has been resealed and there was nothing else to do but wait it out."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-129",
       "episode": 129,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because Someone got there first and there was nothing else to do but wait it out."
+      "text": "\"The file has been resealed,\" Meera said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-130",
       "episode": 130,
-      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Zoya said, looking out at Sassoon Dock through the rain."
+      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Zoya said, looking out at the Fernandes family flat through the rain."
     },
     {
       "id": "ex-131",
       "episode": 131,
-      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the harbor slum lanes through the rain."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rao said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-132",
       "episode": 132,
-      "text": "\"The evidence has already been sold,\" Rafi said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
+      "text": "The rain hadn't let up over the All-India Radio tower in three days. Rafi stood in it anyway, thinking about whether the cassette should ever have aired."
     },
     {
       "id": "ex-133",
@@ -3687,27 +3687,27 @@
     {
       "id": "ex-135",
       "episode": 135,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rafi stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the dock workers' union hall through the rain."
     },
     {
       "id": "ex-136",
       "episode": 136,
-      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Tara said. Zoya just kept walking toward the Bandra sea wall."
+      "text": "\"The file has been resealed,\" Rafi said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-137",
       "episode": 137,
-      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Meera just kept walking toward the Colaba archive."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rao said. Asha just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-138",
       "episode": 138,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
+      "text": "The rain hadn't let up over Crawford Market in three days. Tara stood in it anyway, thinking about whether the cassette should ever have aired."
     },
     {
       "id": "ex-139",
       "episode": 139,
-      "text": "At Crawford Market, the conversation kept circling back to whether the cassette should ever have aired, and Tara let it, because The ledger page is missing and there was nothing else to do but wait it out."
+      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Asha said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-140",
@@ -3717,97 +3717,97 @@
     {
       "id": "ex-141",
       "episode": 141,
-      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Asha said. Zoya just kept walking toward the dock workers' union hall."
     },
     {
       "id": "ex-142",
       "episode": 142,
-      "text": "\"The tape hisses out right where it matters,\" Rao said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
+      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-143",
       "episode": 143,
-      "text": "\"The union won't talk to outsiders,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at Sassoon Dock through the rain."
     },
     {
       "id": "ex-144",
       "episode": 144,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
+      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Asha said. Rafi just kept walking toward Crawford Market."
     },
     {
       "id": "ex-145",
       "episode": 145,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Tara stood in it anyway, thinking about whether the cassette should ever have aired."
+      "text": "The rain hadn't let up over Sassoon Dock in three days. Rafi stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-146",
       "episode": 146,
-      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Tara said. Rao just kept walking toward the Bandra sea wall."
+      "text": "At the dock workers' union hall, the conversation kept circling back to who really owns the silence around the sinking, and Tara let it, because Someone got there first and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-147",
       "episode": 147,
-      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rao said. Rafi just kept walking toward the Colaba archive."
+      "text": "\"The ledger page is missing,\" Tara said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-148",
       "episode": 148,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who Zoya really answers to, and Zoya let it, because The evidence has already been sold and there was nothing else to do but wait it out."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-149",
       "episode": 149,
-      "text": "At Crawford Market, the conversation kept circling back to what the union paid to keep quiet, and Meera let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Asha said, looking out at the Fernandes family flat through the rain."
     },
     {
       "id": "ex-150",
       "episode": 150,
-      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Asha said, looking out at Sassoon Dock through the rain."
+      "text": "\"The union won't talk to outsiders,\" Zoya said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
     },
     {
       "id": "ex-151",
       "episode": 151,
-      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the harbor slum lanes through the rain."
+      "text": "At the harbor slum lanes, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Meera let it, because Someone got there first and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-152",
       "episode": 152,
-      "text": "\"The file has been resealed,\" Rafi said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-153",
       "episode": 153,
-      "text": "\"Someone got there first,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
+      "text": "At Sassoon Dock, the conversation kept circling back to what the union paid to keep quiet, and Rafi let it, because The evidence has already been sold and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-154",
       "episode": 154,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about who Zoya really answers to."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Tara said, looking out at Crawford Market through the rain."
     },
     {
       "id": "ex-155",
       "episode": 155,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
+      "text": "At the Bandra sea wall, the conversation kept circling back to what the union paid to keep quiet, and Zoya let it, because The evidence has already been sold and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-156",
       "episode": 156,
-      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rao said. Asha just kept walking toward the Bandra sea wall."
+      "text": "\"Someone got there first,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
     },
     {
       "id": "ex-157",
       "episode": 157,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "The rain hadn't let up over the harbor slum lanes in three days. Zoya stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-158",
       "episode": 158,
-      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The tape hisses out right where it matters and there was nothing else to do but wait it out."
+      "text": "The rain hadn't let up over the Colaba archive in three days. Meera stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
     },
     {
       "id": "ex-159",
       "episode": 159,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
+      "text": "At Crawford Market, the conversation kept circling back to who Zoya really answers to, and Rafi let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-160",
@@ -3817,72 +3817,72 @@
     {
       "id": "ex-161",
       "episode": 161,
-      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the harbor slum lanes through the rain."
+      "text": "At the Bandra sea wall, the conversation kept circling back to whether the cassette should ever have aired, and Zoya let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-162",
       "episode": 162,
-      "text": "\"The monsoon floods the only road out,\" Rafi said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
+      "text": "At the Bandra sea wall, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Asha let it, because The union won't talk to outsiders and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-163",
       "episode": 163,
-      "text": "\"The ledger page is missing,\" Zoya said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
+      "text": "\"The monsoon floods the only road out,\" Meera said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-164",
       "episode": 164,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
+      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rafi said. Asha just kept walking toward the Fernandes family flat."
     },
     {
       "id": "ex-165",
       "episode": 165,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rafi stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
+      "text": "\"A witness changes their story overnight,\" Tara said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
     },
     {
       "id": "ex-166",
       "episode": 166,
-      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Tara said. Zoya just kept walking toward the Bandra sea wall."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-167",
       "episode": 167,
-      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Meera just kept walking toward the Colaba archive."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the drowned warehouse at Ferry Point through the rain."
     },
     {
       "id": "ex-168",
       "episode": 168,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The file has been resealed and there was nothing else to do but wait it out."
+      "text": "\"Someone got there first,\" Asha said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
     },
     {
       "id": "ex-169",
       "episode": 169,
-      "text": "At Crawford Market, the conversation kept circling back to whether the cassette should ever have aired, and Tara let it, because Someone got there first and there was nothing else to do but wait it out."
+      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Rao said, looking out at the dock workers' union hall through the rain."
     },
     {
       "id": "ex-170",
       "episode": 170,
-      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Rao said, looking out at Sassoon Dock through the rain."
+      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Rao stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-171",
       "episode": 171,
-      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
+      "text": "\"A witness changes their story overnight,\" Rafi said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-172",
       "episode": 172,
-      "text": "\"The evidence has already been sold,\" Rao said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Rao said, looking out at the harbor slum lanes through the rain."
     },
     {
       "id": "ex-173",
       "episode": 173,
-      "text": "\"A witness changes their story overnight,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Rao said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-174",
       "episode": 174,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
+      "text": "\"The ledger page is missing,\" Zoya said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
     },
     {
       "id": "ex-175",
@@ -3892,12 +3892,12 @@
     {
       "id": "ex-176",
       "episode": 176,
-      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Tara said. Rao just kept walking toward the Bandra sea wall."
+      "text": "The rain hadn't let up over the harbor slum lanes in three days. Asha stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
     },
     {
       "id": "ex-177",
       "episode": 177,
-      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rao said. Rafi just kept walking toward the Colaba archive."
+      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the All-India Radio tower through the rain."
     },
     {
       "id": "ex-178",
@@ -3907,7 +3907,7 @@
     {
       "id": "ex-179",
       "episode": 179,
-      "text": "At Crawford Market, the conversation kept circling back to what the union paid to keep quiet, and Meera let it, because The ledger page is missing and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Asha said. Tara just kept walking toward the Colaba archive."
     },
     {
       "id": "ex-180",
@@ -3917,47 +3917,47 @@
     {
       "id": "ex-181",
       "episode": 181,
-      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the harbor slum lanes through the rain."
+      "text": "The rain hadn't let up over Sassoon Dock in three days. Zoya stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-182",
       "episode": 182,
-      "text": "\"The tape hisses out right where it matters,\" Rafi said flatly. \"You want to keep going anyway?\" Rao did not answer right away."
+      "text": "The rain hadn't let up over the harbor slum lanes in three days. Rafi stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-183",
       "episode": 183,
-      "text": "\"The union won't talk to outsiders,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Asha said, looking out at Sassoon Dock through the rain."
     },
     {
       "id": "ex-184",
       "episode": 184,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about who Zoya really answers to."
+      "text": "At the harbor slum lanes, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because Someone got there first and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-185",
       "episode": 185,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
+      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Rao said. Asha just kept walking toward Rao's precinct."
     },
     {
       "id": "ex-186",
       "episode": 186,
-      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rao said. Asha just kept walking toward the Bandra sea wall."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Rao said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-187",
       "episode": 187,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "At the dock workers' union hall, the conversation kept circling back to who Zoya really answers to, and Rao let it, because The monsoon floods the only road out and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-188",
       "episode": 188,
-      "text": "At the Fernandes family flat, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Rao let it, because The evidence has already been sold and there was nothing else to do but wait it out."
+      "text": "The rain hadn't let up over the Fernandes family flat in three days. Meera stood in it anyway, thinking about whether the cassette should ever have aired."
     },
     {
       "id": "ex-189",
       "episode": 189,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because A witness changes their story overnight and there was nothing else to do but wait it out."
+      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at Rao's precinct through the rain."
     },
     {
       "id": "ex-190",
@@ -3967,22 +3967,22 @@
     {
       "id": "ex-191",
       "episode": 191,
-      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the harbor slum lanes through the rain."
+      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Meera said. Zoya just kept walking toward the Bandra sea wall."
     },
     {
       "id": "ex-192",
       "episode": 192,
-      "text": "\"The file has been resealed,\" Rafi said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
+      "text": "The rain hadn't let up over the Colaba archive in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-193",
       "episode": 193,
-      "text": "\"Someone got there first,\" Zoya said flatly. \"You want to keep going anyway?\" Tara did not answer right away."
+      "text": "At Rao's precinct, the conversation kept circling back to who Zoya really answers to, and Zoya let it, because The evidence has already been sold and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-194",
       "episode": 194,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Rao stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
+      "text": "The rain hadn't let up over the dock workers' union hall in three days. Zoya stood in it anyway, thinking about what Rao knew before the retirement papers were signed."
     },
     {
       "id": "ex-195",
@@ -3992,17 +3992,17 @@
     {
       "id": "ex-196",
       "episode": 196,
-      "text": "\"You're going to get yourself in trouble over who Zoya really answers to,\" Tara said. Zoya just kept walking toward the Bandra sea wall."
+      "text": "The rain hadn't let up over Sassoon Dock in three days. Meera stood in it anyway, thinking about whether Tara's memory of that night can be trusted."
     },
     {
       "id": "ex-197",
       "episode": 197,
-      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Meera just kept walking toward the Colaba archive."
+      "text": "\"The monsoon floods the only road out,\" Asha said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-198",
       "episode": 198,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who really owns the silence around the sinking, and Asha let it, because The tape hisses out right where it matters and there was nothing else to do but wait it out."
+      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Meera said. Asha just kept walking toward Crawford Market."
     },
     {
       "id": "ex-199",
@@ -4012,27 +4012,27 @@
     {
       "id": "ex-200",
       "episode": 200,
-      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Rao said, looking out at Sassoon Dock through the rain."
+      "text": "\"Who Zoya really answers to? I've stopped pretending that one has an easy answer,\" Asha said, looking out at Sassoon Dock through the rain."
     },
     {
       "id": "ex-201",
       "episode": 201,
-      "text": "\"Whether Tara's memory of that night can be trusted? I've stopped pretending that one has an easy answer,\" Rafi said, looking out at the harbor slum lanes through the rain."
+      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Rafi said. Asha just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-202",
       "episode": 202,
-      "text": "\"The monsoon floods the only road out,\" Rao said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Zoya said. Rafi just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-203",
       "episode": 203,
-      "text": "\"The ledger page is missing,\" Rafi said flatly. \"You want to keep going anyway?\" Meera did not answer right away."
+      "text": "The rain hadn't let up over Crawford Market in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-204",
       "episode": 204,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Asha stood in it anyway, thinking about who really owns the silence around the sinking."
+      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Asha said. Rafi just kept walking toward the dock workers' union hall."
     },
     {
       "id": "ex-205",
@@ -4042,22 +4042,22 @@
     {
       "id": "ex-206",
       "episode": 206,
-      "text": "\"You're going to get yourself in trouble over what Rao knew before the retirement papers were signed,\" Tara said. Rao just kept walking toward the Bandra sea wall."
+      "text": "\"The union won't talk to outsiders,\" Tara said flatly. \"You want to keep going anyway?\" Asha did not answer right away."
     },
     {
       "id": "ex-207",
       "episode": 207,
-      "text": "\"You're going to get yourself in trouble over whether Tara's memory of that night can be trusted,\" Rao said. Rafi just kept walking toward the Colaba archive."
+      "text": "The rain hadn't let up over the harbor slum lanes in three days. Zoya stood in it anyway, thinking about who really owns the silence around the sinking."
     },
     {
       "id": "ex-208",
       "episode": 208,
-      "text": "At the Fernandes family flat, the conversation kept circling back to who Zoya really answers to, and Zoya let it, because The file has been resealed and there was nothing else to do but wait it out."
+      "text": "The rain hadn't let up over the harbor slum lanes in three days. Rao stood in it anyway, thinking about who Zoya really answers to."
     },
     {
       "id": "ex-209",
       "episode": 209,
-      "text": "At Crawford Market, the conversation kept circling back to what the union paid to keep quiet, and Meera let it, because Someone got there first and there was nothing else to do but wait it out."
+      "text": "\"The evidence has already been sold,\" Asha said flatly. \"You want to keep going anyway?\" Zoya did not answer right away."
     },
     {
       "id": "ex-210",
@@ -4067,7 +4067,7 @@
     {
       "id": "ex-211",
       "episode": 211,
-      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Tara said, looking out at the harbor slum lanes through the rain."
+      "text": "At the harbor slum lanes, the conversation kept circling back to what Rao knew before the retirement papers were signed, and Zoya let it, because The file has been resealed and there was nothing else to do but wait it out."
     },
     {
       "id": "ex-212",
@@ -4077,27 +4077,27 @@
     {
       "id": "ex-213",
       "episode": 213,
-      "text": "\"A witness changes their story overnight,\" Zoya said flatly. \"You want to keep going anyway?\" Rafi did not answer right away."
+      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Zoya said. Tara just kept walking toward the harbor slum lanes."
     },
     {
       "id": "ex-214",
       "episode": 214,
-      "text": "The rain hadn't let up over Rao's precinct in three days. Zoya stood in it anyway, thinking about who Zoya really answers to."
+      "text": "\"You're going to get yourself in trouble over what the union paid to keep quiet,\" Rao said. Zoya just kept walking toward the All-India Radio tower."
     },
     {
       "id": "ex-215",
       "episode": 215,
-      "text": "The rain hadn't let up over the drowned warehouse at Ferry Point in three days. Meera stood in it anyway, thinking about what the union paid to keep quiet."
+      "text": "\"Whether the cassette should ever have aired? I've stopped pretending that one has an easy answer,\" Asha said, looking out at the Colaba archive through the rain."
     },
     {
       "id": "ex-216",
       "episode": 216,
-      "text": "\"You're going to get yourself in trouble over who really owns the silence around the sinking,\" Rao said. Asha just kept walking toward the Bandra sea wall."
+      "text": "\"Who really owns the silence around the sinking? I've stopped pretending that one has an easy answer,\" Tara said, looking out at Crawford Market through the rain."
     },
     {
       "id": "ex-217",
       "episode": 217,
-      "text": "\"You're going to get yourself in trouble over whether the cassette should ever have aired,\" Rafi said. Tara just kept walking toward the Colaba archive."
+      "text": "\"What the union paid to keep quiet? I've stopped pretending that one has an easy answer,\" Rao said, looking out at Rao's precinct through the rain."
     },
     {
       "id": "ex-218",
@@ -4107,7 +4107,7 @@
     {
       "id": "ex-219",
       "episode": 219,
-      "text": "At Crawford Market, the conversation kept circling back to whether Tara's memory of that night can be trusted, and Rafi let it, because The ledger page is missing and there was nothing else to do but wait it out."
+      "text": "\"What Rao knew before the retirement papers were signed? I've stopped pretending that one has an easy answer,\" Meera said, looking out at the Bandra sea wall through the rain."
     },
     {
       "id": "ex-220",

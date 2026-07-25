@@ -22,6 +22,7 @@ Usage: uv run python scripts/generate_series.py
 from __future__ import annotations
 
 import json
+import random
 from pathlib import Path
 
 TOTAL_EPISODES = 220
@@ -705,19 +706,22 @@ def _cap(text: str) -> str:
 def generate_filler(episode: int) -> dict[str, object]:
     """Deterministic filler beat/excerpt for a background episode.
 
-    Indices are derived from the episode number so the same series is
-    produced every run, but neighbouring episodes rarely land on the same
-    template/location/topic combination.
+    Uses a deterministic pseudorandom source seeded by episode number so the
+    same series is produced every run, but neighbouring episodes rarely land on
+    the same template/location/topic combination. Avoids short-cycle patterns
+    from raw modular arithmetic.
     """
-    pov = POV_ROTATION[episode % len(POV_ROTATION)]
-    other_candidates = [c for c in POV_ROTATION if c != pov]
-    other = other_candidates[episode % len(other_candidates)]
-    location = LOCATIONS[(episode * 3) % len(LOCATIONS)]
-    obstacle = OBSTACLES[(episode * 5) % len(OBSTACLES)]
-    topic = TOPICS[(episode * 7) % len(TOPICS)]
+    rng = random.Random(episode)
 
-    beat_template = BEAT_TEMPLATES[episode % len(BEAT_TEMPLATES)]
-    excerpt_template = EXCERPT_TEMPLATES[(episode // 2) % len(EXCERPT_TEMPLATES)]
+    pov = rng.choice(POV_ROTATION)
+    other_candidates = [c for c in POV_ROTATION if c != pov]
+    other = rng.choice(other_candidates)
+    location = rng.choice(LOCATIONS)
+    obstacle = rng.choice(OBSTACLES)
+    topic = rng.choice(TOPICS)
+
+    beat_template = rng.choice(BEAT_TEMPLATES)
+    excerpt_template = rng.choice(EXCERPT_TEMPLATES)
 
     beat = beat_template.format(pov=pov, other=other, location=location, obstacle=obstacle, topic=topic)
     excerpt = excerpt_template.format(
