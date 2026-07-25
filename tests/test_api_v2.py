@@ -44,6 +44,13 @@ def test_dashboard_shows_the_baseline_comparison(client):
     assert "Protected" in body
 
 
+def test_dashboard_has_hooks_for_prediction_and_rewrite_attribution(client):
+    body = client.get("/").text
+    assert 'id="prediction-value"' in body
+    assert 'id="prediction-interval"' in body
+    assert 'id="rewrite-body"' in body
+
+
 def test_predict_returns_a_real_prediction_with_interval_and_disclosure(client):
     payload = client.get("/api/predict", params={"episode": 30}).json()
     assert payload["episode"] == 30
