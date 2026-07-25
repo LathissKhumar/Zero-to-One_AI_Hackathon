@@ -50,8 +50,8 @@ extractor doesn't do it):
    sentence's episode text) as a pending negation. Every later episode is
    checked against every still-open pending negation: the negation's
    capability is stemmed (crude suffix-stripping: -ing/-ed/-es/-s) and looked
-   up in a small hand-written synonym cluster (e.g. "swim" also matches
-   "dive"; "dead" is contradicted by verbs implying being alive: "speak",
+   up in a small hand-written synonym cluster (e.g. "dead" is contradicted
+   by verbs implying being alive: "speak",
    "appear", "return", "arrive", "walk", "live"; capabilities outside the
    cluster table only match their own stem). A contradiction entry fires only
    if, in addition to the stem/cluster hit, the two episodes also share at
@@ -134,7 +134,16 @@ _PAYOFF_PATTERN = re.compile(
 )
 
 _SYNONYM_CLUSTERS: dict[str, frozenset[str]] = {
-    "swim": frozenset({"swim", "dive"}),
+    # No "swim"/"dive" entry: a prior version had one, but it existed only
+    # because it happened to clear one specific manifest fixture (a
+    # character who "can't swim" later "dives"). Swimming and diving are not
+    # actually the same capability -- someone who cannot swim diving into
+    # water is the *point* of that contradiction, not evidence the verbs are
+    # synonyms in general prose. A rule earning its place only by matching
+    # one fixture's vocabulary is worse than no rule: it inflates apparent
+    # recall without generalizing. Left out; the extractor is allowed to
+    # miss swim/dive contradictions until a genuinely general case justifies
+    # one.
     "dead": frozenset({"speak", "appear", "return", "arrive", "walk", "live"}),
     "walk": frozenset({"walk", "run"}),
     "speak": frozenset({"speak", "talk", "say"}),
@@ -147,8 +156,8 @@ _TOKEN_PATTERN = re.compile(r"[A-Za-z']+")
 
 
 def _stem(word: str) -> str:
-    """Crude suffix stripper -- just enough to fold "dives"/"dived"/"diving"
-    onto "dive" for cluster matching. Not a real stemmer: it knows nothing
+    """Crude suffix stripper -- just enough to fold "welds"/"welded"/"welding"
+    onto "weld" for cluster matching. Not a real stemmer: it knows nothing
     about irregular verbs (e.g. "spoke" does not stem to "speak")."""
     word = word.lower()
     if word.endswith("ies") and len(word) > 4:
