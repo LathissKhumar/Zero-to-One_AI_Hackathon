@@ -239,20 +239,30 @@ class EndToEndReport(BaseModel):
 
 
 def _episode_rows(series: Series) -> list[dict]:
-    """Build the extractor's input from the series' own authored text.
+    """Build the extractor's input from episode prose only.
 
-    Nodes carry a short authored ``summary``; excerpts carry the fuller scene
-    text for the same episode. Concatenating both gives the extractor
-    everything a reader would see for that episode, without introducing a new
-    data file -- the episode text already lives on the series.
+    **Excerpts only. Never ``node.summary``.** Summaries are generator output
+    conditioned on the defect manifest, and they frequently state a defect
+    outright ("Despite swearing weeks ago that she cannot swim, Tara dives").
+    Feeding them to the extractor hands it the answer key.
+
+    That is not hypothetical. When summaries were included, seven of the nine
+    promise-class manifest anchors had their promise language *only* in the
+    summary and none in the prose -- so ``false_positive_rate`` and
+    ``obligations_tracked`` were being manufactured from the manifest rather
+    than measured: 1.0 and 6/6 with summaries, 0.0 and 2/6 without. The
+    contradiction detections were byte-identical either way, so the headline
+    recall and precision never depended on the leak; two numbers reported
+    beside them did.
+
+    A metric derived from the answer key cannot fail, and a metric that cannot
+    fail is not evidence. This is the fourth time that defect has surfaced in
+    this project in a different disguise -- see SESSION_HANDOFF.md.
     """
-    excerpt_text_by_episode = {excerpt.episode: excerpt.text for excerpt in series.excerpts}
-    rows: list[dict] = []
-    for node in series.nodes:
-        excerpt_text = excerpt_text_by_episode.get(node.episode, "")
-        text = f"{node.summary} {excerpt_text}".strip()
-        rows.append({"episode": node.episode, "synopsis": text})
-    return rows
+    return [
+        {"episode": excerpt.episode, "synopsis": excerpt.text}
+        for excerpt in sorted(series.excerpts, key=lambda item: item.episode)
+    ]
 
 
 def _content_words(text: str) -> set[str]:
