@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import pytest
-
 from app.ledger import LedgerResolver, LedgerSummary
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink, Series
 
@@ -56,9 +54,17 @@ def resolve_one(entry_id: str, series: Series, **kwargs):
     return next(item for item in resolved if item.entry.id == entry_id)
 
 
-def test_contradiction_with_downstream_payoff_is_protected():
+def test_contradiction_with_verified_downstream_payoff_is_protected():
     series = build_series(
-        payoffs=[PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="Reveals the dive was imagined.")]
+        payoffs=[
+            PayoffLink(
+                node_id="n-30",
+                target_id="c-1",
+                episode=30,
+                rationale="Reveals the dive was imagined.",
+                verified=True,
+            )
+        ]
     )
     result = resolve_one("c-1", series)
     assert result.state == "suspended"
@@ -66,6 +72,41 @@ def test_contradiction_with_downstream_payoff_is_protected():
     assert not result.is_defect
     assert result.payoff.episode == 30
     assert "Ep 30" in result.reason
+
+
+def test_unverified_payoff_does_not_protect_with_no_verifier_configured():
+    """The default (no-verifier) path must not grant protection on trust alone.
+
+    Without a verifier, and without the link being pre-marked as trusted ground
+    truth, a contradiction cannot be suspended purely on an extractor's say-so --
+    that would silently suppress a real plot hole, the worst error this system
+    can make.
+    """
+    series = build_series(
+        payoffs=[PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="unverified claim")]
+    )
+    result = resolve_one("c-1", series)
+    assert result.state == "broken"
+    assert result.is_defect
+    assert result.payoff is None
+
+
+def test_approving_verifier_protects_and_marks_the_link_verified():
+    series = build_series(
+        payoffs=[PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="checked out")]
+    )
+    result = resolve_one("c-1", series, verifier=lambda link, entry: True)
+    assert result.state == "suspended"
+    assert result.payoff is not None
+    assert result.payoff.verified is True
+
+
+def test_unverified_payoff_still_pays_off_a_promise():
+    """Promises are lower stakes: any matching link discharges one, verified or not."""
+    series = build_series(
+        payoffs=[PayoffLink(node_id="n-30", target_id="p-1", episode=30, rationale="unverified but fine for a promise")]
+    )
+    assert resolve_one("p-1", series).state == "paid"
 
 
 def test_contradiction_without_payoff_is_a_defect():
@@ -116,7 +157,9 @@ def test_rejected_verifier_leaves_the_contradiction_broken():
 
 def test_as_of_horizon_hides_later_payoffs():
     series = build_series(
-        payoffs=[PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="Late reveal.")]
+        payoffs=[
+            PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="Late reveal.", verified=True)
+        ]
     )
     early = LedgerResolver().resolve_series(series, as_of=25)
     assert next(item for item in early if item.entry.id == "c-1").state == "broken"
@@ -124,7 +167,7 @@ def test_as_of_horizon_hides_later_payoffs():
 
 def test_summary_headline_separates_baseline_from_real_defects():
     series = build_series(
-        payoffs=[PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="Reveal.")]
+        payoffs=[PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="Reveal.", verified=True)]
     )
     summary = LedgerSummary(LedgerResolver().resolve_series(series))
     headline = summary.headline()
