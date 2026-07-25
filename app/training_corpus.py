@@ -15,12 +15,19 @@ Generative process, per synthetic chapter boundary::
         BASE
         + OPEN_OBLIGATION_WEIGHT * open_obligation_count   # open threads pull a reader forward
         + URGENCY_WEIGHT * mean_urgency                    # urgent open threads pull harder
-        - OVERDUE_WEIGHT * overdue_count                   # an overdue promise reads as abandoned
-        - BROKEN_WEIGHT * broken_count                     # an unresolved contradiction repels
-        - AGE_WEIGHT * max_obligation_age                  # a debt left standing goes stale
+        - OVERDUE_WEIGHT * sqrt(overdue_count)             # an overdue promise reads as abandoned
+        - BROKEN_WEIGHT * sqrt(broken_count)               # an unresolved contradiction repels
+        - AGE_WEIGHT * sqrt(max_obligation_age)            # a debt left standing goes stale
         + noise,
         0.0, 1.0,
     )
+
+The penalties take a square root because attrition has diminishing returns: the
+eighth loose thread does not cost what the first did, and a reader who tolerated
+five contradictions is not lost by the sixth. Linear penalties saturated instead
+-- eight unresolved contradictions subtracted more than the whole base rate, so
+every boundary past roughly episode 100 of a long series pinned at zero and the
+back half of the curve carried no signal.
 
 Any feature absent from this expression is one the model will correctly learn to
 ignore, because in this synthetic world it carries no signal. That is a real
@@ -45,16 +52,17 @@ app/main.py.
 from __future__ import annotations
 
 import random
+from math import sqrt
 
 BASE = 0.5
 OPEN_OBLIGATION_WEIGHT = 0.03
 URGENCY_WEIGHT = 0.02
-OVERDUE_WEIGHT = 0.08
-BROKEN_WEIGHT = 0.12
+OVERDUE_WEIGHT = 0.09
+BROKEN_WEIGHT = 0.13
 # Per-episode decay on the oldest standing debt. Small, because age is a slow
 # pressure next to an outright broken promise -- but nonzero, because a thread
 # left hanging for 200 episodes is not the same as one opened last week.
-AGE_WEIGHT = 0.0015
+AGE_WEIGHT = 0.012
 NOISE_SPREAD = 0.05
 
 PLATFORMS = ("royalroad", "qidian", "arxiv_serial")
@@ -110,9 +118,9 @@ def generate_synthetic_corpus(
                 BASE
                 + OPEN_OBLIGATION_WEIGHT * open_obligation_count
                 + URGENCY_WEIGHT * mean_urgency
-                - OVERDUE_WEIGHT * overdue_count
-                - BROKEN_WEIGHT * broken_count
-                - AGE_WEIGHT * max_obligation_age
+                - OVERDUE_WEIGHT * sqrt(overdue_count)
+                - BROKEN_WEIGHT * sqrt(broken_count)
+                - AGE_WEIGHT * sqrt(max_obligation_age)
                 + noise
             )
             continue_rate = max(0.0, min(1.0, raw_rate))

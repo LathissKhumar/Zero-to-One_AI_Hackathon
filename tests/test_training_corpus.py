@@ -132,3 +132,36 @@ def test_prediction_responds_to_structural_pressure():
     assert len(set(predictions)) == len(predictions), (
         f"prediction is flat across broken_count 0/3/9: {predictions}"
     )
+
+
+def test_predictions_do_not_saturate_across_the_demo_series():
+    """The served curve must stay informative, not clamp to a floor.
+
+    With linear penalties, eight unresolved contradictions subtracted 0.96 from
+    a 0.5 base, so every boundary past roughly episode 100 pinned at 0.000 --
+    the back half of the series carried no signal at all. Reader attrition has
+    diminishing returns: the eighth loose thread does not cost what the first
+    did.
+    """
+    from pathlib import Path
+
+    from app.corpus import normalize_within_book
+    from app.features import FeatureExtractor
+    from app.predictor import ContinuationPredictor
+    from app.series_loader import load_series
+
+    series = load_series(Path("data/series/last_monsoon.json"))
+    predictor = ContinuationPredictor()
+    predictor.train(normalize_within_book(generate_synthetic_corpus()))
+
+    predictions = [
+        predictor.predict(FeatureExtractor().extract(series, episode))
+        for episode in range(1, series.total_episodes + 1)
+    ]
+    clamped = [p for p in predictions if getattr(p, "clamped", False)]
+    assert len(clamped) / len(predictions) < 0.15, (
+        f"{len(clamped)}/{len(predictions)} boundaries clamp; the curve is uninformative"
+    )
+
+    values = [p.value for p in predictions]
+    assert max(values) - min(values) > 0.2, f"curve is flat: [{min(values)}, {max(values)}]"
