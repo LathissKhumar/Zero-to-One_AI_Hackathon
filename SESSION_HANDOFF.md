@@ -1,7 +1,9 @@
 # Session Handoff — CanonPulse
 
-**Written:** 2026-07-26. **Branch:** `feat/extraction-eval` @ `13c6ca2`, 10 commits ahead of `main`.
-**Suite:** 123 passing (`uv run --group dev pytest -q`). Working tree clean except two untracked files — see §7.
+**Written:** 2026-07-26, updated after the final whole-branch review.
+**Branch:** `feat/extraction-eval` @ `a6ea65b`, 16 commits ahead of `main`.
+**Suite:** 124 passing (`uv run --group dev pytest -q`). Working tree clean except two untracked files — see §7.
+**Plan status:** all 4 tasks of `2026-07-26-canonpulse-extraction-eval.md` complete; final review's blocking findings fixed.
 
 You are picking up a hackathon build mid-flight. Read §1 and §3 before touching anything.
 
@@ -60,6 +62,8 @@ This is the single most important thing to understand about this repo.
 - **First:** `run_benchmark` "detected" a case exactly when the case was labelled detectable. Deleted.
 - **Second:** the demo series is *generated from* the manifest it is scored against, so the resolver trivially recovered it. This is why the two-number split in §4 exists.
 - **Third:** the plan's own test fixture paraphrased two manifest defects, silently tuning the extractor to them. Caught in review; fixture rewritten, `swim`/`dive` synonym cluster removed.
+- **Fourth:** `_episode_rows` fed the extractor `node.summary` — generator output conditioned on the manifest, which often states a defect outright. Seven of the nine promise-class anchors had their promise language *only* there and none in the episode prose, so `false_positive_rate` and `obligations_tracked` were manufactured (1.0 and 6/6 with summaries; 0.0 and 2/6 without). Contradiction detections were byte-identical either way, so the headline never depended on it — but two numbers reported beside it did, and all three were on screen and in this document. Fixed in `735f903`; `_episode_rows` now uses excerpt prose only.
+- **Fifth (methodology, same family):** the ceiling test read each entry's expected state out of the manifest and never ran `LedgerResolver`, so it validated the matcher while claiming to validate the end-to-end scale. Fixed in `a6ea65b` — it now feeds a byte-perfect extraction through `evaluate_series` and scores 1.0/1.0/0.0 via the real path.
 
 **Before adding any evaluation, ask: could this number fail? If not, it is not evidence.** Every prompt, fixture, and rule must be written without consulting `data/manifest/last_monsoon.yaml`.
 
@@ -72,7 +76,12 @@ Use these sentences verbatim in any user-facing copy. Do not soften the zero.
 | | Value | Honest description |
 |---|---|---|
 | **Ledger** | recall 1.0, precision 1.0, FPR 0.0 | *"Given a correct, hand-authored graph, the resolver separates all 6 real plot holes from all 5 intentional twists with no false positives. This measures graph traversal only, not extraction."* |
-| **End-to-end** | recall 0.0, precision 0.0, FPR 1.0 | *"Run end-to-end through the offline heuristic extractor, the system recovers 0 of 6 real plot holes: it produces only 4 contradiction candidates across 220 episodes, locates 3 of the 11 contradiction-class items (all twists, none protected because their payoff links are missing or unverified), and misfires on all 3 clean controls."*|
+| **End-to-end** | recall 0.0, precision 0.0, FPR 0.0 | *"Run end-to-end through the offline heuristic extractor, the system recovers 0 of 6 real plot holes and protects 0 of 5 intentional twists. It produces 4 contradiction candidates across 220 episodes; 3 are matched to a manifest item, but only one (`twist-02`) has both endpoints right — and `twist-02` is an easy case by construction. The 3 clean controls are not over-flagged: they resolve `outstanding`, meaning the extractor found the promise and missed the payoff."* |
+
+**Two things to say out loud rather than let a judge find them:**
+
+1. **The reachable precision ceiling is 0.55, not 1.0.** Protection requires a *verified* payoff link by design, and no extractor in this repo can emit one — no `Verifier` implementation exists, and `app/main.py` uses a bare `LedgerResolver()`. So `twists_protected` measures the absence of a verifier rather than the extractor, and every twist correctly located strictly *lowers* extracted precision (a located-but-unprotected twist counts as `twists_flagged`). Read `precision 0.00` against 0.55.
+2. **The big `11 → 6 / 5 / 3` panel is the traversal number.** It now carries a provenance label saying so. Do not remove it.
 
 **The zero is trustworthy, and that took two review rounds to establish.** The first version reported 0.167; a reviewer traced the single "recovered" hole to a numeric coincidence and showed the matcher *scrambled* — a byte-perfect extraction scored 0.833, and a +1 episode drift left 8/11 "matching" with 0 correct. After rebuilding matching around content agreement with order-free assignment, the extracted numbers came out **byte-identical across both a tightening and a loosening of the matcher**. That invariance is the evidence the number measures the extractor rather than itself.
 
@@ -84,17 +93,19 @@ Use these sentences verbatim in any user-facing copy. Do not soften the zero.
 
 ## 5. Immediate next work
 
-### Task 4 — surface both numbers (not started, fully specified)
+**Task 4 is done.** `/api/discrimination` returns `EndToEndReport`, both numbers render with labels that are static HTML (so no loading or fetch-failure state can show a bare figure), and the README carries the two-number framing. The final whole-branch review's blocking findings are fixed.
 
-Brief already generated at `.git/sdd/task-4-brief.md`; plan section in the active plan file.
+**Remaining findings from that review, deliberately deferred — triage before merge:**
 
-- `/api/discrimination` returns a flat `DiscriminationReport`. Change it to return `EndToEndReport` (`ledger`, `extracted`, `extraction_rejected`) from `app/evaluation.py::evaluate_series`. Compute once at startup via the existing `@lru_cache` pattern in `app/main.py`, not per request.
-- Use `HeuristicExtractor()` for the served numbers. **Do not wire `LLMExtractor` into the app** — it needs credentials and would make the endpoint fail without a key.
-- UI: never show the two numbers adjacent without labels saying what each measures. An unlabelled pair invites the reader to assume the higher one is the headline — that is the misleading single number this task exists to remove, with extra steps.
-- README: its honesty section currently apologises for a metric that could not fall. Replace with the §4 framing. Keep every existing disclosure (synthetic series, synthetic training corpus, no real listener data). Record which manifest items the extractor recovers — anything aligning with `twist-02` or `twist-05` is an easy case by construction (see §3), so recovering those is weaker evidence than the other nine.
-- Vanilla HTML/CSS/JS only. No frameworks, no CDN, no external fonts.
+| Finding | Where | Verdict |
+|---|---|---|
+| Mutual-best charges the better of two correct detections as a false positive. `contradiction-3-60` is the genuinely correct twist-02 detection (both endpoints right) but loses to `contradiction-60-134`, stays unmatched, and lands in `spurious_broken`. | `app/evaluation.py:99-107`, `app/manifest.py:111` | Invisible today (precision is 0.0 regardless). Live the moment `holes_caught > 0`. |
+| The content gate is tautological for the matches it credits: `_entry_content_words` draws from the entry's own cited excerpts and `_manifest_item_content_words` from the anchor episode's excerpt, so when an entry cites the excerpt *at* an anchor both sets come from the same text and overlap ≈1.0 by construction. It is a real filter only for entries that bracket an anchor without citing it. | `app/evaluation.py:295,326` | Ship, but do not describe the gate as verifying semantic agreement. |
+| `LedgerEntry.entities` is set to the episode's whole content-word bag, and `app/features.py:107` counts entities into `active_thread_count`. The extracted graph never reaches the feature path today (`app/main.py` uses the authored series), so "the predictor never sees prose" holds — but nothing guards the seam. | `app/heuristic_extractor.py:245,258,287` | Hard blocker before wiring the extracted graph into `/api/predict`. |
+| No test asserts the extractor ever produces a `contradiction` entry, despite the fixture being built to exercise exactly that. | `tests/test_heuristic_extractor.py` | Ship; cheap to add. |
+| `DiscriminationReport.baseline_flags` is `len(holes)+len(twists)` and never touches `resolved`, so the `extracted` block serves `baseline_flags: 11` copied from the answer key. | `app/manifest.py:131` | Ship, but do not present it as an extracted result. |
 
-### Then: measure the LLM extractor
+### Next: measure the LLM extractor
 
 Built and tested offline in Task 3. Needs credentials:
 
@@ -127,7 +138,10 @@ Then: `databricks bundle deploy`, run `sql/ddl.sql`, load the demo series into D
 
 ## 7. Loose ends
 
-**Untracked files that should probably be committed:** `AGENTS.md` and `PRODUCT.md` at repo root. Neither was created by the plan; both are useful. Review and commit.
+**Untracked files at repo root:** `AGENTS.md` and `PRODUCT.md`. Neither was created by the plan.
+
+- `AGENTS.md` — build/test/style conventions, Codex reads it natively. Safe to commit.
+- `PRODUCT.md` — **do not commit as-is.** Two sections are now false: it still describes the superseded single-1.0 metric framing this branch replaced, and it lists MLflow runs under "Real and committed" though Databricks has never executed. Fix both first.
 
 **Deferred Minor findings** (full list with rationale in the ledger):
 
