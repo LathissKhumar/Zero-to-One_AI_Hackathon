@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FutureTimeoutError
 from functools import lru_cache
@@ -20,7 +21,7 @@ from app.manifest import load_manifest
 from app.narrative_models import ResolvedEntry, Series
 from app.predictor import ContinuationPredictor
 from app.rewrite import EditAttribution, RewriteReport, attribute_delta
-from app.series_loader import load_series
+from app.store import SeriesStore, store_from_env
 from app.training_corpus import generate_synthetic_corpus
 
 SERIES_PATH = Path("data/series/last_monsoon.json")
@@ -53,8 +54,27 @@ class RewriteRequest(BaseModel):
 
 
 @lru_cache(maxsize=1)
+def _store() -> SeriesStore:
+    """The single place that knows which source the series comes from.
+
+    Selected from environment configuration (see `app.store.store_from_env`):
+    file mode with nothing set, Databricks mode only when host, token, and
+    warehouse id are all present. Logged at first use so which store is
+    active is visible in the startup output, not just inferable from
+    behaviour.
+    """
+    store = store_from_env(os.environ, default_series_path=SERIES_PATH)
+    print(f"[canonpulse] series store: {store.backend}")
+    return store
+
+
+@lru_cache(maxsize=1)
 def _series_cached() -> Series:
-    return load_series(SERIES_PATH)
+    # Databricks mode fails loudly here: `store.load()` raises
+    # `StatementError` on a failed statement rather than returning a partial
+    # `Series`, and nothing downstream catches it -- a broken configuration
+    # surfaces as a 500, never as a silent fallback to the committed JSON.
+    return _store().load()
 
 
 def _series() -> Series:
@@ -122,6 +142,11 @@ def create_app() -> FastAPI:
             "title": current.title,
             "genre": current.genre,
             "total_episodes": current.total_episodes,
+            # Which source this response was built from -- "file" (committed
+            # JSON) or "databricks" (Unity Catalog). Never inferred by the
+            # caller; always the store's own label, so a demo cannot claim
+            # to read the lakehouse while quietly serving the file.
+            "source": _store().backend,
         }
 
     @app.get("/api/audit", response_model=AuditResponse)
