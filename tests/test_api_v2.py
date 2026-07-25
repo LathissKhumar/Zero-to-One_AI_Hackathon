@@ -42,3 +42,100 @@ def test_dashboard_shows_the_baseline_comparison(client):
     assert "Baseline checker" in body
     assert "CanonPulse" in body
     assert "Protected" in body
+
+
+def test_predict_returns_a_real_prediction_with_interval_and_disclosure(client):
+    payload = client.get("/api/predict", params={"episode": 30}).json()
+    assert payload["episode"] == 30
+    assert set(payload["features"].keys())  # features still returned as the explanation
+    prediction = payload["prediction"]
+    assert 0.0 <= prediction["value"] <= 1.0
+    assert prediction["lower_ci"] <= prediction["value"] <= prediction["upper_ci"]
+    assert "ci_method" in prediction
+    assert "synthetic" in payload["disclosure"].lower()
+
+
+def test_predict_features_never_look_past_the_boundary(client):
+    """Sanity check that the wired endpoint still uses the causal extractor."""
+    early = client.get("/api/predict", params={"episode": 5}).json()
+    late = client.get("/api/predict", params={"episode": 200}).json()
+    assert early["features"] != late["features"]
+
+
+def test_rewrite_computes_total_delta_from_the_predictor_not_the_caller(client):
+    """The endpoint must not trust a caller-supplied total_delta -- it has to
+    compute both predictions itself from the same trained model."""
+    response = client.post(
+        "/api/rewrite",
+        json={
+            "before_episode": 20,
+            "after_episode": 40,
+            "edits": [
+                {
+                    "hunk": "- obligation left open\n+ obligation closed",
+                    "obligation_id": "p-1",
+                    "feature_moved": "open_obligation_count",
+                    "delta": 999.0,  # deliberately wrong; must be ignored
+                }
+            ],
+        },
+    )
+    assert response.status_code == 200
+    report = response.json()
+    assert report["total_delta"] != pytest.approx(999.0)
+    assert report["unattributed"] == pytest.approx(report["total_delta"] - report["attributed_delta"])
+
+
+def test_rewrite_rejects_edits_with_no_named_obligation(client):
+    response = client.post(
+        "/api/rewrite",
+        json={
+            "before_episode": 20,
+            "after_episode": 40,
+            "edits": [{"hunk": "x", "obligation_id": "", "feature_moved": "open_obligation_count", "delta": 0.01}],
+        },
+    )
+    assert response.status_code == 422
+
+
+def test_cached_series_is_not_mutated_across_requests(client):
+    """_series()/_resolved() are lru_cache'd; handing out the same mutable
+    pydantic objects to every request is a corruption risk once anything
+    writes to them (e.g. PayoffLink.verified during resolution)."""
+    first = client.get("/api/audit").json()
+    for payoff in first.get("findings", []):
+        if payoff.get("payoff"):
+            payoff["payoff"]["verified"] = True  # mutate the response copy
+    second = client.get("/api/audit").json()
+    assert second == client.get("/api/audit").json()  # still deterministic
+    from app.main import _resolved, _series
+
+    a, b = _resolved(), _resolved()
+    assert a is not b or all(x is not y for x, y in zip(a, b))
+    sa, sb = _series(), _series()
+    assert sa is not sb
+
+
+def test_predict_falls_back_to_the_golden_path_when_inference_is_slow(client, monkeypatch):
+    """INFERENCE_TIMEOUT_SECONDS must actually gate a real code path -- the
+    README describes an automatic switchover to golden_path(); before this,
+    nothing read the constant."""
+    import time
+
+    import app.demo_mode as demo_mode
+    import app.main as main
+
+    monkeypatch.setattr(demo_mode, "INFERENCE_TIMEOUT_SECONDS", 0.05)
+
+    real_predict = main._predictor().predict
+
+    def slow_predict(features):
+        time.sleep(0.3)
+        return real_predict(features)
+
+    monkeypatch.setattr(main._predictor(), "predict", slow_predict)
+
+    payload = client.get("/api/predict", params={"episode": 30}).json()
+    assert payload["degraded"] is True
+    assert payload["prediction"] is None
+    assert payload["fallback"]["headline"]["baseline_flags"] > 0
