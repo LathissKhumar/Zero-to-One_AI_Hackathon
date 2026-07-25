@@ -104,6 +104,11 @@ def _estimate_uncached_calls(rows: list[dict], model: str, cache_path: Path) -> 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="Skip the spend confirmation. Required when running non-interactively.",
+    )
     parser.add_argument("--limit", type=int, default=None, help="only send the first N episodes")
     parser.add_argument(
         "--cache-path", type=Path, default=DEFAULT_CACHE_PATH, help="response cache file"
@@ -135,8 +140,15 @@ def main() -> int:
     estimated_calls = _estimate_uncached_calls(rows, model or "default", args.cache_path)
     print(f"Episodes to process: {len(rows)}")
     print(f"Estimated new API calls (not already cached): {estimated_calls}")
-    if estimated_calls > 0:
-        confirm = input(f"Proceed with {estimated_calls} call(s) to {llm_extractor.backend}? [y/N] ")
+    if estimated_calls > 0 and not args.yes:
+        # Interactive by default: this spends money, so a human confirms unless
+        # they have explicitly said otherwise. --yes exists because input()
+        # raises EOFError under any non-interactive runner.
+        try:
+            confirm = input(f"Proceed with {estimated_calls} call(s) to {llm_extractor.backend}? [y/N] ")
+        except EOFError:
+            print("Not a terminal. Re-run with --yes to confirm the spend.")
+            return 1
         if confirm.strip().lower() not in {"y", "yes"}:
             print("Aborted.")
             return 1
