@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.demo_data import get_demo_catalogue, get_demo_story
@@ -35,6 +36,8 @@ def create_app() -> FastAPI:
     @app.get("/api/discover", response_model=list[DiscoveryMatch])
     def discover(q: str = Query(min_length=2, max_length=120)) -> list[DiscoveryMatch]:
         return engine.discover(q, get_demo_catalogue())
+
+    app.mount("/", StaticFiles(directory="app/static", html=True), name="dashboard")
 
     return app
 

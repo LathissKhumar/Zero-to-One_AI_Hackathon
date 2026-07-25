@@ -21,3 +21,13 @@ def test_compare_endpoint_rejects_unknown_endings():
     response = client.post("/api/compare", json={"left_slug": "missing", "right_slug": "earned-storm"})
 
     assert response.status_code == 422
+
+
+def test_root_serves_the_canonpulse_dashboard():
+    client = TestClient(create_app())
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert "Narrative Debt Engine" in response.text
+    assert "Audience Court" in response.text
