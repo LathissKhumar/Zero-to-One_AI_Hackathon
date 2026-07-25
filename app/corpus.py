@@ -1,11 +1,14 @@
 """Training corpus preparation.
 
-Three sources with incompatible label scales: the arXiv serial corpus reports a
-continue-to-read rate, Qidian reports raw reader-response counts, Royal Road
-gives chapter view ratios. Pooling raw values would teach the model platform
-identity rather than narrative structure.
+**Nothing in this repository ingests a real corpus yet.** The only corpus that
+exists here is the synthetic one in ``app/training_corpus.py``. This module is
+built for three *intended* real sources, none of them wired up: the arXiv serial
+corpus (continue-to-read rate), Qidian (raw reader-response counts), and Royal
+Road (chapter view ratios).
 
-Two rules make them comparable:
+Those three report on incompatible label scales, so pooling raw values would
+teach a model platform identity rather than narrative structure. Two rules make
+them comparable, and they apply equally to the synthetic corpus:
 
 1. Z-score the target within each book. What transfers is "was this boundary
    stronger than the rest of its own story", not the absolute rate.

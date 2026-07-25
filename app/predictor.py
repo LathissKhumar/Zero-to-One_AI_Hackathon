@@ -5,7 +5,11 @@ is deliberate: a rewrite cannot raise this score by sounding better, only by
 changing structure -- closing an obligation, raising urgency, shortening the gap
 to a payoff. Without that property the generator would be grading its own work.
 
-Trained on public serialized fiction, not platform telemetry. Say so.
+Fit to a synthetic corpus with a documented generative process (see
+``app/training_corpus.py``), not to observed reader behaviour and not to platform
+telemetry. Nothing in this repository ingests real retention labels yet, so these
+predictions demonstrate that the pipeline runs end to end -- they are not
+calibrated to real audiences. Say so wherever a number is shown.
 """
 
 from __future__ import annotations
