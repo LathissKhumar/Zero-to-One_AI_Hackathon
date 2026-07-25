@@ -12,9 +12,11 @@ from pydantic import BaseModel
 import app.demo_mode as demo_mode
 from app.corpus import normalize_within_book
 from app.demo_mode import golden_path
+from app.evaluation import EndToEndReport, evaluate_series
 from app.features import FeatureExtractor
+from app.heuristic_extractor import HeuristicExtractor
 from app.ledger import LedgerResolver, LedgerSummary
-from app.manifest import DiscriminationReport, load_manifest, score_discrimination
+from app.manifest import load_manifest
 from app.narrative_models import ResolvedEntry, Series
 from app.predictor import ContinuationPredictor
 from app.rewrite import EditAttribution, RewriteReport, attribute_delta
@@ -81,6 +83,21 @@ def _resolved() -> tuple[ResolvedEntry, ...]:
 
 
 @lru_cache(maxsize=1)
+def _discrimination_report() -> EndToEndReport:
+    """Both numbers, computed once at startup rather than per request.
+
+    ``ledger`` scores the authored graph as-is (traversal only); ``extracted``
+    runs the offline ``HeuristicExtractor`` over the series' own episode text
+    first and scores what it rebuilds. ``_series()`` hands back a private
+    deep copy, so `evaluate_series`'s internal `LedgerResolver.resolve_series`
+    calls -- which can write `PayoffLink.verified` -- never touch the
+    process-wide cached series, for the same reason `_resolved_cached` does
+    not resolve it directly (see `_series`'s docstring).
+    """
+    return evaluate_series(_series(), load_manifest(MANIFEST_PATH), HeuristicExtractor())
+
+
+@lru_cache(maxsize=1)
 def _predictor() -> ContinuationPredictor:
     """Train once at startup (first use), not per request.
 
@@ -120,9 +137,9 @@ def create_app() -> FastAPI:
             findings=findings,
         )
 
-    @app.get("/api/discrimination", response_model=DiscriminationReport)
-    def discrimination() -> DiscriminationReport:
-        return score_discrimination(load_manifest(MANIFEST_PATH), list(_resolved()))
+    @app.get("/api/discrimination", response_model=EndToEndReport)
+    def discrimination() -> EndToEndReport:
+        return _discrimination_report()
 
     @app.get("/api/predict")
     def predict(episode: int = Query(ge=1)) -> dict:

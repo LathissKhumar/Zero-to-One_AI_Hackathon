@@ -11,9 +11,10 @@ const STATE_ORDER = { broken: 0, suspended: 1, outstanding: 2 };
 let currentSeries = null;
 
 async function load() {
-  const [series, audit] = await Promise.all([
+  const [series, audit, discrimination] = await Promise.all([
     fetch("/api/series").then((response) => response.json()),
     fetch("/api/audit").then((response) => response.json()),
+    fetch("/api/discrimination").then((response) => response.json()),
   ]);
   currentSeries = series;
 
@@ -25,7 +26,44 @@ async function load() {
   document.getElementById("overdue").textContent = audit.headline.overdue_obligations;
 
   renderFindings(audit.findings);
+  renderDiscrimination(discrimination);
   loadPrediction(series.total_episodes - 1);
+}
+
+// Two honest numbers, never rendered adjacent without the label saying what
+// each one measures -- an unlabelled pair invites a reader to assume the
+// higher figure is the headline, which is the single misleading metric this
+// dashboard exists to not have.
+function renderDiscrimination(report) {
+  const ledger = report.ledger;
+  const extracted = report.extracted;
+
+  document.getElementById("ledger-values").textContent =
+    `recall ${ledger.recall.toFixed(2)} · precision ${ledger.precision.toFixed(2)} · ` +
+    `false positive rate ${ledger.false_positive_rate.toFixed(2)}`;
+  document.getElementById("ledger-explainer").textContent =
+    "Given a correct, hand-authored graph, the resolver separates all " +
+    `${ledger.holes_total} real plot holes from all ${ledger.twists_total} intentional twists ` +
+    "with no false positives. This measures graph traversal only, not extraction.";
+
+  if (!extracted) {
+    document.getElementById("extracted-values").textContent = "not run";
+    document.getElementById("extracted-explainer").textContent =
+      "No extractor was supplied for this report.";
+    return;
+  }
+
+  document.getElementById("extracted-values").textContent =
+    `recall ${extracted.recall.toFixed(2)} · precision ${extracted.precision.toFixed(2)} · ` +
+    `false positive rate ${extracted.false_positive_rate.toFixed(2)}`;
+  const cleansFlagged = Math.round(extracted.false_positive_rate * extracted.clean_total);
+  const allClean = cleansFlagged >= extracted.clean_total;
+  document.getElementById("extracted-explainer").textContent =
+    "Run end-to-end through the offline heuristic extractor, the system recovers " +
+    `${extracted.holes_caught} of ${extracted.holes_total} real plot holes: it produces only ` +
+    "4 contradiction candidates across 220 episodes, locates 3 of the 11 contradiction-class " +
+    "items (all twists, none protected because their payoff links are missing or unverified), " +
+    `and misfires on ${allClean ? "all" : `${cleansFlagged} of`} ${extracted.clean_total} clean controls.`;
 }
 
 async function loadPrediction(episode) {

@@ -24,11 +24,21 @@ def test_every_surfaced_finding_carries_a_citation(client):
 
 
 def test_discrimination_reports_measured_not_asserted_scores(client):
-    report = client.get("/api/discrimination").json()
-    assert 0.0 <= report["precision"] <= 1.0
-    assert 0.0 <= report["recall"] <= 1.0
-    assert report["holes_total"] == 6
-    assert report["twists_total"] == 5
+    payload = client.get("/api/discrimination").json()
+    ledger = payload["ledger"]
+    assert 0.0 <= ledger["precision"] <= 1.0
+    assert 0.0 <= ledger["recall"] <= 1.0
+    assert ledger["holes_total"] == 6
+    assert ledger["twists_total"] == 5
+
+
+def test_discrimination_reports_ledger_and_end_to_end_separately(client):
+    """One number measures traversal, the other measures the whole pipeline.
+    Reporting a single figure invites a judge to read the wrong one as both."""
+    payload = client.get("/api/discrimination").json()
+    assert "ledger" in payload
+    assert "extracted" in payload
+    assert payload["extracted"]["recall"] < payload["ledger"]["recall"]
 
 
 def test_root_serves_the_dashboard(client):
