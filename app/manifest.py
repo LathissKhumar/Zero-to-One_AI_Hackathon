@@ -127,8 +127,11 @@ def score_discrimination(
         precision=holes_caught / flagged_total if flagged_total else 0.0,
         recall=holes_caught / len(holes) if holes else 0.0,
         false_positive_rate=cleans_flagged / len(cleans) if cleans else 0.0,
-        # What a checker without the payoff test reports: every contradiction.
-        baseline_flags=len(holes) + len(twists),
+        # What this resolved graph actually flags without distinguishing
+        # whether the contradiction maps to the held-out manifest. The authored
+        # demo graph therefore reports 11, while an extracted graph can report
+        # its own candidate count instead of inheriting the answer key's 11.
+        baseline_flags=sum(1 for state in states.values() if state in {"broken", "suspended"}),
         obligations_tracked=obligations_tracked,
         obligations_total=len(obligations),
     )

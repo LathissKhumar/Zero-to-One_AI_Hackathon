@@ -46,6 +46,14 @@ def test_promise_language_opens_an_obligation():
     assert all(entry.excerpt_ids for entry in promises), "every entry must cite"
 
 
+def test_contradictory_claims_become_a_ledger_entry():
+    result = HeuristicExtractor().extract(episodes())
+    contradictions = [entry for entry in result.entries if entry.kind == "contradiction"]
+    assert contradictions
+    assert any(entry.episodes == [5, 40] for entry in contradictions)
+    assert all(entry.excerpt_ids for entry in contradictions)
+
+
 def test_extracted_payoff_links_start_unverified():
     """Extraction is untrusted by construction, so an extracted twist resolves
     `broken` until something verifies it. That is the guarantee under test."""

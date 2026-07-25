@@ -18,8 +18,10 @@ from app.features import FeatureExtractor
 from app.heuristic_extractor import HeuristicExtractor
 from app.ledger import LedgerResolver, LedgerSummary
 from app.manifest import load_manifest
+from app.memory import MemoryQuery
 from app.narrative_models import ResolvedEntry, Series
-from app.predictor import ContinuationPredictor
+from app.prepublish import PrePublishChecker, PrePublishRequest, PrePublishReport
+from app.predictor import ContinuationPredictor, train_predictor
 from app.rewrite import EditAttribution, RewriteReport, attribute_delta
 from app.store import SeriesStore, store_from_env
 from app.training_corpus import generate_synthetic_corpus
@@ -43,6 +45,7 @@ _inference_executor = ThreadPoolExecutor(max_workers=2)
 
 class AuditResponse(BaseModel):
     series_id: str
+    source: str
     headline: dict[str, int]
     findings: list[ResolvedEntry]
 
@@ -125,9 +128,9 @@ def _predictor() -> ContinuationPredictor:
     and README -- so the pipeline runs end to end without a real reader-
     retention dataset, which does not exist in this repo.
     """
-    predictor = ContinuationPredictor()
     rows = normalize_within_book(generate_synthetic_corpus())
-    predictor.train(rows)
+    experiment = os.environ.get("MLFLOW_EXPERIMENT_ID") or None
+    predictor, _report = train_predictor(rows, experiment=experiment)
     return predictor
 
 
@@ -158,9 +161,42 @@ def create_app() -> FastAPI:
         findings = [item for item in resolved if item.state != "paid"]
         return AuditResponse(
             series_id=_series().id,
+            source=_store().backend,
             headline=summary.headline(),
             findings=findings,
         )
+
+    @app.get("/api/memory")
+    def memory(query: str = Query(min_length=1), episode: int | None = Query(default=None, ge=1)) -> dict:
+        current = _series()
+        horizon = episode if episode is not None else current.total_episodes
+        if horizon > current.total_episodes:
+            raise HTTPException(
+                status_code=422,
+                detail=f"episode {horizon} is past the end of the series ({current.total_episodes} episodes)",
+            )
+        hits = MemoryQuery().search(current, query, horizon)
+        return {
+            "series_id": current.id,
+            "source": _store().backend,
+            "query": query,
+            "episode": horizon,
+            "hits": [hit.model_dump() for hit in hits],
+        }
+
+    @app.post("/api/prepublish", response_model=PrePublishReport)
+    def prepublish(payload: PrePublishRequest) -> PrePublishReport:
+        current = _series()
+        if payload.episode <= current.total_episodes:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    f"candidate episode must follow the published series; "
+                    f"received {payload.episode} after {current.total_episodes}"
+                ),
+            )
+        report = PrePublishChecker().check(current, payload)
+        return report.model_copy(update={"source": _store().backend})
 
     @app.get("/api/discrimination", response_model=EndToEndReport)
     def discrimination() -> EndToEndReport:

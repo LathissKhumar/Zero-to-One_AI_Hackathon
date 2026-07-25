@@ -17,6 +17,11 @@ def test_audit_separates_protected_twists_from_real_holes(client):
     assert payload["headline"]["twists_protected"] > 0
 
 
+def test_audit_reports_the_active_series_backend(client):
+    payload = client.get("/api/audit").json()
+    assert payload["source"] == "file"
+
+
 def test_every_surfaced_finding_carries_a_citation(client):
     payload = client.get("/api/audit").json()
     for finding in payload["findings"]:

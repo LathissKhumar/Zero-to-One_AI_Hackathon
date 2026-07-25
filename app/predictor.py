@@ -175,6 +175,38 @@ class ContinuationPredictor:
         return [[float(row[name]) for name in FEATURE_ORDER] for row in rows]
 
 
+def train_predictor(
+    rows: list[dict], experiment: str | None = None
+) -> tuple[ContinuationPredictor, TrainingReport]:
+    """Train the runtime predictor, optionally recording a governed MLflow run.
+
+    Local demo mode passes no experiment and remains offline. Workspace mode
+    supplies an experiment name or ID, which makes model provenance an actual
+    runtime property instead of a helper that exists only in tests.
+    """
+    predictor = ContinuationPredictor()
+    if not experiment:
+        return predictor, predictor.train(rows)
+
+    mlflow.set_experiment(experiment)
+    with mlflow.start_run(run_name=MODEL_VERSION) as run:
+        report = predictor.train(rows)
+        mlflow.log_metric("held_out_mae", report.held_out_mae)
+        mlflow.log_metric("residual_quantile_z_p90", report.residual_quantile_z)
+        mlflow.log_param("train_rows", report.train_rows)
+        mlflow.log_param("test_rows", report.test_rows)
+        mlflow.log_param("split_strategy", "grouped_by_book_id")
+        mlflow.log_param("ci_method", report.ci_method)
+        mlflow.log_param("features", ",".join(FEATURE_ORDER))
+        mlflow.log_param("model_version", report.model_version)
+        predictor.log_model_to_mlflow(name="model")
+        # Keep this available to callers that need to connect a served
+        # prediction back to its training artifact without making the model
+        # itself depend on MLflow internals.
+        predictor.mlflow_run_id = run.info.run_id  # type: ignore[attr-defined]
+    return predictor, report
+
+
 def _to_probability(z: float, center: float, scale: float) -> tuple[float, bool]:
     """Map a within-book z-score onto a displayable continuation rate.
 
@@ -194,16 +226,5 @@ def _to_probability(z: float, center: float, scale: float) -> tuple[float, bool]
 
 def train_and_log(rows: list[dict], experiment: str) -> TrainingReport:
     """Train and record the run. This is the credibility artifact for judging."""
-    mlflow.set_experiment(experiment)
-    with mlflow.start_run(run_name=MODEL_VERSION):
-        predictor = ContinuationPredictor()
-        report = predictor.train(rows)
-        mlflow.log_metric("held_out_mae", report.held_out_mae)
-        mlflow.log_metric("residual_quantile_z_p90", report.residual_quantile_z)
-        mlflow.log_param("train_rows", report.train_rows)
-        mlflow.log_param("test_rows", report.test_rows)
-        mlflow.log_param("split_strategy", "grouped_by_book_id")
-        mlflow.log_param("ci_method", report.ci_method)
-        mlflow.log_param("features", ",".join(FEATURE_ORDER))
-        predictor.log_model_to_mlflow(name="model")
+    _predictor, report = train_predictor(rows, experiment)
     return report

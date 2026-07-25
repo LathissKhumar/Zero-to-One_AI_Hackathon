@@ -67,6 +67,13 @@ def test_baseline_flag_count_exceeds_real_defects():
     assert report.baseline_flags > report.holes_caught
 
 
+def test_baseline_flags_count_the_resolved_graph_not_the_answer_key():
+    """An extracted report must not inherit the authored graph's flag count."""
+    manifest = load_manifest(MANIFEST_PATH)
+    report = score_discrimination(manifest, [resolved("spurious-1", "broken")])
+    assert report.baseline_flags == 1
+
+
 def test_spurious_broken_entries_outside_the_manifest_cost_precision():
     """An extractor hallucinating contradictions must not report perfect precision.
 
