@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 from typing import Protocol
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink
 
@@ -82,6 +82,14 @@ class DatabricksExtractor:
         self._model = model
 
     def extract(self, episodes: list[dict]) -> ExtractionResult:
+        if not episodes:
+            # No episodes means no series to query -- issuing the statement
+            # would either bind an empty/absent series_id or scan unfiltered.
+            # An empty result is the honest answer, not a query.
+            return ExtractionResult()
+
+        series_id = episodes[0]["series_id"]
+
         sql = (
             Path(__file__).parent.parent / "sql" / "extract_graph.sql"
         ).read_text(encoding="utf-8")
@@ -91,7 +99,7 @@ class DatabricksExtractor:
             .replace("${model}", self._model)
         )
         with self._connection.cursor() as cursor:
-            cursor.execute(statement)
+            cursor.execute(statement, {"series_id": series_id})
             rows = cursor.fetchall()
 
         result = ExtractionResult()
@@ -100,8 +108,22 @@ class DatabricksExtractor:
             if parsed is None:
                 result.rejected += 1
                 continue
-            result.nodes.extend(NarrativeNode.model_validate(item) for item in parsed.get("nodes", []))
-            result.entries.extend(LedgerEntry.model_validate(item) for item in parsed.get("entries", []))
-            result.payoffs.extend(PayoffLink.model_validate(item) for item in parsed.get("payoffs", []))
-            result.excerpts.extend(Excerpt.model_validate(item) for item in parsed.get("excerpts", []))
+            # A row that is valid JSON but schema-invalid (missing field, wrong
+            # type on urgency/valence, etc.) is rejected wholesale rather than
+            # item-by-item: a single malformed item makes the rest of that row's
+            # bookkeeping suspect too, and the row-level `rejected` counter
+            # already communicates "this row's contribution is missing" to the
+            # ledger. The batch itself still continues.
+            try:
+                nodes = [NarrativeNode.model_validate(item) for item in parsed.get("nodes", [])]
+                entries = [LedgerEntry.model_validate(item) for item in parsed.get("entries", [])]
+                payoffs = [PayoffLink.model_validate(item) for item in parsed.get("payoffs", [])]
+                excerpts = [Excerpt.model_validate(item) for item in parsed.get("excerpts", [])]
+            except ValidationError:
+                result.rejected += 1
+                continue
+            result.nodes.extend(nodes)
+            result.entries.extend(entries)
+            result.payoffs.extend(payoffs)
+            result.excerpts.extend(excerpts)
         return result
