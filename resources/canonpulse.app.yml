@@ -2,5 +2,8 @@ resources:
   apps:
     canonpulse:
       name: canonpulse-${bundle.target}
-      description: Evidence-cited narrative debt analysis and simulated Audience Court.
+      description: >-
+        Separates real plot holes from intentional narrative twists across a full
+        serialized series, with cited evidence and a predicted next-episode
+        continuation.
       source_code_path: ..

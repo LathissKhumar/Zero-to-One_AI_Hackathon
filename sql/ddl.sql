@@ -211,6 +211,20 @@ CREATE TABLE IF NOT EXISTS eval_runs (
 )
 USING DELTA;
 
+-- The five listener cohorts, mirroring app/cohorts.py::COHORTS.
+--
+-- `weights` is what actually separates them. Cohorts that differ only by an
+-- adjective in a prompt are decoration -- five personas that all sound like the
+-- same model. Carrying the weight vector here keeps the batch query honest
+-- about why two cohorts disagree on the same episode.
+CREATE TABLE IF NOT EXISTS listener_cohorts (
+    cohort_id       STRING  NOT NULL,
+    name            STRING  NOT NULL,
+    weights         MAP<STRING, DOUBLE> NOT NULL,
+    profile         STRING              -- prose rendering of `weights`, for the prompt
+)
+USING DELTA;
+
 -- Cohort reactions. Populated by a single ai_query over the (cohort x episode)
 -- cross join -- 5 x 220 rows in one statement, not 1,100 API calls.
 -- `variant_blinded` records that the cohort could not see whether it was reading

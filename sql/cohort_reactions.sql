@@ -20,5 +20,5 @@ SELECT
     responseFormat => 'STRUCT<engagement:DOUBLE,vote:STRING,reaction:STRING,citation_ids:ARRAY<STRING>>'
   ) AS reaction
 FROM ${catalog}.${db}.episodes e
-CROSS JOIN ${catalog}.${db}.audience_cohorts c
+CROSS JOIN ${catalog}.${db}.listener_cohorts c
 WHERE e.series_id = :series_id;

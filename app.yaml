@@ -15,7 +15,10 @@ env:
     value: ""
   - name: DATABRICKS_SCHEMA
     value: ""
-  - name: COURT_MODEL_SERVICE
+  # Foundation Model APIs endpoint. All product inference routes here, so calls
+  # carry Unity Catalog lineage and MLflow traces rather than leaving the
+  # platform. Leave empty to run the app in DEMO_MODE off committed data.
+  - name: SERVING_MODEL_ENDPOINT
     value: ""
-  - name: AI_SEARCH_INDEX
+  - name: MLFLOW_EXPERIMENT_ID
     value: ""
