@@ -56,14 +56,18 @@ function renderDiscrimination(report) {
   document.getElementById("extracted-values").textContent =
     `recall ${extracted.recall.toFixed(2)} · precision ${extracted.precision.toFixed(2)} · ` +
     `false positive rate ${extracted.false_positive_rate.toFixed(2)}`;
+  // Derived from the report, never hardcoded: prose stating counts the report
+  // does not carry goes stale silently the moment the extractor or series
+  // changes, and it already did once.
   const cleansFlagged = Math.round(extracted.false_positive_rate * extracted.clean_total);
-  const allClean = cleansFlagged >= extracted.clean_total;
   document.getElementById("extracted-explainer").textContent =
     "Run end-to-end through the offline heuristic extractor, the system recovers " +
-    `${extracted.holes_caught} of ${extracted.holes_total} real plot holes: it produces only ` +
-    "4 contradiction candidates across 220 episodes, locates 3 of the 11 contradiction-class " +
-    "items (all twists, none protected because their payoff links are missing or unverified), " +
-    `and misfires on ${allClean ? "all" : `${cleansFlagged} of`} ${extracted.clean_total} clean controls.`;
+    `${extracted.holes_caught} of ${extracted.holes_total} real plot holes and protects ` +
+    `${extracted.twists_protected} of ${extracted.twists_total} intentional twists. ` +
+    `It over-flags ${cleansFlagged} of ${extracted.clean_total} clean controls. ` +
+    "No twist can be protected until a Verifier exists: protection requires a verified " +
+    "payoff link by design, and no extractor here can produce one, so the reachable " +
+    "precision ceiling is 0.55 rather than 1.0.";
 }
 
 async function loadPrediction(episode) {

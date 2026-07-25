@@ -552,3 +552,21 @@ footer p {
     width: 100%;
   }
 }
+
+/* Provenance label for the top comparison panel. Same visual register as the
+   discrimination cards' labels: it has to read as a caveat on the number, not
+   as decoration under the header. */
+.provenance {
+  max-width: 70ch;
+  margin: 0 auto 0.9rem;
+  padding: 0.55rem 0.8rem;
+  border-left: 3px solid var(--muted, #8a8f98);
+  color: var(--muted, #8a8f98);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.provenance a {
+  color: inherit;
+  text-decoration: underline;
+}
