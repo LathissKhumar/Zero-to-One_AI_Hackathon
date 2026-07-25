@@ -46,24 +46,13 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from app.evaluation import _episode_rows, evaluate_series  # noqa: E402
 from app.heuristic_extractor import HeuristicExtractor  # noqa: E402
-from app.llm_extractor import LLMExtractor, cache_key  # noqa: E402
+from app.llm_extractor import LLMExtractor, cache_key, prompt_for  # noqa: E402
 from app.manifest import load_manifest  # noqa: E402
 from app.series_loader import load_series  # noqa: E402
 
 SERIES_PATH = REPO_ROOT / "data" / "series" / "last_monsoon.json"
 MANIFEST_PATH = REPO_ROOT / "data" / "manifest" / "last_monsoon.yaml"
 DEFAULT_CACHE_PATH = REPO_ROOT / "data" / "extraction_cache" / "last_monsoon_llm.json"
-
-_PROMPT_TEMPLATE = (
-    "Extract narrative structure as JSON. Return keys: nodes, entries, payoffs, excerpts. "
-    "A node has id, episode, perceived_index, true_time (0-1 chronological position or null), "
-    "summary, entities, valence (-1..1), excerpt_id. "
-    "An entry has id, kind (contradiction|promise), description, episodes, excerpt_ids, urgency (1-5), entities. "
-    "A payoff has node_id, target_id, episode, rationale. "
-    "Respond with JSON only, no prose, no markdown fences. "
-    "Episode {episode}: {text}"
-)
-
 
 class CredentialsError(RuntimeError):
     pass
@@ -104,7 +93,10 @@ def _estimate_uncached_calls(rows: list[dict], model: str, cache_path: Path) -> 
     for row in rows:
         episode = row.get("episode")
         text = row.get("synopsis") or row.get("body") or ""
-        prompt = _PROMPT_TEMPLATE.format(episode=episode, text=text)
+        # Must go through the extractor's own builder: a local copy of the
+        # template would compute different cache keys, so this estimate would
+        # describe a different run than the one that actually executes.
+        prompt = prompt_for(episode, text)
         if cache_key(model, prompt) not in cached_keys:
             uncached += 1
     return uncached

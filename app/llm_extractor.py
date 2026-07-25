@@ -87,6 +87,19 @@ def _http_transport(*, endpoint: str, token: str, model: str, prompt: str) -> st
     return payload["choices"][0]["message"]["content"]
 
 
+def prompt_for(episode: int, text: str) -> str:
+    """Build the extraction prompt for one episode.
+
+    The single place the prompt is constructed. Callers that need to predict a
+    cache key before spending money -- the measurement script does, to estimate
+    how many uncached calls a run will make -- must go through here rather than
+    formatting their own copy of the template. A divergent copy silently
+    computes different cache keys, so the estimate shown before a spend decision
+    would describe a different run than the one that executes.
+    """
+    return _PROMPT_TEMPLATE.format(episode=episode, text=text)
+
+
 def cache_key(model: str, prompt: str) -> str:
     """Hash of (model, prompt) -- changing either invalidates the cache entry
     cleanly rather than silently serving a stale answer for a new question."""
@@ -140,7 +153,7 @@ class LLMExtractor:
                 continue
             episode, text = validated
 
-            prompt = _PROMPT_TEMPLATE.format(episode=episode, text=text)
+            prompt = prompt_for(episode, text)
             key = cache_key(self._model, prompt)
             if key in self._cache:
                 raw = self._cache[key]
