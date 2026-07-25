@@ -42,10 +42,15 @@ class LedgerResolver:
     """Resolves raw entries into states, with citations for every verdict.
 
     A ``verifier`` may be supplied to second-guess the extractor's payoff claims.
-    Without one, links are taken at face value -- fine for tests and offline runs,
-    but a production resolve should pass one, since protecting a contradiction on
-    a hallucinated payoff is the single worst error this system can make: it
-    silently suppresses a real defect.
+    Regardless of whether one is supplied, an unverified link never protects a
+    contradiction -- that is the single worst error this system can make: it
+    silently suppresses a real defect. A link starts life unverified
+    (``PayoffLink.verified`` defaults to ``False``); it becomes trusted either by
+    being authored as ground truth with ``verified=True`` already set (the demo
+    series does this, since its links are hand-authored, not extracted) or by
+    passing a ``verifier`` here that approves it at resolve time. Promises are
+    lower stakes -- a payoff link discharges a promise (marks it ``paid``)
+    whether or not it is verified.
     """
 
     def __init__(self, verifier: Verifier | None = None) -> None:
@@ -63,7 +68,7 @@ class LedgerResolver:
         return [
             self._resolve_entry(entry, payoffs, excerpts, series, horizon)
             for entry in series.entries
-            if entry.origin_episode <= horizon
+            if entry.latest_episode <= horizon
         ]
 
     def _index_payoffs(self, series: Series, horizon: int) -> dict[str, list[PayoffLink]]:
@@ -141,7 +146,15 @@ class LedgerResolver:
     def _find_payoff(
         self, entry: LedgerEntry, payoffs: dict[str, list[PayoffLink]]
     ) -> PayoffLink | None:
-        """Earliest downstream link that discharges ``entry`` and survives verification."""
+        """Earliest downstream link that discharges ``entry`` and survives verification.
+
+        A contradiction may only be protected by a link that is verified --
+        either pre-marked as trusted ground truth, or approved just now by the
+        ``verifier``. Without a verifier and without a pre-marked link, an
+        extracted payoff for a contradiction is never enough on its own: the
+        entry falls through to ``broken`` rather than being silently protected.
+        Promises are discharged by any matching link, verified or not.
+        """
         for link in payoffs.get(entry.id, []):
             if link.episode - entry.latest_episode < MIN_PAYOFF_GAP:
                 continue
@@ -149,6 +162,8 @@ class LedgerResolver:
                 if not self._verifier(link, entry):
                     continue
                 link.verified = True
+            if entry.kind == "contradiction" and not link.verified:
+                continue
             return link
         return None
 
@@ -196,13 +211,6 @@ class LedgerSummary:
     @property
     def baseline_flags(self) -> int:
         return len(self.broken) + len(self.suspended)
-
-    def open_promises(self, as_of: int) -> list[ResolvedEntry]:
-        return [
-            item
-            for item in self.outstanding
-            if item.entry.origin_episode <= as_of
-        ]
 
     def headline(self) -> dict[str, int]:
         return {
