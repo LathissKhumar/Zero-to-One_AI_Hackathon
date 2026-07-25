@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from app.extraction import ExtractionResult
 from app.evaluation import EndToEndReport, _match_extracted_ids, evaluate_series
 from app.heuristic_extractor import HeuristicExtractor
 from app.manifest import Manifest, ManifestItem, load_manifest, score_discrimination
@@ -53,35 +54,61 @@ def test_extraction_rejections_are_reported_not_swallowed():
     assert report.extraction_rejected >= 0
 
 
-def test_ceiling_a_byte_perfect_extraction_scores_near_perfect():
-    """Feed the authored graph itself back through the matching path, with
-    synthetic ids the way a real extractor would produce them (never the
-    manifest defect_id). If matching cannot recognise its own ground truth,
-    the scale is broken and every number reported on it is meaningless.
+class _PerfectExtractor:
+    """Returns the authored graph verbatim, with ids a real extractor would mint.
 
-    Never assert this equals 1.0 -- a couple of authored entries share an
-    episode window loosely enough that a purely mechanical matcher may still
-    drop one at the margin. The claim is "near the ceiling", not "the ceiling".
+    Ids are synthesized because no extractor can guess a manifest ``defect_id``;
+    everything else -- nodes, excerpts, payoff targets, and the ``verified``
+    flags the demo data carries -- is passed through untouched. This is the
+    best any extraction could possibly do.
+    """
+
+    def __init__(self, series):
+        self._series = series
+
+    def extract(self, episodes):
+        rename = {entry.id: _synthetic_id(entry) for entry in self._series.entries}
+        return ExtractionResult(
+            nodes=[node.model_copy(deep=True) for node in self._series.nodes],
+            excerpts=[item.model_copy(deep=True) for item in self._series.excerpts],
+            entries=[
+                entry.model_copy(update={"id": rename[entry.id]})
+                for entry in self._series.entries
+            ],
+            payoffs=[
+                link.model_copy(update={"target_id": rename.get(link.target_id, link.target_id)})
+                for link in self._series.payoffs
+            ],
+        )
+
+
+def test_ceiling_a_byte_perfect_extraction_scores_near_perfect():
+    """A flawless extraction must score at the top, through the real pipeline.
+
+    This runs `evaluate_series`, so resolution goes through `LedgerResolver`
+    exactly as a live extraction does. That matters: an earlier version of this
+    test read each entry's expected state straight out of the manifest and never
+    resolved anything, so it exercised the matcher alone and could not have
+    detected a broken end-to-end scale -- which is precisely what it claimed to
+    guard. It also had the answer key inside the test body.
+
+    If a perfect extraction cannot score near-perfect here, the scale is broken
+    and every number reported on it is meaningless, including the headline 0.0.
+
+    Note this measures the *scale*, not the verifier situation: the demo data's
+    payoff links carry ``verified=True``, so twists can be protected. A real
+    extractor emits unverified links and therefore tops out near precision 0.55
+    -- see the README. Both facts are true and they answer different questions.
+
+    Never assert this equals 1.0.
     """
     series = load_series(SERIES)
-    manifest = load_manifest(MANIFEST)
-    expected_state_by_id = {item.defect_id: item.expected_state for item in manifest.items}
-    synthetic_entries = [
-        entry.model_copy(update={"id": _synthetic_id(entry)}) for entry in series.entries
-    ]
-    mapping = _match_extracted_ids(synthetic_entries, series.excerpts, manifest, series)
+    report = evaluate_series(series, load_manifest(MANIFEST), extractor=_PerfectExtractor(series))
 
-    resolved = []
-    for entry, synthetic in zip(series.entries, synthetic_entries):
-        matched_defect_id = mapping.get(synthetic.id)
-        renamed = entry.model_copy(update={"id": matched_defect_id or synthetic.id})
-        # The authored entry's own id already names the manifest item it *is*,
-        # so its expected_state is what a correct match should resolve it to.
-        resolved.append(ResolvedEntry(entry=renamed, state=expected_state_by_id[entry.id]))
-
-    report = score_discrimination(manifest, resolved)
-    assert report.recall > 0.9
-    assert report.precision > 0.9
+    assert report.extracted is not None
+    assert report.extracted.recall > 0.9
+    assert report.extracted.precision > 0.9
+    assert report.extracted.false_positive_rate < 0.1
 
 
 def test_position_alone_without_content_agreement_is_not_a_match():
