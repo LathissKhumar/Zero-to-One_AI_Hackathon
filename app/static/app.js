@@ -104,6 +104,39 @@ function showEvidence(finding) {
   drawer.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+// Features that count actual failures or unresolved gaps. The server rejects
+// an edit that claims an *increase* in one of these as a repair -- there is
+// no reading of "more broken promises" as an improvement. Kept in sync with
+// app/rewrite.py::_WORSENS_IF_INCREASED.
+const WORSENS_IF_INCREASED = new Set([
+  "broken_count",
+  "overdue_count",
+  "max_obligation_age",
+  "mean_obligation_age",
+  "planting_recency",
+]);
+
+// Which feature actually moved, and how, differs per finding and per episode
+// window -- the ledger is real data, not a script, so "closing this
+// obligation" cannot be hardcoded to always move the same feature the same
+// way. Ask the server what genuinely changed between the two boundaries and
+// attribute to whichever named feature the movement actually supports,
+// instead of guessing and letting the server reject an incoherent claim.
+function pickCoherentRepairEdit(beforeFeatures, afterFeatures) {
+  for (const name of WORSENS_IF_INCREASED) {
+    if (afterFeatures[name] < beforeFeatures[name]) {
+      return { feature_moved: name, delta: 0.02 };
+    }
+  }
+  for (const name of Object.keys(beforeFeatures)) {
+    if (WORSENS_IF_INCREASED.has(name)) continue;
+    if (afterFeatures[name] !== beforeFeatures[name]) {
+      return { feature_moved: name, delta: 0.02 };
+    }
+  }
+  return null;
+}
+
 async function runRewrite(finding) {
   const rewriteBody = document.getElementById("rewrite-body");
   rewriteBody.innerHTML = "<p class=\"reason\">Computing attributed movement…</p>";
@@ -111,6 +144,19 @@ async function runRewrite(finding) {
   const totalEpisodes = currentSeries ? currentSeries.total_episodes : 220;
   const beforeEpisode = Math.min(...finding.entry.episodes);
   const afterEpisode = Math.min(beforeEpisode + 10, totalEpisodes);
+
+  const [beforePredict, afterPredict] = await Promise.all([
+    fetch(`/api/predict?episode=${beforeEpisode}`).then((r) => r.json()),
+    fetch(`/api/predict?episode=${afterEpisode}`).then((r) => r.json()),
+  ]);
+
+  const edit = pickCoherentRepairEdit(beforePredict.features, afterPredict.features);
+  if (!edit) {
+    rewriteBody.innerHTML =
+      "<p class=\"reason\">No structural feature moved between these two boundaries -- " +
+      "nothing to attribute.</p>";
+    return;
+  }
 
   const report = await fetch("/api/rewrite", {
     method: "POST",
@@ -122,11 +168,11 @@ async function runRewrite(finding) {
         {
           hunk: "closes the obligation this finding is anchored to",
           obligation_id: finding.entry.id,
-          feature_moved: "broken_count",
+          feature_moved: edit.feature_moved,
           // A claimed, per-edit estimate -- independent of the total_delta
           // below, which the server computes from the trained predictor.
           // The gap between them (unattributed) is the honesty check.
-          delta: 0.02,
+          delta: edit.delta,
         },
       ],
     }),

@@ -105,6 +105,40 @@ def test_rewrite_rejects_edits_with_no_named_obligation(client):
     assert response.status_code == 422
 
 
+def test_rewrite_rejects_a_feature_name_the_model_never_saw(client):
+    """A bogus feature_moved must be rejected at the API boundary, not rendered
+    as an attributed movement on the dashboard."""
+    response = client.post(
+        "/api/rewrite",
+        json={
+            "before_episode": 20,
+            "after_episode": 40,
+            "edits": [
+                {"hunk": "x", "obligation_id": "p-1", "feature_moved": "NOT_A_FEATURE", "delta": 9.99}
+            ],
+        },
+    )
+    assert response.status_code == 422
+
+
+def test_rewrite_rejects_a_repair_whose_named_feature_got_worse(client):
+    """Regression test for the live bug: episode 20 -> 40 moves broken_count
+    0 -> 1 (a real series has more broken promises later, not fewer), so a
+    claimed positive delta on broken_count is an incoherent 'repair' and must
+    be rejected rather than served as 200 with attributed_delta: 0.02."""
+    response = client.post(
+        "/api/rewrite",
+        json={
+            "before_episode": 20,
+            "after_episode": 40,
+            "edits": [
+                {"hunk": "x", "obligation_id": "p-1", "feature_moved": "broken_count", "delta": 0.02}
+            ],
+        },
+    )
+    assert response.status_code == 422
+
+
 def test_cached_series_is_not_mutated_across_requests(client):
     """_series()/_resolved() are lru_cache'd; handing out the same mutable
     pydantic objects to every request is a corruption risk once anything

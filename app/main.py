@@ -5,7 +5,7 @@ from concurrent.futures import TimeoutError as FutureTimeoutError
 from functools import lru_cache
 from pathlib import Path
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -163,7 +163,13 @@ def create_app() -> FastAPI:
         before_prediction = predictor.predict(before_features)
         after_prediction = predictor.predict(after_features)
         total_delta = after_prediction.value - before_prediction.value
-        return attribute_delta(before_features, after_features, payload.edits, total_delta)
+        try:
+            return attribute_delta(before_features, after_features, payload.edits, total_delta)
+        except ValueError as exc:
+            # An edit that names a feature which did not move, or moved the
+            # wrong way for a repair, is a fabricated attribution -- reject it
+            # at the API boundary rather than letting it render on screen.
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     app.mount("/", StaticFiles(directory="app/static", html=True), name="dashboard")
     return app
