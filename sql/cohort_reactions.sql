@@ -14,10 +14,29 @@ SELECT
     concat(
       'You are a listener of this type: ', c.profile, '. ',
       'Rate engagement 0-1 for this episode and vote continue, hesitate, or stop. ',
-      'Return JSON with keys engagement, vote, reaction, citation_ids. ',
       'Episode ', CAST(e.episode AS STRING), ': ', coalesce(e.body, e.synopsis)
     ),
-    responseFormat => 'STRUCT<engagement:DOUBLE,vote:STRING,reaction:STRING,citation_ids:ARRAY<STRING>>'
+    -- json_schema, not the DDL-string form. Verified against a live workspace:
+    -- `responseFormat => 'STRUCT<a:...,b:...>'` fails with
+    -- AI_FUNCTION_UNSUPPORTED_RESPONSE_FORMAT.DDL_STRING because that form
+    -- permits exactly one top-level field, and this needs four.
+    responseFormat => '{
+      "type": "json_schema",
+      "json_schema": {
+        "name": "cohort_reaction",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "engagement": {"type": "number"},
+            "vote": {"type": "string"},
+            "reaction": {"type": "string"},
+            "citation_ids": {"type": "array", "items": {"type": "string"}}
+          },
+          "required": ["engagement", "vote", "reaction", "citation_ids"]
+        },
+        "strict": true
+      }
+    }'
   ) AS reaction
 FROM ${catalog}.${db}.episodes e
 CROSS JOIN ${catalog}.${db}.listener_cohorts c
