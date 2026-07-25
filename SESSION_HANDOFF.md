@@ -119,20 +119,48 @@ Responses cache to `data/extraction_cache/` keyed by hash of (model, prompt), so
 
 ---
 
-## 6. Blocked on the human — and this is the biggest item on the board
+## 6. Databricks — live, and what actually works
 
-**Databricks has never run.** No CLI installed, no `~/.databrickscfg`. The deployment assets are coherent and deployable (`sql/ddl.sql`, `databricks.yml`, `resources/`, `app.yaml`, and `tests/test_databricks_assets.py` pins that every SQL placeholder resolves), but nothing has ever executed against a workspace.
+**Workspace is authenticated and the pipeline runs.** CLI v1.9.0, profile `DEFAULT`,
+host `dbc-53cf8438-33aa.cloud.databricks.com`. Warehouse `c4cfcc95726ac7d5`
+(Serverless Starter, 2X-Small — **stops itself**, restart before demoing).
 
-This is the sponsor track prize. The Databricks judge's question is "substrate or storage bill?" and there is currently no running answer.
+| Piece | State |
+|---|---|
+| Schema `writers_room.canonpulse` | ✅ all 14 tables, matching `sql/ddl.sql` exactly |
+| Demo data in Delta | ✅ loaded — 220 episodes / 220 excerpts / 220 nodes / 20 entries / 8 payoffs / 20 manifest items / 5 cohorts, via `scripts/load_databricks.py` (idempotent) |
+| `ai_query` | ✅ works |
+| Structured output | ✅ works via **`json_schema`** responseFormat |
+| `sql/cohort_reactions.sql` | ✅ verified end to end — 20 structured verdicts, 5 cohorts × 4 episodes, cohorts genuinely disagreeing |
+| `sql/extract_graph.sql` | ✅ verified — `parse_extraction_row` accepts the output (ep 3: 1 node/1 entry; ep 47: 4 nodes/1 entry). Before the fix every row would have been rejected. Slow: nested strict schema takes minutes over 220 episodes. |
+| `databricks bundle validate` | ✅ OK |
+| `databricks bundle deploy` | ❌ never run |
+| App reading from Databricks | ❌ **`app/main.py` has no Databricks reference at all** — it reads committed JSON |
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
-databricks auth login --host <workspace-url>
-```
+**Three defects that only live deployment could find** (fixed in `28c852c`), all in files
+`tests/test_databricks_assets.py` asserts are parameterized but never executes:
 
-Then: `databricks bundle deploy`, run `sql/ddl.sql`, load the demo series into Delta, and run extraction and cohort batches through `ai_query`. The repo vendors the Databricks AI Dev Kit's own guidance at `.agents/skills/databricks-*` — read `databricks-apps-python`, `databricks-model-serving`, `databricks-bundles`, and `mlflow-onboarding` before deploying rather than guessing at bundle semantics.
+1. Both SQL statements used the DDL-string `responseFormat`. That form permits exactly
+   **one top-level field**; a 4-field struct fails with
+   `AI_FUNCTION_UNSUPPORTED_RESPONSE_FORMAT.DDL_STRING`. Use the `json_schema` form.
+2. `extract_graph.sql` had **no `responseFormat` at all**, so the model wrapped output in
+   ```` ```json ```` fences. `parse_extraction_row` rejects those — extraction would have
+   returned an empty graph with `rejected == row count` while reporting success.
+3. `databricks-gpt-5-6-luna` is **not supported for batch inference**. The bundle's
+   `databricks-gpt-oss-20b` default is correct and works.
 
-**The credit position:** unlimited Databricks, ~$100 OpenAI (untouched, reserved for the Task 3 measurement and cold failover), $100 Codex.
+**The honest gap:** data, SQL and inference are verified on-platform, but the *application*
+does not consume any of it. Wiring `app/main.py` to read from Unity Catalog — or deploying
+the bundle so the app runs on Databricks Apps — is the remaining work for the track prize.
+The repo vendors the AI Dev Kit's guidance at `.agents/skills/databricks-*`; read
+`databricks-apps-python`, `databricks-bundles` and `mlflow-onboarding` before deploying.
+Note the CLI suggests `databricks aitools install` for those skills.
+
+**MLflow has never run** — no experiment, no logged training run, no traces, despite the
+spec naming MLflow as one of four load-bearing primitives.
+
+**Credit position:** unlimited Databricks, ~$100 OpenAI (untouched — reserved for the
+`scripts/measure_llm_extraction.py` run and cold failover), $100 Codex.
 
 ---
 
