@@ -46,19 +46,38 @@ class CohortReaction(BaseModel):
     citation_ids: list[str] = []
 
 
-def blind_variants(rows: list[dict], seed: int = 42) -> list[dict]:
-    """Strip version labels and shuffle before evaluation.
+def blind_variants(rows: list[dict], seed: int = 42) -> tuple[list[dict], dict[int, int]]:
+    """Strip version labels, shuffle, and assign opaque identifiers.
 
-    Without this the evaluator knows which text is the rewrite and flatters it,
-    which turns the whole before/after comparison into a self-graded essay.
+    Returns a tuple of (blinded_rows, unblind_map) where:
+    - blinded_rows: list of dicts with 'variant' and 'id' removed, and opaque
+      'blind_id' values added (0, 1, 2, ...). Each has 'variant_blinded: True'.
+    - unblind_map: dict mapping blind_id (int) back to original row index.
+
+    This prevents information leakage: the returned rows contain no values that
+    correlate with variant origin. Without this, evaluator knowledge of which
+    text is rewritten flatters it, turning the comparison into a self-graded essay.
+    Shuffling alone is insufficient because field values like 'id' still disclose
+    variant when they correlate with insertion order.
     """
-    blinded = [
-        {**{key: value for key, value in row.items() if key != "variant"},
-         "variant_blinded": True}
-        for row in rows
-    ]
-    random.Random(seed).shuffle(blinded)
-    return blinded
+    # Create indices to track original positions
+    indexed_rows = list(enumerate(rows))
+
+    # Shuffle with seed for determinism
+    random.Random(seed).shuffle(indexed_rows)
+
+    # Build blinded rows and mapping
+    blinded = []
+    unblind_map = {}
+    for blind_id, (original_index, row) in enumerate(indexed_rows):
+        unblind_map[blind_id] = original_index
+        blinded.append({
+            **{key: value for key, value in row.items() if key != "variant" and key != "id"},
+            "blind_id": blind_id,
+            "variant_blinded": True
+        })
+
+    return blinded, unblind_map
 
 
 def divergence_by_episode(reactions: list[dict]) -> dict[int, float]:
