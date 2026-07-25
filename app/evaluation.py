@@ -9,68 +9,133 @@ extractor is supplied, a second number (``extracted``) that rebuilds the graph
 from episode text first and only then resolves and scores it. ``extracted`` is
 the number that can fall, which is what makes it evidence.
 
+KNOWN LIMITATION on how strong the ``extracted`` number is allowed to look:
+`_episode_rows` feeds the extractor ``node.summary`` alongside the excerpt
+text, and that summary is generator output that was itself conditioned on the
+manifest -- it sometimes states a defect outright (e.g. episode 60's summary
+narrates "Despite swearing weeks ago that she cannot swim, Tara dives...").
+So "derived from episode text" is weaker than it sounds: part of the input is
+answer key, not blind prose. This does not make the extracted number
+worthless -- the extractor still has to notice and correctly pair the
+language -- but it means a higher ``extracted`` score is not proof the
+extractor would do as well on prose that was not manifest-shaped.
+
 THE MATCHING RULE (the one load-bearing judgement here -- argue with this, not
 with the code):
 
 Extracted `LedgerEntry` ids are synthetic (``contradiction-12-88``,
 ``promise-30-obligation``, ...); they never equal a manifest `defect_id`, so
-`score_discrimination` cannot join the two by id. Instead we match by
-position: an extracted entry is credited with recovering manifest item ``X``
-when
+`score_discrimination` cannot join the two by id. An extracted entry is
+credited with recovering manifest item ``X`` only when all three hold:
 
-  1. the entry's *kind* is compatible with ``X``'s `defect_class`
-     (``contradiction`` entries may only match ``accidental_hole`` or
-     ``intentional_twist`` items; ``promise`` entries may only match
-     ``outstanding_obligation`` or ``clean_control`` items) -- a promise can
-     never "recover" a plot hole no matter where it falls, and
+  1. Kind compatibility. ``contradiction`` entries may only match
+     ``accidental_hole`` or ``intentional_twist`` items; ``promise`` entries
+     may only match ``outstanding_obligation`` or ``clean_control`` items --
+     a promise can never "recover" a plot hole no matter where it falls.
 
-  2. ``X.planted_episode`` falls inside the entry's own detected span,
-     inclusive: ``entry.origin_episode <= X.planted_episode <=
-     entry.latest_episode``.
+  2. Position. One of ``X``'s own anchor episodes falls inside the entry's
+     detected span, inclusive (``entry.origin_episode <= anchor <=
+     entry.latest_episode``). The anchor is ``X.planted_episode``, and for an
+     ``intentional_twist`` also ``X.payoff_episode`` when present -- a twist
+     is defined by *both* ends (the plant and the reveal that later resolves
+     it), and a real detection may bracket either one depending on which pair
+     of episodes the extractor's own rules happened to pair up.
 
-Tolerance chosen: exact containment, zero fuzzy widening. We deliberately did
-not add a "within N episodes of the plant" proximity rule. A window wide
-enough to forgive the extractor's imprecision (N=5, say) is also wide enough
-to let two *unrelated* contradictions -- different characters, different
-threads, whose planted episodes merely happen to fall a few episodes apart --
-match each other. That would manufacture recall out of coincidence rather than
-detection. Containment ties the match to a span the extractor actually
-computed from the text (the two episodes its own rules found in conflict),
-so a match means the extractor's detected span really does bracket the
-planted claim, not merely that it landed nearby.
+  3. Content agreement. Position alone is not evidence: two *unrelated*
+     contradictions -- different characters, different threads -- can share
+     nothing but the coincidence that one's planted episode falls between the
+     other's detected span. (This happened for real: `HeuristicExtractor`
+     over this series produces a contradiction spanning episodes 88 and 110 --
+     a ferry survivor's account and a sound engineer's remark, sharing no
+     content -- that used to get credited with hole-04, a locket described
+     brass at episode 2 and silver at episode 90, purely because 88 <= 90 <=
+     110.) So a match additionally requires the entry and the manifest item to
+     share at least one *discriminative* word: a lowercase content word drawn
+     from the entry's own cited excerpts, intersected with a word drawn from
+     the series' excerpts at ``X``'s own anchor episode(s), after discarding
+     words common enough across the whole series (character names who narrate
+     constantly, recurring nouns) to carry no distinguishing signal on their
+     own. Sharing "Asha" -- present in a third of this series' episodes --
+     proves nothing; sharing "silver" or "locket" does.
 
-Each manifest item can be claimed by at most one extracted entry (first
-encountered, in the extractor's own deterministic output order), and each
-extracted entry claims at most one manifest item (the one with the smallest
-`planted_episode` among candidates, for determinism) -- so one lucky wide
-span cannot "recover" several manifest items at once, and matching is a
-one-to-one assignment, not a many-to-many fan-out.
+Assignment: matching is a **stable, order-independent one-to-one assignment**,
+not first-come-first-served. Every kind-compatible, position-valid,
+content-agreeing (entry, item) pair is a candidate, weighted by the *overlap
+coefficient* of the two word sets (shared words / the smaller set's size), not
+the raw shared-word count -- a wide entry citing two full episodes of prose
+would otherwise out-count a small, precise one just by having a bigger bag of
+words to coincidentally share. An entry is only matched to the item that is
+its highest-weight candidate *and* for which that entry is, in turn, the
+item's own highest-weight candidate (ties broken by id, deterministically) --
+i.e. every match is each side's mutual best. This is what stops a genuine second
+detection of an already-claimed item from being silently reassigned to a
+different, merely nearby item: previously, greedy first-come processing let a
+duplicate, correct detection of twist-02 get shunted onto twist-04 (because
+twist-02 was already claimed and twist-04's planted episode happened to also
+fall in the duplicate's span), which then resolved ``broken`` and counted as
+a false positive against a twist it never actually touched. Under mutual-best
+matching that duplicate is simply left unmatched -- an honest extra flag, not
+a wrong attribution.
 
 A matched entry is not automatically scored as a hit: it is only *renamed* to
 the manifest's `defect_id` before scoring, so `score_discrimination`'s
 existing precision/recall/false-positive logic runs unchanged on top of it.
 Whether it then counts as recovered still depends on the state the resolver
-assigned it -- and extracted `PayoffLink`s are always `verified=False`
-(see `app/heuristic_extractor.py`), so `LedgerResolver` will not let an
-unverified link protect a contradiction. An extracted, correctly-matched
-twist therefore still resolves `broken`, not `suspended`, and counts against
-precision as a false positive rather than for recall as a protected twist.
-That is the system working as designed, not a bug in the matching rule.
+assigned it -- and over this series, 0 of 5 twists ever resolve `suspended`,
+for a mix of two distinct reasons, not the single one an earlier version of
+this docstring claimed ("every extracted `PayoffLink` is `verified=False`, so
+none can protect a contradiction"). That statement is true of
+`HeuristicExtractor` but is not what is actually deciding this result for most
+of these twists. The real, per-twist breakdown: 2 of the 5 (twist-03,
+twist-04) are never located at all -- no contradiction entry's span even
+brackets their episodes with content agreement, so there is nothing to
+resolve one way or the other. Of the 3 that are located, 2 (twist-02,
+twist-05) get no `PayoffLink` emitted for them by the extractor at all --
+`HeuristicExtractor`'s payoff rule never finds a resolution-language episode
+whose salient words intersect theirs, so again there is no link to verify or
+distrust. Only the third (twist-01) actually reaches the point this
+docstring used to describe: a real payoff link is extracted for it, and it is
+the `verified=False` default that stops it from protecting the contradiction.
+Re-running with a verifier that trusts every extracted link confirms this
+split -- it raises `twists_protected` from 0 to exactly 1, not to 5, because
+verification was only ever the bottleneck for one of the five. (This module
+does not ship or call such a verifier; the check above was run once, by hand,
+to confirm which cause was operative, not to change what gets scored.)
+
+Also worth naming plainly: ``obligations_tracked`` in the extracted report is
+not a strong extraction-quality signal. 97 of the 101 entries
+`HeuristicExtractor` emits over this series are promises, and the large
+majority of those fire on nothing more specific than "the episode's text
+contains a question mark". Promise spans are single-episode, so the position
+containment above collapses to exact episode equality -- there is no
+imprecision left for content agreement to filter out. `obligations_tracked`
+is close to free; it should not be read as evidence the extractor understands
+obligations.
 """
 
 from __future__ import annotations
+
+import re
+from collections import defaultdict
 
 from pydantic import BaseModel
 
 from app.extraction import Extractor
 from app.ledger import LedgerResolver
-from app.manifest import DiscriminationReport, Manifest, score_discrimination
-from app.narrative_models import LedgerEntry, ResolvedEntry, Series
+from app.manifest import DiscriminationReport, Manifest, ManifestItem, score_discrimination
+from app.narrative_models import Excerpt, LedgerEntry, ResolvedEntry, Series
 
 _KIND_TO_MANIFEST_CLASSES: dict[str, set[str]] = {
     "contradiction": {"accidental_hole", "intentional_twist"},
     "promise": {"outstanding_obligation", "clean_control"},
 }
+
+_WORD_PATTERN = re.compile(r"[A-Za-z']+")
+# A word appearing in more than this fraction of the series' episodes (e.g. a
+# narrator's own name, or "rain" in a monsoon-set series) carries no
+# distinguishing power for matching -- it would let a match manufacture
+# itself out of the two texts merely being about the same series.
+_COMMON_WORD_FRACTION = 0.12
 
 
 class EndToEndReport(BaseModel):
@@ -100,28 +165,150 @@ def _episode_rows(series: Series) -> list[dict]:
     return rows
 
 
-def _match_extracted_ids(entries: list[LedgerEntry], manifest: Manifest) -> dict[str, str]:
-    """Positional match from extracted entry id -> manifest defect_id.
+def _content_words(text: str) -> set[str]:
+    """Lowercase content-bearing tokens (len > 2), no coreference, no stemming.
 
-    See the module docstring for the exact rule and the tolerance rationale.
+    Deliberately crude bag-of-words -- it exists only to gate a position match
+    on *some* shared content, not to do real similarity scoring.
     """
-    matched_defect_ids: set[str] = set()
-    mapping: dict[str, str] = {}
+    return {match.lower() for match in _WORD_PATTERN.findall(text) if len(match) > 2}
+
+
+def _document_frequencies(series: Series) -> dict[str, int]:
+    """How many of the series' own episodes each lowercase word appears in."""
+    freq: dict[str, int] = defaultdict(int)
+    for excerpt in series.excerpts:
+        for word in _content_words(excerpt.text):
+            freq[word] += 1
+    return freq
+
+
+def _discriminative(words: set[str], freq: dict[str, int], total_episodes: int) -> set[str]:
+    """Drop words too common across the series to distinguish anything."""
+    ceiling = max(1, int(total_episodes * _COMMON_WORD_FRACTION))
+    return {word for word in words if freq.get(word, 0) <= ceiling}
+
+
+def _entry_content_words(entry: LedgerEntry, excerpt_text_by_id: dict[str, str]) -> set[str]:
+    """Words drawn from the excerpts an entry itself cites.
+
+    Falls back to ``entry.entities`` only if the entry cites no excerpt at
+    all (should not happen for either the heuristic extractor or the
+    authored graph, but an entry with no textual anchor should not simply be
+    unmatchable-by-construction).
+    """
+    words: set[str] = set()
+    for excerpt_id in entry.excerpt_ids:
+        text = excerpt_text_by_id.get(excerpt_id)
+        if text:
+            words |= _content_words(text)
+    if not words:
+        words = {entity.lower() for entity in entry.entities}
+    return words
+
+
+def _manifest_item_anchors(item: ManifestItem) -> list[int]:
+    """The episode(s) that define this manifest item's own content.
+
+    Holes and obligations are defined by a single planted episode. A twist is
+    defined by both ends: the plant and the payoff episode that later
+    resolves it -- a real detection may bracket either.
+    """
+    anchors = [item.planted_episode] if item.planted_episode is not None else []
+    if item.defect_class == "intentional_twist" and item.payoff_episode is not None:
+        anchors.append(item.payoff_episode)
+    return anchors
+
+
+def _manifest_item_content_words(item: ManifestItem, episode_text: dict[int, str]) -> set[str]:
+    words: set[str] = set()
+    for episode in _manifest_item_anchors(item):
+        words |= _content_words(episode_text.get(episode, ""))
+    return words
+
+
+def _match_extracted_ids(
+    entries: list[LedgerEntry],
+    excerpts: list[Excerpt],
+    manifest: Manifest,
+    series: Series,
+) -> dict[str, str]:
+    """Content-aware, order-independent match from extracted entry id ->
+    manifest defect_id. See the module docstring for the full rule.
+
+    ``excerpts`` are the excerpts belonging to the graph ``entries`` came from
+    (so an entry's own excerpt_ids resolve to real text); ``series`` is the
+    original, authored series, whose excerpts supply both the corpus-wide word
+    frequencies and the text at each manifest item's own anchor episode(s).
+    """
+    excerpt_text_by_id = {excerpt.id: excerpt.text for excerpt in excerpts}
+    episode_text = {excerpt.episode: excerpt.text for excerpt in series.excerpts}
+    freq = _document_frequencies(series)
+    total_episodes = len(series.excerpts) or 1
+
+    item_words = {
+        item.defect_id: _discriminative(
+            _manifest_item_content_words(item, episode_text), freq, total_episodes
+        )
+        for item in manifest.items
+    }
+
+    # (overlap_coefficient, entry_id, defect_id) candidates -- every
+    # kind-compatible, position-valid, content-agreeing pair. The overlap
+    # *coefficient* (shared / smaller of the two word sets), not the raw
+    # shared-word count, is the weight: a wide-spanning entry citing two full
+    # episodes of prose will out-count a small, precise one on raw overlap
+    # just by having a bigger bag of words to coincidentally share, even after
+    # the corpus-frequency filter. Normalising by the smaller set means a
+    # small entry whose entire vocabulary sits inside the item's is scored on
+    # par with (or above) a large entry that only partially overlaps it.
+    candidates: list[tuple[float, str, str]] = []
     for entry in entries:
         allowed_classes = _KIND_TO_MANIFEST_CLASSES.get(entry.kind, set())
-        candidates = [
-            item
-            for item in manifest.items
-            if item.defect_class in allowed_classes
-            and item.defect_id not in matched_defect_ids
-            and item.planted_episode is not None
-            and entry.origin_episode <= item.planted_episode <= entry.latest_episode
-        ]
-        if not candidates:
+        if not allowed_classes:
             continue
-        chosen = min(candidates, key=lambda item: item.planted_episode)
-        mapping[entry.id] = chosen.defect_id
-        matched_defect_ids.add(chosen.defect_id)
+        entry_words = _discriminative(
+            _entry_content_words(entry, excerpt_text_by_id), freq, total_episodes
+        )
+        if not entry_words:
+            continue
+        for item in manifest.items:
+            if item.defect_class not in allowed_classes:
+                continue
+            anchors = _manifest_item_anchors(item)
+            if not any(
+                entry.origin_episode <= anchor <= entry.latest_episode for anchor in anchors
+            ):
+                continue
+            words = item_words[item.defect_id]
+            shared = entry_words & words
+            if not shared:
+                continue
+            coefficient = len(shared) / min(len(entry_words), len(words))
+            candidates.append((coefficient, entry.id, item.defect_id))
+
+    if not candidates:
+        return {}
+
+    # Mutual-best assignment: a match survives only if it is simultaneously
+    # the strongest candidate for its entry and the strongest for its item.
+    # Ties broken by id so the result never depends on iteration order.
+    best_item_for_entry: dict[str, tuple[float, str]] = {}
+    best_entry_for_item: dict[str, tuple[float, str]] = {}
+    for weight, entry_id, defect_id in candidates:
+        item_key = (weight, defect_id)
+        if item_key > best_item_for_entry.get(entry_id, (-1.0, "")):
+            best_item_for_entry[entry_id] = item_key
+        entry_key = (weight, entry_id)
+        if entry_key > best_entry_for_item.get(defect_id, (-1.0, "")):
+            best_entry_for_item[defect_id] = entry_key
+
+    mapping: dict[str, str] = {}
+    for weight, entry_id, defect_id in candidates:
+        if best_item_for_entry.get(entry_id) == (weight, defect_id) and best_entry_for_item.get(
+            defect_id
+        ) == (weight, entry_id):
+            mapping[entry_id] = defect_id
     return mapping
 
 
@@ -154,9 +341,9 @@ def evaluate_series(
     2. Extracted: when ``extractor`` is supplied, rebuild ``entries``,
        ``payoffs``, ``nodes`` and ``excerpts`` from the series' episode text
        via the extractor, resolve *that* graph, and score it against the same
-       manifest using the positional match described in the module docstring.
-       Omitting ``extractor`` omits this number entirely (``None``) rather
-       than faking one.
+       manifest using the content-aware match described in the module
+       docstring. Omitting ``extractor`` omits this number entirely (``None``)
+       rather than faking one.
     """
     resolver = LedgerResolver()
     ledger_report = score_discrimination(manifest, resolver.resolve_series(series))
@@ -174,7 +361,7 @@ def evaluate_series(
         }
     )
     resolved = resolver.resolve_series(extracted_series)
-    mapping = _match_extracted_ids(extraction.entries, manifest)
+    mapping = _match_extracted_ids(extraction.entries, extraction.excerpts, manifest, series)
     extracted_report = score_discrimination(manifest, _rescored(resolved, mapping))
 
     return EndToEndReport(
