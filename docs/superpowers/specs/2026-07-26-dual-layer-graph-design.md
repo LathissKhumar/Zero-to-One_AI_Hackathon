@@ -83,8 +83,10 @@ segmented toggle, and the "Zero timeline contradictions" line beneath the figure
 
 ## Verification
 
-One `assert`-based self-check (`web/src/components/dual-layer-graph.test.ts`, run with
-`node --test`) over the two pure functions extracted for it:
+The geometry moves into `web/src/lib/graph-layout.ts` as pure functions, leaving the component
+to render only. One `assert`-based self-check lives in `web/src/lib/graph-layout.test.ts` and
+runs with `node --test` — Node 26 on this machine strips TypeScript types natively, so no
+loader, runner, or dependency is involved. It asserts:
 
 1. `slotX(beat, order)` at progress 0 returns exactly the linear layout, and at progress 1
    exactly the non-linear layout.
