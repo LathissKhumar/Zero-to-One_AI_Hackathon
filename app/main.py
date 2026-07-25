@@ -68,7 +68,12 @@ def _series() -> Series:
 
 @lru_cache(maxsize=1)
 def _resolved_cached() -> tuple[ResolvedEntry, ...]:
-    return tuple(LedgerResolver().resolve_series(_series_cached()))
+    # Resolve a copy, not the cached series. The default resolver has no verifier
+    # and so never writes `PayoffLink.verified` today -- but the moment one is
+    # configured, resolving the shared instance would permanently mark the
+    # process-wide series on the very first call, which is the corruption
+    # `_series()` exists to prevent.
+    return tuple(LedgerResolver().resolve_series(_series()))
 
 
 def _resolved() -> tuple[ResolvedEntry, ...]:
@@ -121,7 +126,19 @@ def create_app() -> FastAPI:
 
     @app.get("/api/predict")
     def predict(episode: int = Query(ge=1)) -> dict:
-        features = FeatureExtractor().extract(_series(), episode)
+        series = _series()
+        # A boundary past the finale does not exist. Unbounded, the extractor
+        # happily reports an obligation age in the tens of thousands and the
+        # model renders a confident percentage for it.
+        if episode > series.total_episodes:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    f"episode {episode} is past the end of the series "
+                    f"({series.total_episodes} episodes)"
+                ),
+            )
+        features = FeatureExtractor().extract(series, episode)
         predictor = _predictor()
 
         future = _inference_executor.submit(predictor.predict, features)
@@ -157,6 +174,23 @@ def create_app() -> FastAPI:
         caller-supplied claim.
         """
         series = _series()
+        for label, episode in (
+            ("before_episode", payload.before_episode),
+            ("after_episode", payload.after_episode),
+        ):
+            if not 1 <= episode <= series.total_episodes:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"{label} {episode} is outside episodes 1-{series.total_episodes}",
+                )
+        # Running the window backwards inverts the comparison: obligations
+        # un-accumulate, so a regression reads as a repair.
+        if payload.after_episode < payload.before_episode:
+            raise HTTPException(
+                status_code=422,
+                detail="after_episode must not precede before_episode",
+            )
+
         predictor = _predictor()
         before_features = FeatureExtractor().extract(series, payload.before_episode)
         after_features = FeatureExtractor().extract(series, payload.after_episode)

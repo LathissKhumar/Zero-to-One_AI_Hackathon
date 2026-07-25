@@ -180,3 +180,31 @@ def test_predict_falls_back_to_the_golden_path_when_inference_is_slow(client, mo
     assert payload["degraded"] is True
     assert payload["prediction"] is None
     assert payload["fallback"]["headline"]["baseline_flags"] > 0
+
+
+def test_predict_rejects_an_episode_past_the_end_of_the_series(client):
+    """A boundary that does not exist must not return a confident number.
+
+    Unbounded, ?episode=99999 returned 200 with max_obligation_age near 99999 --
+    a feature vector describing a boundary 99,779 episodes past the finale, and a
+    percentage rendered as if it meant something.
+    """
+    total = client.get("/api/series").json()["total_episodes"]
+    assert client.get(f"/api/predict?episode={total}").status_code == 200
+    assert client.get(f"/api/predict?episode={total + 1}").status_code == 422
+
+
+def test_rewrite_rejects_a_window_that_runs_the_clock_backwards(client):
+    """after_episode before before_episode inverts the comparison.
+
+    Obligations un-accumulate, so a regression reads as a repair. The UI's
+    repair button walks forward; nothing stopped a caller walking back.
+    """
+    findings = client.get("/api/audit").json()["findings"]
+    broken = next(f for f in findings if f["state"] == "broken")
+    episode = min(broken["entry"]["episodes"])
+    response = client.post(
+        "/api/rewrite",
+        json={"before_episode": episode + 10, "after_episode": episode, "edits": []},
+    )
+    assert response.status_code == 422
