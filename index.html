@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CanonPulse — The Pre-Release Story Wind Tunnel</title>
+    <meta
+      name="description"
+      content="CanonPulse is an AI quality-control and audience-testing studio for long-form audio series."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,600;6..72,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=20260725-hero-fix" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <canvas class="webgpu-backdrop" id="webgpu-backdrop" aria-hidden="true"></canvas>
+      <div class="mesh mesh-one"></div>
+      <div class="mesh mesh-two"></div>
+      <div class="pulse-field"></div>
+
+      <header class="site-header" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="CanonPulse home">
+          <img class="brand-mark" src="assets/canonpulse-logo.svg" alt="" />
+          <span>CanonPulse</span>
+        </a>
+        <nav class="nav-links" aria-label="Landing page sections">
+          <a href="#ledgers">Ledgers</a>
+          <a href="#court">Audience Court</a>
+          <a href="#demo">Demo</a>
+        </nav>
+        <a class="nav-cta" href="#apply">Request demo</a>
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy reveal">
+            <p class="kicker">AI quality control for serialized audio</p>
+            <h1 id="hero-title">The pre-release wind tunnel for story endings.</h1>
+            <p class="hero-text">
+              CanonPulse checks whether a draft episode breaks canon, abandons an
+              emotional promise, or creates a cliffhanger listeners will find unfair.
+            </p>
+            <div class="proof-strip" aria-label="CanonPulse core checks">
+              <span>Canon breaks</span>
+              <span>Promise debt</span>
+              <span>Audience hesitation</span>
+            </div>
+            <div class="hero-actions" aria-label="Primary actions">
+              <a class="primary-button" href="#demo">See the demo flow</a>
+              <a class="secondary-button" href="#court">Meet the court</a>
+            </div>
+          </div>
+
+          <div class="hero-stage reveal" aria-label="Animated CanonPulse product preview">
+            <div class="orbit-ring ring-one"></div>
+            <div class="orbit-ring ring-two"></div>
+            <div class="code-card audit-console tilt-card">
+              <div class="panel-bar">
+                <span>The Last Monsoon</span>
+                <strong>Ending A audit</strong>
+              </div>
+              <div class="audit-row">
+                <span>Canon Integrity</span>
+                <strong>91</strong>
+              </div>
+              <div class="audit-row warning">
+                <span>Promise Payoff</span>
+                <strong>62</strong>
+              </div>
+              <div class="audit-row">
+                <span>Emotional Continuity</span>
+                <strong>84</strong>
+              </div>
+              <div class="evidence-strip">
+                Episode 2: Tara cannot swim · Episode 4: cassette clue · Episode 7:
+                grief arc unresolved
+              </div>
+            </div>
+            <div class="signal-card float-card">
+              <span class="signal-dot"></span>
+              <strong>Producer's Verdict</strong>
+              <small>Ending B repairs the clue trail with the smallest safe edit.</small>
+            </div>
+            <div class="metric-card float-card">
+              <span>Binge Momentum Proxy</span>
+              <strong>+18%</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-band" id="ledgers" aria-labelledby="ledgers-title">
+          <div class="section-heading reveal">
+            <p class="kicker">Stories make promises</p>
+            <h2 id="ledgers-title">CanonPulse remembers what the audience was taught to expect.</h2>
+          </div>
+          <div class="track-grid">
+            <article class="track-card reveal">
+              <span class="ledger-label">Fact memory</span>
+              <h3>Canon Ledger</h3>
+              <p>Facts, dates, abilities, locations, and relationships checked against cited episode evidence.</p>
+            </article>
+            <article class="track-card reveal">
+              <span class="ledger-label">Unpaid setup</span>
+              <h3>Promise Ledger</h3>
+              <p>Mysteries, planted clues, emotional obligations, and foreshadowing tracked until payoff.</p>
+            </article>
+            <article class="track-card reveal">
+              <span class="ledger-label">Feeling curve</span>
+              <h3>Emotion Ledger</h3>
+              <p>Trust, fear, grief, romance, guilt, and tension mapped episode by episode.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="court-band" id="court" aria-labelledby="court-title">
+          <div class="section-heading reveal">
+            <p class="kicker">Audience Court</p>
+            <h2 id="court-title">Five listener cohorts argue before the episode goes live.</h2>
+          </div>
+          <div class="jury-grid">
+            <article class="juror-card vote-continue reveal">
+              <span>Continue</span>
+              <h3>The Binge Listener</h3>
+              <p>"The storm ending gives me a reason to start the next episode now."</p>
+            </article>
+            <article class="juror-card vote-hesitate reveal">
+              <span>Hesitate</span>
+              <h3>The Mystery Purist</h3>
+              <p>"The surprise villain shocks me, but the clue trail does not earn it."</p>
+            </article>
+            <article class="juror-card vote-continue reveal">
+              <span>Continue</span>
+              <h3>The Romance Listener</h3>
+              <p>"The reconciliation works only if the grief beat is acknowledged first."</p>
+            </article>
+            <article class="juror-card vote-stop reveal">
+              <span>Stop</span>
+              <h3>The Skeptic</h3>
+              <p>"Rafi needs at least one prior motive scene before this reveal lands."</p>
+            </article>
+            <article class="juror-card vote-continue reveal">
+              <span>Continue</span>
+              <h3>The Late-Night Listener</h3>
+              <p>"Ending B is clearer, moodier, and easier to replay in my head."</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="timeline" id="demo" aria-labelledby="demo-title">
+          <div class="section-heading reveal">
+            <p class="kicker">The Last Monsoon demo</p>
+            <h2 id="demo-title">In under two minutes, judges see the system make a defensible call.</h2>
+          </div>
+          <div class="timeline-rail">
+            <div class="timeline-item reveal">
+              <span>Step 1</span>
+              <h3>Select a season</h3>
+              <p>Open an eight-episode Mumbai thriller with indexed events, clues, relationships, and emotional beats.</p>
+            </div>
+            <div class="timeline-item reveal">
+              <span>Step 2</span>
+              <h3>Compare endings</h3>
+              <p>Test "The Surprise Villain" against "The Earned Storm" before release.</p>
+            </div>
+            <div class="timeline-item reveal">
+              <span>Step 3</span>
+              <h3>Apply safe edits</h3>
+              <p>Use three minimal revisions tied to exact contradictions or unresolved promises.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="prize-band" aria-labelledby="stack-title">
+          <div class="prize-copy reveal">
+            <p class="kicker">Built for a real creator workflow</p>
+            <h2 id="stack-title">Structured AI output, cited evidence, and local demo resilience.</h2>
+          </div>
+          <div class="prize-stack reveal" aria-label="System capabilities">
+            <span>OpenAI extracts claims, promises, and emotional beats into JSON</span>
+            <span>Databricks stores long-story memory and evaluation traces</span>
+            <span>Offline demo mode keeps the pitch stable without credentials</span>
+          </div>
+        </section>
+
+        <section class="apply" id="apply" aria-labelledby="apply-title">
+          <div class="apply-panel reveal">
+            <div>
+              <p class="kicker">Creator-side pre-publication tool</p>
+              <h2 id="apply-title">Find the smallest change that makes a cliffhanger feel earned.</h2>
+            </div>
+            <form class="signup-form">
+              <label for="email">Email address</label>
+              <div class="form-row">
+                <input id="email" name="email" type="email" placeholder="creator@example.com" />
+                <button type="submit">Request demo</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three/webgpu": "https://esm.sh/three@0.183.0/webgpu",
+          "three/tsl": "https://esm.sh/three@0.183.0/tsl"
+        }
+      }
+    </script>
+    <script type="module" src="app.js?v=20260725-hero-fix"></script>
+  </body>
+</html>

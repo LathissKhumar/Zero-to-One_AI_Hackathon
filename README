@@ -1,1 +1,17 @@
+CanonPulse
+==========
 
+Remix landing page for CanonPulse, the pre-release story wind tunnel for
+long-form audio series.
+
+Run locally:
+
+```bash
+npm run dev
+```
+
+Then open:
+
+```text
+http://localhost:44100/
+```
