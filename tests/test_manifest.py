@@ -65,3 +65,53 @@ def test_baseline_flag_count_exceeds_real_defects():
     perfect = [resolved(item.defect_id, item.expected_state) for item in manifest.items]
     report = score_discrimination(manifest, perfect)
     assert report.baseline_flags > report.holes_caught
+
+
+def test_spurious_broken_entries_outside_the_manifest_cost_precision():
+    """An extractor hallucinating contradictions must not report perfect precision.
+
+    Precision has to be measured over everything the resolver calls broken, not
+    just the subset that happens to land on a manifest item -- otherwise an
+    extractor could emit dozens of spurious contradictions and still show
+    precision 1.0.
+    """
+    manifest = load_manifest(MANIFEST_PATH)
+    perfect = [resolved(item.defect_id, item.expected_state) for item in manifest.items]
+    clean_precision = score_discrimination(manifest, perfect).precision
+
+    with_spurious = [*perfect, resolved("spurious-1", "broken"), resolved("spurious-2", "broken")]
+    report = score_discrimination(manifest, with_spurious)
+    assert report.false_positives == 2
+    assert report.precision < clean_precision
+
+
+def test_clean_control_flagged_as_suspended_still_counts_as_a_false_positive():
+    """A clean control isn't only mis-scored by being called broken.
+
+    Wrongly suspending (or otherwise not paying off) an ordinary promise is just
+    as much a false read as flagging it broken, so it must move
+    false_positive_rate too.
+    """
+    manifest = load_manifest(MANIFEST_PATH)
+    tampered = [
+        resolved(item.defect_id, "suspended" if item.defect_class == "clean_control" else item.expected_state)
+        for item in manifest.items
+    ]
+    report = score_discrimination(manifest, tampered)
+    assert report.false_positive_rate > 0.0
+
+
+def test_outstanding_obligations_are_scored_not_ignored():
+    """expected_state on an outstanding_obligation item must not be dead code."""
+    manifest = load_manifest(MANIFEST_PATH)
+    perfect = [resolved(item.defect_id, item.expected_state) for item in manifest.items]
+    report = score_discrimination(manifest, perfect)
+    assert report.obligations_total == 6
+    assert report.obligations_tracked == report.obligations_total
+
+    wrong = [
+        resolved(item.defect_id, "paid" if item.defect_class == "outstanding_obligation" else item.expected_state)
+        for item in manifest.items
+    ]
+    broken_report = score_discrimination(manifest, wrong)
+    assert broken_report.obligations_tracked == 0
