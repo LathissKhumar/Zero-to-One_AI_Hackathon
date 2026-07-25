@@ -71,3 +71,64 @@ def test_split_still_groups_by_book_after_generation():
         by_book.setdefault(row["book_id"], set()).add(row["split"])
     for book, splits in by_book.items():
         assert len(splits) == 1, f"book {book} straddles the split"
+
+
+def test_corpus_covers_the_feature_ranges_the_demo_series_actually_produces():
+    """The corpus must span the demo's feature ranges, or predictions extrapolate.
+
+    Gradient boosting extrapolates flat: outside the training range every input
+    collapses onto the same boundary leaf, so the served number stops responding
+    to the structural pressure the product exists to measure. A 220-episode
+    serial produces obligation ages in the hundreds; a corpus of 20-chapter books
+    cannot cover that, and the held-out interval would be an in-distribution
+    error estimate advertised on an out-of-distribution prediction.
+    """
+    from pathlib import Path
+
+    from app.features import FeatureExtractor
+    from app.predictor import FEATURE_ORDER
+    from app.series_loader import load_series
+
+    series = load_series(Path("data/series/last_monsoon.json"))
+    demo = [
+        FeatureExtractor().extract(series, episode).to_vector()
+        for episode in range(1, series.total_episodes + 1)
+    ]
+    corpus = generate_synthetic_corpus()
+
+    uncovered = []
+    for name in FEATURE_ORDER:
+        demo_lo, demo_hi = min(r[name] for r in demo), max(r[name] for r in demo)
+        corpus_lo = min(r[name] for r in corpus)
+        corpus_hi = max(r[name] for r in corpus)
+        if corpus_lo > demo_lo or corpus_hi < demo_hi:
+            uncovered.append(
+                f"{name}: demo [{demo_lo:.2f}, {demo_hi:.2f}] "
+                f"outside corpus [{corpus_lo:.2f}, {corpus_hi:.2f}]"
+            )
+
+    assert not uncovered, "features extrapolate past the training range:\n" + "\n".join(uncovered)
+
+
+def test_prediction_responds_to_structural_pressure():
+    """Varying a defect feature across the demo's real range must move the number.
+
+    This is the test that would have caught the flat-extrapolation bug: before
+    widening, broken_count of 1, 3 and 9 all returned the identical prediction.
+    """
+    from app.corpus import normalize_within_book
+    from app.narrative_models import BoundaryFeatures
+    from app.predictor import ContinuationPredictor
+
+    predictor = ContinuationPredictor()
+    predictor.train(normalize_within_book(generate_synthetic_corpus()))
+
+    predictions = [
+        predictor.predict(
+            BoundaryFeatures(episode=100, open_obligation_count=4, mean_urgency=3.0, broken_count=n)
+        ).value
+        for n in (0, 3, 9)
+    ]
+    assert len(set(predictions)) == len(predictions), (
+        f"prediction is flat across broken_count 0/3/9: {predictions}"
+    )

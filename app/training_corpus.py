@@ -17,9 +17,18 @@ Generative process, per synthetic chapter boundary::
         + URGENCY_WEIGHT * mean_urgency                    # urgent open threads pull harder
         - OVERDUE_WEIGHT * overdue_count                   # an overdue promise reads as abandoned
         - BROKEN_WEIGHT * broken_count                     # an unresolved contradiction repels
+        - AGE_WEIGHT * max_obligation_age                  # a debt left standing goes stale
         + noise,
         0.0, 1.0,
     )
+
+Any feature absent from this expression is one the model will correctly learn to
+ignore, because in this synthetic world it carries no signal. That is a real
+limit of training on generated labels, not a bug: ``suspended_density``,
+``perceived_time_jump``, ``sentiment_velocity`` and ``active_thread_count`` are
+carried through the pipeline and served, but nothing here makes them predictive.
+On a real corpus they might be. Do not read their importance in this model as
+evidence either way.
 
 This mirrors the product's own thesis (see app/features.py) on purpose: it is
 the only thesis available to ground a synthetic label in, and it is stated
@@ -42,6 +51,10 @@ OPEN_OBLIGATION_WEIGHT = 0.03
 URGENCY_WEIGHT = 0.02
 OVERDUE_WEIGHT = 0.08
 BROKEN_WEIGHT = 0.12
+# Per-episode decay on the oldest standing debt. Small, because age is a slow
+# pressure next to an outright broken promise -- but nonzero, because a thread
+# left hanging for 200 episodes is not the same as one opened last week.
+AGE_WEIGHT = 0.0015
 NOISE_SPREAD = 0.05
 
 PLATFORMS = ("royalroad", "qidian", "arxiv_serial")
@@ -49,7 +62,7 @@ PLATFORMS = ("royalroad", "qidian", "arxiv_serial")
 
 def generate_synthetic_corpus(
     n_books: int = 24,
-    chapters_per_book: int = 20,
+    chapters_per_book: int = 220,
     seed: int = 1337,
 ) -> list[dict]:
     """Generate a deterministic synthetic training corpus.
@@ -71,16 +84,24 @@ def generate_synthetic_corpus(
 
         for chapter in range(1, chapters_per_book + 1):
             open_obligation_count = min(8, round(rng.uniform(0, 6) * pressure))
-            mean_urgency = round(rng.uniform(1.0, 5.0), 2)
+            # Urgency is a mean over *open* obligations, so with none open the
+            # real extractor yields 0.0. Mirror that rather than floor at 1.0,
+            # or early boundaries in a real series fall outside the corpus.
+            mean_urgency = (
+                round(rng.uniform(1.0, 5.0), 2) if open_obligation_count else 0.0
+            )
             max_obligation_age = rng.randint(0, chapter)
             mean_obligation_age = round(rng.uniform(0, max_obligation_age or 1), 2)
             # Overdue and broken counts are capped by what's actually open, so
             # a row is never "3 overdue promises but 0 open obligations".
-            overdue_count = rng.randint(0, min(2, open_obligation_count))
-            broken_count = 1 if rng.random() < 0.08 else 0
-            planting_recency = rng.randint(0, min(chapter, 15))
+            overdue_count = rng.randint(0, min(4, open_obligation_count))
+            # A long serial accumulates unresolved contradictions; capping this
+            # at 1 leaves the model unable to distinguish a mildly inconsistent
+            # story from a badly broken one.
+            broken_count = rng.randint(0, 10) if rng.random() < 0.35 else 0
+            planting_recency = rng.randint(0, min(chapter, 60))
             suspended_density = round(rng.uniform(0, 0.3), 3)
-            sentiment_velocity = round(rng.uniform(-0.5, 0.5), 3)
+            sentiment_velocity = round(rng.uniform(-1.2, 1.2), 3)
             perceived_time_jump = round(rng.uniform(0, 0.4), 3)
             active_thread_count = min(open_obligation_count, rng.randint(0, 5))
 
@@ -91,6 +112,7 @@ def generate_synthetic_corpus(
                 + URGENCY_WEIGHT * mean_urgency
                 - OVERDUE_WEIGHT * overdue_count
                 - BROKEN_WEIGHT * broken_count
+                - AGE_WEIGHT * max_obligation_age
                 + noise
             )
             continue_rate = max(0.0, min(1.0, raw_rate))
