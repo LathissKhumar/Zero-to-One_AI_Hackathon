@@ -7,3 +7,4 @@ mlruns/
 .agents/
 .ai-dev-kit/
 .codex/
+node_modules/

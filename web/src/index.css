@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.208 0.042 265.755);
+  --card: oklch(0.984 0.003 247.858);
+  --card-foreground: oklch(0.208 0.042 265.755);
+  --primary: oklch(0.511 0.262 276.966);
+  --primary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.554 0.046 257.417);
+  --border: oklch(0.929 0.013 255.508);
+  --ring: oklch(0.511 0.262 276.966);
+}
+
+.dark {
+  /* Deep space — the starfield sits directly on this, page-wide. */
+  --background: #05070f;
+  --foreground: oklch(0.929 0.013 255.508);
+  /* Translucent so stars read through every card. */
+  --card: oklch(0.257 0.04 260.031 / 0.62);
+  --card-foreground: oklch(0.929 0.013 255.508);
+  --primary: oklch(0.673 0.182 276.935);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --border: oklch(0.279 0.041 260.031);
+  --ring: oklch(0.673 0.182 276.935);
+}
+
+@theme inline {
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+}
+
+/* The page's one authored entrance: focus resolving out of the dark. */
+@keyframes riseBlur {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+/* Draw-in for SVG curves; pathLength=1 makes the dash maths trivial. */
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
