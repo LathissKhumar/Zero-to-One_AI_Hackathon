@@ -123,7 +123,12 @@ def _http_statement_transport(*, host: str, token: str, warehouse_id: str) -> St
     take tens of seconds, well past the 50s the initial POST is willing to
     wait synchronously.
     """
-    base = host.rstrip("/")
+    # Databricks Apps inject DATABRICKS_HOST without a scheme (confirmed
+    # live: "dbc-....cloud.databricks.com", not "https://dbc-...."). Without
+    # this, urllib raises ValueError("unknown url type") before any request
+    # is sent -- this crashed /api/series in the actual deployed app.
+    normalized_host = host if host.startswith(("http://", "https://")) else f"https://{host}"
+    base = normalized_host.rstrip("/")
 
     def _request(method: str, path: str, body: dict | None = None) -> dict:
         data = json.dumps(body).encode("utf-8") if body is not None else None

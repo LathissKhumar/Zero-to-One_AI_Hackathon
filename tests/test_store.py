@@ -26,6 +26,7 @@ from app.store import (
     DatabricksSeriesStore,
     FileSeriesStore,
     StatementError,
+    _http_statement_transport,
     store_from_env,
 )
 
@@ -218,6 +219,61 @@ def test_databricks_store_never_falls_back_to_file_on_failure():
         store.load()
     # No JSON fallback path exists on this object at all.
     assert not hasattr(store, "_file_fallback")
+
+
+def test_http_statement_transport_adds_a_scheme_to_a_bare_host(monkeypatch):
+    """Databricks Apps inject DATABRICKS_HOST without a scheme (confirmed
+    live: 'dbc-....cloud.databricks.com', not 'https://dbc-....'). Without
+    normalisation, urllib raises ValueError('unknown url type') before any
+    request is even sent -- this crashed the real deployed app's /api/series."""
+    captured_urls: list[str] = []
+
+    class _FakeResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def read(self):
+            return json.dumps({"statement_id": "s1", "status": {"state": "SUCCEEDED"}, "result": {}}).encode()
+
+    def fake_urlopen(request, timeout=None):
+        captured_urls.append(request.full_url)
+        return _FakeResponse()
+
+    monkeypatch.setattr("app.store.urllib.request.urlopen", fake_urlopen)
+
+    transport = _http_statement_transport(host="dbc-53cf8438-33aa.cloud.databricks.com", token="tok", warehouse_id="wh1")
+    transport("SELECT 1")
+
+    assert captured_urls[0].startswith("https://dbc-53cf8438-33aa.cloud.databricks.com/")
+
+
+def test_http_statement_transport_does_not_double_prefix_a_host_with_a_scheme(monkeypatch):
+    captured_urls: list[str] = []
+
+    class _FakeResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def read(self):
+            return json.dumps({"statement_id": "s1", "status": {"state": "SUCCEEDED"}, "result": {}}).encode()
+
+    def fake_urlopen(request, timeout=None):
+        captured_urls.append(request.full_url)
+        return _FakeResponse()
+
+    monkeypatch.setattr("app.store.urllib.request.urlopen", fake_urlopen)
+
+    transport = _http_statement_transport(host="https://example.cloud.databricks.com", token="tok", warehouse_id="wh1")
+    transport("SELECT 1")
+
+    assert captured_urls[0].startswith("https://example.cloud.databricks.com/")
+    assert "https://https://" not in captured_urls[0]
 
 
 def test_no_credential_is_ever_embedded_in_a_query_statement():
