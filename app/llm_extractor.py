@@ -75,6 +75,24 @@ _MAX_ATTEMPTS = 5
 _BACKOFF_BASE_SECONDS = 4
 
 
+def message_text(content: object) -> str:
+    """Unwrap a chat-completion message's content into a plain string.
+
+    Most OpenAI-compatible endpoints return a plain string. Reasoning-style
+    models (e.g. Databricks' gpt-oss serving endpoints) instead return a list
+    of typed blocks -- a "reasoning" block plus a "text" block -- and the
+    reasoning block is not the answer. Extracts and joins every "text" block,
+    ignoring anything else, so the caller gets the same plain-string shape
+    regardless of which kind of endpoint answered.
+    """
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = [block.get("text", "") for block in content if isinstance(block, dict) and block.get("type") == "text"]
+        return "\n".join(parts)
+    return ""
+
+
 def _http_transport(*, endpoint: str, token: str, model: str, prompt: str) -> str:
     """OpenAI-compatible chat-completions POST. Used by both backends -- they
     differ only in endpoint URL, token, and model name, never in shape."""
@@ -99,7 +117,7 @@ def _http_transport(*, endpoint: str, token: str, model: str, prompt: str) -> st
         try:
             with urllib.request.urlopen(request, timeout=120) as response:  # noqa: S310
                 payload = json.loads(response.read().decode("utf-8"))
-            return payload["choices"][0]["message"]["content"]
+            return message_text(payload["choices"][0]["message"]["content"])
         except urllib.error.HTTPError as error:  # noqa: PERF203
             last_error = error
             if error.code not in _RETRY_STATUS or attempt == _MAX_ATTEMPTS - 1:

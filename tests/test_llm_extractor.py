@@ -5,7 +5,7 @@ import json
 import pytest
 
 from app.extraction import ExtractionResult
-from app.llm_extractor import LLMExtractor, backend_for, cache_key
+from app.llm_extractor import LLMExtractor, backend_for, cache_key, message_text
 
 
 def _episodes() -> list[dict]:
@@ -220,6 +220,28 @@ def test_empty_input_yields_empty_result_without_any_call():
     )
     result = extractor.extract([])
     assert result.nodes == [] and result.rejected == 0
+
+
+def test_message_text_passes_through_a_plain_string():
+    assert message_text("plain content") == "plain content"
+
+
+def test_message_text_unpacks_a_reasoning_model_content_array():
+    content = [
+        {"type": "reasoning", "summary": [{"type": "summary_text", "text": "thinking..."}]},
+        {"type": "text", "text": '{"nodes": []}'},
+    ]
+    assert message_text(content) == '{"nodes": []}'
+
+
+def test_message_text_joins_multiple_text_blocks():
+    content = [{"type": "text", "text": "part one"}, {"type": "text", "text": "part two"}]
+    assert message_text(content) == "part one\npart two"
+
+
+def test_message_text_returns_empty_string_for_a_content_array_with_no_text_block():
+    content = [{"type": "reasoning", "summary": []}]
+    assert message_text(content) == ""
 
 
 def test_malformed_row_in_the_input_itself_is_rejected_without_calling_the_transport():
