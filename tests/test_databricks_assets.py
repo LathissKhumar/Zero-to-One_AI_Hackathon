@@ -88,6 +88,14 @@ def test_batch_inference_runs_through_ai_query_not_a_vendor_sdk():
     assert "responseFormat" in reactions
 
 
+def test_document_processing_uses_databricks_document_parser():
+    raw = (SQL_DIR / "document_raw.sql").read_text()
+    parsed = (SQL_DIR / "document_parse.sql").read_text()
+    assert "format => 'binaryFile'" in raw
+    assert "ai_parse_document" in parsed
+    assert "parsed_document" in parsed
+
+
 def test_no_credential_is_committed_in_a_deployment_asset():
     for asset in (BUNDLE, Path("app.yaml"), *Path("resources").glob("*.yml")):
         text = asset.read_text()

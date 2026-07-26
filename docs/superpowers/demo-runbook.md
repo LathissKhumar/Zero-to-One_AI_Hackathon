@@ -17,9 +17,21 @@ Open `http://127.0.0.1:8000`. The local path uses committed synthetic series dat
 ## Governed Databricks demo
 
 1. Apply `sql/ddl.sql` to the configured Unity Catalog schema.
-2. Load the demo series with `uv run python scripts/load_databricks.py --warehouse <warehouse-id>`.
-3. Sync retrieval with `uv run python scripts/build_vector_index.py --warehouse <warehouse-id> --index-name <index> --endpoint-name <endpoint>`.
-4. Run the deployed app’s health endpoint and then run:
+2. For user documents, put supported files in a Unity Catalog Volume and run:
+
+```bash
+uv run python scripts/run_document_processing.py \
+  --warehouse <warehouse-id> \
+  --source-path /Volumes/<catalog>/<volume-schema>/<folder>/ \
+  --series-id <series-id>
+```
+
+   This uses Databricks `ai_parse_document` and writes the raw and parsed
+   document layers. Normalize its `document.elements` output with
+   `app/document_ingestion.py`; do not skip the episode-boundary review gate.
+3. Alternatively, load the deterministic demo series with `uv run python scripts/load_databricks.py --warehouse <warehouse-id>`.
+4. Sync retrieval with `uv run python scripts/build_vector_index.py --warehouse <warehouse-id> --index-name <index> --endpoint-name <endpoint>`.
+5. Run the deployed app’s health endpoint and then run:
 
 ```bash
 uv run python scripts/smoke_golden_path.py \

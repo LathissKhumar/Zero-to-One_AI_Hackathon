@@ -16,6 +16,9 @@ class EpisodeInput(BaseModel):
     synopsis: str | None = None
     writer_id: str = "unknown"
     language: str = "en"
+    source_path: str | None = None
+    source_pages: list[int] = Field(default_factory=list)
+    source_element_ids: list[int] = Field(default_factory=list)
 
 
 class SubmissionInput(BaseModel):

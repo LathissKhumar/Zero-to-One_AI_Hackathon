@@ -23,6 +23,9 @@ class SourceCitation(BaseModel):
     start_offset: int = Field(ge=0)
     end_offset: int = Field(gt=0)
     quote_hash: str = Field(min_length=1)
+    source_path: str | None = None
+    source_pages: list[int] = Field(default_factory=list)
+    source_element_ids: list[int] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_span_and_version(self) -> "SourceCitation":
@@ -34,7 +37,8 @@ class SourceCitation(BaseModel):
 
     @classmethod
     def from_text(
-        cls, *, series_id: str, version_id: str, episode_number: int, text: str, start_offset: int = 0, end_offset: int | None = None
+        cls, *, series_id: str, version_id: str, episode_number: int, text: str, start_offset: int = 0, end_offset: int | None = None,
+        source_path: str | None = None, source_pages: list[int] | None = None, source_element_ids: list[int] | None = None,
     ) -> "SourceCitation":
         import hashlib
 
@@ -47,6 +51,9 @@ class SourceCitation(BaseModel):
             start_offset=start_offset,
             end_offset=end,
             quote_hash=f"{version_id}:{quote_hash}",
+            source_path=source_path,
+            source_pages=source_pages or [],
+            source_element_ids=source_element_ids or [],
         )
 
 

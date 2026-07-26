@@ -56,12 +56,20 @@ def attach_provenance(
         for row in episodes
         if isinstance(row, dict) and row.get("episode") is not None
     }
+    source_rows = {
+        int(row["episode"]): row
+        for row in episodes
+        if isinstance(row, dict) and row.get("episode") is not None
+    }
     result.citations = [
         SourceCitation.from_text(
             series_id=context.series_id,
             version_id=context.version_id,
             episode_number=excerpt.episode,
             text=source_text.get(excerpt.episode, excerpt.text),
+            source_path=source_rows.get(excerpt.episode, {}).get("source_path"),
+            source_pages=source_rows.get(excerpt.episode, {}).get("source_pages", []),
+            source_element_ids=source_rows.get(excerpt.episode, {}).get("source_element_ids", []),
         )
         for excerpt in result.excerpts
     ]

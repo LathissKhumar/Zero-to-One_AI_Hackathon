@@ -73,6 +73,39 @@ CREATE TABLE IF NOT EXISTS canonpulse_episode_work_item (
 USING DELTA
 PARTITIONED BY (job_id);
 
+-- ---------------------------------------------------------------------------
+-- Governed document parsing
+-- ---------------------------------------------------------------------------
+
+-- Binary source files are retained by hash so the parsed result can always be
+-- tied back to the exact upload without putting document bytes in the app.
+CREATE TABLE IF NOT EXISTS canonpulse_raw_document (
+    document_id     STRING NOT NULL,
+    series_id       STRING NOT NULL,
+    source_path     STRING NOT NULL,
+    source_hash     STRING NOT NULL,
+    content         BINARY NOT NULL,
+    file_size       BIGINT,
+    ingested_at     TIMESTAMP NOT NULL DEFAULT current_timestamp()
+)
+USING DELTA
+PARTITIONED BY (series_id);
+
+-- Databricks Document Parsing output is versioned VARIANT. Persist it once so
+-- retries and downstream normalization do not pay to parse the same upload.
+CREATE TABLE IF NOT EXISTS canonpulse_parsed_document (
+    document_id     STRING NOT NULL,
+    series_id       STRING NOT NULL,
+    source_path     STRING NOT NULL,
+    source_hash     STRING NOT NULL,
+    parser          STRING NOT NULL,
+    parser_version  STRING NOT NULL,
+    parsed_document VARIANT NOT NULL,
+    parsed_at       TIMESTAMP NOT NULL DEFAULT current_timestamp()
+)
+USING DELTA
+PARTITIONED BY (series_id);
+
 CREATE TABLE IF NOT EXISTS series (
     series_id       STRING  NOT NULL,
     title           STRING  NOT NULL,

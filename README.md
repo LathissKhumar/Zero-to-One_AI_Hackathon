@@ -43,6 +43,29 @@ Key endpoints:
 - `GET /api/predict?episode=N` — the feature vector for a given episode boundary, **plus** the trained model's predicted continuation (`value`, `lower_ci`, `upper_ci`, `ci_method`, whether the value was `clamped`), and a `disclosure` field repeating that the model is fit to a synthetic corpus. If inference exceeds `INFERENCE_TIMEOUT_SECONDS`, the response instead carries `"degraded": true` and a `fallback` computed by `golden_path()`.
 - `POST /api/rewrite` — `{before_episode, after_episode, edits}` → a `RewriteReport`. Both predictions are computed server-side from the same trained predictor, so `total_delta` is never a value the caller supplied — closing the provenance gap a naive "trust the client's delta" design would have. Each edit must name the ledger obligation it discharges; `unattributed` reports whatever movement the named edits don't explain.
 
+## User document ingestion
+
+The committed JSON/YAML series is only the deterministic offline fixture. For
+governed uploads, place PDF, DOC/DOCX, JPG/JPEG, PNG, TIFF/TIF, or PPT/PPTX
+files in a Unity Catalog Volume and run:
+
+```bash
+uv run python scripts/run_document_processing.py \
+  --warehouse <warehouse-id> \
+  --source-path /Volumes/<catalog>/<volume-schema>/<folder>/ \
+  --series-id <series-id> \
+  --catalog <catalog> \
+  --schema <schema>
+```
+
+Databricks `ai_parse_document` creates the governed raw and parsed layers in
+`canonpulse_raw_document` and `canonpulse_parsed_document`. CanonPulse then
+normalizes the parsed `document.elements` into `EpisodeInput` records in
+`app/document_ingestion.py`, retaining source page and element identifiers for
+citations. A file named `episode-07.pdf` becomes episode 7; a document with
+`Episode 1`/`Episode 2` headings is split by those headings. Ambiguous files
+are marked for review instead of being assigned an invented episode number.
+
 ## Training data — read this before trusting a predicted number
 
 **There is no real reader-retention corpus in this repository.** Fetching the real corpora (arXiv 2412.15239, Qidian, Royal Road) needs network access and licensing judgement that is out of scope for this demo. Instead, `app/training_corpus.py` generates a **deterministic, offline, synthetic corpus** shaped like that telemetry would be: each row carries the full structural feature vector plus a `continue_rate` derived from a fully stated formula —
