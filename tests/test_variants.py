@@ -7,6 +7,9 @@ from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, Series
 from app.personas import PERSONAS, WritersRoom
 from app.scrambler import Scrambler
 from app.variants import RepairEngine
+from app.corpus import normalize_within_book
+from app.predictor import ContinuationPredictor
+from app.training_corpus import generate_synthetic_corpus
 
 
 def _series() -> Series:
@@ -34,6 +37,16 @@ def test_repair_changes_only_named_node_and_does_not_mutate_source():
     assert variant.series.nodes[1].summary != source.nodes[1].summary
 
 
+def test_variant_score_uses_the_same_frozen_predictor():
+    source = _series()
+    variant = RepairEngine().repair(source, "hole", "n2", "Asha finds the key in the drawer.")
+    predictor = ContinuationPredictor()
+    predictor.train(normalize_within_book(generate_synthetic_corpus(n_books=8, chapters_per_book=30)))
+    score = predictor.score_variant(source, variant.series, 3)
+    assert score.model_version == score.original.model_version == score.variant.model_version
+    assert score.delta == pytest.approx(score.variant.value - score.original.value)
+
+
 def test_scrambler_preserves_true_graph_and_rejects_invalid_order():
     source = _series()
     variant = Scrambler().scramble(source, [2, 1])
@@ -57,4 +70,3 @@ def test_writers_room_returns_five_citation_backed_structured_annotations():
     assert {annotation.persona_id for annotation in annotations} == {persona.id for persona in PERSONAS}
     assert all(annotation.citation_ids for annotation in annotations)
     assert all(annotation.target_id for annotation in annotations)
-

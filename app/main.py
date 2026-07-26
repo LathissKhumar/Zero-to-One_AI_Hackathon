@@ -14,17 +14,26 @@ import app.demo_mode as demo_mode
 from app.corpus import normalize_within_book
 from app.demo_mode import golden_path
 from app.evaluation import EndToEndReport, evaluate_series
+from app.cohorts import COHORTS, divergence_by_episode, structural_reaction
+from app.discovery import EvidenceRepository, discover
 from app.features import FeatureExtractor
+from app.foreshadowing import ForeshadowingEngine, ForeshadowingProposal
 from app.heuristic_extractor import HeuristicExtractor
+from app.ingestion import IngestJob, IngestService, Submission
 from app.ledger import LedgerResolver, LedgerSummary
 from app.manifest import load_manifest
 from app.memory import MemoryQuery
 from app.narrative_models import ResolvedEntry, Series
+from app.personas import WritersRoom
 from app.prepublish import PrePublishChecker, PrePublishRequest, PrePublishReport
-from app.predictor import ContinuationPredictor, train_predictor
+from app.predictor import FEATURE_SCHEMA_VERSION, MODEL_VERSION, ContinuationPredictor, train_predictor
 from app.rewrite import EditAttribution, RewriteReport, attribute_delta
 from app.store import SeriesStore, store_from_env
+from app.scrambler import Scrambler
+from app.surfaces import DebtBoardQuery, HandoffQuery, LocalizationChecker, LocalizationEpisode
 from app.training_corpus import generate_synthetic_corpus
+from app.variants import RepairEngine
+from app.verifier import PayoffVerifier
 
 SERIES_PATH = Path("data/series/last_monsoon.json")
 MANIFEST_PATH = Path("data/manifest/last_monsoon.yaml")
@@ -46,6 +55,7 @@ _inference_executor = ThreadPoolExecutor(max_workers=2)
 class AuditResponse(BaseModel):
     series_id: str
     source: str
+    source_version: str
     headline: dict[str, int]
     findings: list[ResolvedEntry]
 
@@ -54,6 +64,28 @@ class RewriteRequest(BaseModel):
     before_episode: int
     after_episode: int
     edits: list[EditAttribution]
+
+
+class RepairRequest(BaseModel):
+    target_entry_id: str
+    node_id: str
+    replacement_summary: str
+
+
+class ScrambleRequest(BaseModel):
+    presentation_order: list[int]
+
+
+class ForeshadowRequest(BaseModel):
+    obligation_id: str
+    insertion_episode: int
+    clue_type: str
+
+
+class LocalizationRequest(BaseModel):
+    episode: int
+    language: str
+    text: str
 
 
 @lru_cache(maxsize=1)
@@ -98,7 +130,8 @@ def _resolved_cached() -> tuple[ResolvedEntry, ...]:
     # configured, resolving the shared instance would permanently mark the
     # process-wide series on the very first call, which is the corruption
     # `_series()` exists to prevent.
-    return tuple(LedgerResolver().resolve_series(_series()))
+    current = _series()
+    return tuple(LedgerResolver(verifier=PayoffVerifier(current)).resolve_series(current))
 
 
 def _resolved() -> tuple[ResolvedEntry, ...]:
@@ -136,6 +169,16 @@ def _predictor() -> ContinuationPredictor:
 
 def create_app() -> FastAPI:
     app = FastAPI(title="CanonPulse", version="0.2.0")
+    ingest_service = IngestService()
+
+    @app.middleware("http")
+    async def add_request_id(request, call_next):
+        import uuid
+
+        request_id = request.headers.get("x-request-id") or str(uuid.uuid4())
+        response = await call_next(request)
+        response.headers["x-request-id"] = request_id
+        return response
 
     @app.get("/api/series")
     def series() -> dict:
@@ -145,6 +188,7 @@ def create_app() -> FastAPI:
             "title": current.title,
             "genre": current.genre,
             "total_episodes": current.total_episodes,
+            "source_version": current.source_version,
             # Which source this response was built from -- "file" (committed
             # JSON) or "databricks" (Unity Catalog). Never inferred by the
             # caller; always the store's own label, so a demo cannot claim
@@ -162,12 +206,13 @@ def create_app() -> FastAPI:
         return AuditResponse(
             series_id=_series().id,
             source=_store().backend,
+            source_version=_series().source_version,
             headline=summary.headline(),
             findings=findings,
         )
 
     @app.get("/api/memory")
-    def memory(query: str = Query(min_length=1), episode: int | None = Query(default=None, ge=1)) -> dict:
+    def memory(query: str = Query(min_length=1), episode: int | None = Query(default=None, ge=1), kind: str | None = Query(default=None), entity: str | None = Query(default=None), limit: int = Query(default=50, ge=1, le=200), offset: int = Query(default=0, ge=0)) -> dict:
         current = _series()
         horizon = episode if episode is not None else current.total_episodes
         if horizon > current.total_episodes:
@@ -175,7 +220,8 @@ def create_app() -> FastAPI:
                 status_code=422,
                 detail=f"episode {horizon} is past the end of the series ({current.total_episodes} episodes)",
             )
-        hits = MemoryQuery().search(current, query, horizon)
+        filters = {key: value for key, value in {"kind": kind, "entity": entity}.items() if value}
+        hits = MemoryQuery().search(current, query, horizon, filters, limit=limit, offset=offset)
         return {
             "series_id": current.id,
             "source": _store().backend,
@@ -197,6 +243,112 @@ def create_app() -> FastAPI:
             )
         report = PrePublishChecker().check(current, payload)
         return report.model_copy(update={"source": _store().backend})
+
+    @app.post("/api/submissions", response_model=IngestJob, status_code=201)
+    def submit_series(payload: Submission) -> IngestJob:
+        return ingest_service.submit(payload)
+
+    @app.get("/api/submissions/{job_id}", response_model=IngestJob)
+    def submission_status(job_id: str) -> IngestJob:
+        try:
+            return ingest_service.get(job_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.post("/api/submissions/{job_id}/deep", response_model=IngestJob)
+    def run_deep_extraction(job_id: str) -> IngestJob:
+        try:
+            return ingest_service.run_deep(job_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/api/handoff")
+    def handoff(writer_id: str = Query(min_length=1), episode: int | None = Query(default=None, ge=1)) -> dict:
+        current = _series()
+        horizon = episode or current.total_episodes
+        try:
+            sheet = HandoffQuery().for_writer(current, writer_id, horizon)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        return sheet.model_dump()
+
+    @app.get("/api/debt-board")
+    def debt_board(writer_id: str | None = Query(default=None), state: str | None = Query(default=None), genre: str | None = Query(default=None), urgency: int | None = Query(default=None, ge=1, le=5)) -> dict:
+        current = _series()
+        board = DebtBoardQuery().aggregate([(current, {int(key): value for key, value in current.episode_writers.items()})], writer_id=writer_id, state=state, genre=genre, urgency=urgency)
+        return board.model_dump()
+
+    @app.post("/api/localization")
+    def localization(payload: LocalizationRequest) -> dict:
+        current = _series()
+        source = next((excerpt for excerpt in current.excerpts if excerpt.episode == payload.episode), None)
+        if source is None:
+            raise HTTPException(status_code=404, detail=f"no source excerpt for episode {payload.episode}")
+        report = LocalizationChecker().check(source, LocalizationEpisode.model_validate(payload.model_dump()), current)
+        return report.model_dump()
+
+    @app.get("/api/cohorts")
+    def cohorts() -> dict:
+        current = _series()
+        extractor = FeatureExtractor()
+        reactions = []
+        for episode in range(1, current.total_episodes + 1):
+            features = extractor.extract(current, episode).to_vector()
+            excerpt = next((item for item in current.excerpts if item.episode == episode), None)
+            for cohort in COHORTS:
+                reaction = structural_reaction(cohort, episode, features).model_copy(update={"citation_ids": [excerpt.id] if excerpt else []})
+                reactions.append(reaction.model_dump())
+        return {"series_id": current.id, "source": _store().backend, "disclosure": "Cohorts are a bounded structural simulation, not observed listener behavior.", "cohorts": [cohort.model_dump() for cohort in COHORTS], "reactions": reactions, "divergence": divergence_by_episode(reactions)}
+
+    @app.get("/api/discover")
+    def discovery(query: str = Query(min_length=1)) -> dict:
+        return discover(_series(), query).model_dump()
+
+    @app.get("/api/diagnostics")
+    def diagnostics() -> dict:
+        report = _discrimination_report()
+        predictor = _predictor()
+        return {
+            "series_id": _series().id,
+            "series_source": _store().backend,
+            "model_version": MODEL_VERSION,
+            "feature_schema_version": FEATURE_SCHEMA_VERSION,
+            "mlflow_run_id": getattr(predictor, "mlflow_run_id", None),
+            "discrimination": report.model_dump(),
+            "disclosure": PREDICTION_DISCLOSURE,
+        }
+
+    @app.post("/api/repair")
+    def repair(payload: RepairRequest) -> dict:
+        current = _series()
+        try:
+            variant = RepairEngine().repair(current, payload.target_entry_id, payload.node_id, payload.replacement_summary)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        result = variant.model_dump()
+        result["score"] = _predictor().score_variant(current, variant.series, current.total_episodes).model_dump()
+        return result
+
+    @app.post("/api/scramble")
+    def scramble(payload: ScrambleRequest) -> dict:
+        try:
+            variant = Scrambler().scramble(_series(), payload.presentation_order)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        return variant.model_dump()
+
+    @app.post("/api/foreshadowing")
+    def foreshadowing(payload: ForeshadowRequest) -> dict:
+        try:
+            proposal = ForeshadowingEngine().propose(_series(), payload.obligation_id, payload.insertion_episode, payload.clue_type)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        return proposal.model_dump()
+
+    @app.get("/api/writers-room")
+    def writers_room(episode: int | None = Query(default=None, ge=1)) -> dict:
+        current = _series()
+        return {"series_id": current.id, "annotations": [item.model_dump() for item in WritersRoom().review(current, episode)]}
 
     @app.get("/api/discrimination", response_model=EndToEndReport)
     def discrimination() -> EndToEndReport:

@@ -223,3 +223,46 @@ def test_rewrite_rejects_a_window_that_runs_the_clock_backwards(client):
         json={"before_episode": episode + 10, "after_episode": episode, "edits": []},
     )
     assert response.status_code == 422
+
+
+def test_submission_api_exposes_synopsis_before_deep_promotion(client):
+    payload = {
+        "series_id": "api-demo",
+        "title": "API demo",
+        "genre": "thriller",
+        "episodes": [{"episode": 1, "synopsis": "Asha promises to return.", "writer_id": "w1"}],
+    }
+    created = client.post("/api/submissions", json=payload)
+    assert created.status_code == 201
+    job_id = created.json()["job_id"]
+    assert created.json()["status"] == "synopsis_ready"
+    promoted = client.post(f"/api/submissions/{job_id}/deep")
+    assert promoted.status_code == 200
+    assert promoted.json()["status"] == "complete"
+
+
+def test_writer_surfaces_and_discovery_are_served(client):
+    assert client.get("/api/handoff", params={"writer_id": "w1", "episode": 30}).status_code == 200
+    assert client.get("/api/debt-board").json()["total_open"] >= 0
+    localization = client.post("/api/localization", json={"episode": 1, "language": "hi", "text": "Asha opens her podcast."})
+    assert localization.status_code == 200
+    discovery = client.get("/api/discover", params={"query": "rainy Sunday after heartbreak"})
+    assert discovery.status_code == 200
+    assert discovery.json()["matches"]
+
+
+def test_cohorts_and_writers_room_are_structured_and_disclosed(client):
+    cohorts = client.get("/api/cohorts")
+    assert cohorts.status_code == 200
+    assert len(cohorts.json()["cohorts"]) == 5
+    assert "simulation" in cohorts.json()["disclosure"]
+    room = client.get("/api/writers-room", params={"episode": 30})
+    assert room.status_code == 200
+    assert len(room.json()["annotations"]) == 5
+
+
+def test_diagnostics_reports_model_and_source_provenance(client):
+    payload = client.get("/api/diagnostics").json()
+    assert payload["series_source"] == "file"
+    assert payload["model_version"]
+    assert payload["feature_schema_version"]

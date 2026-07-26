@@ -115,6 +115,19 @@ def _http_statement_transport(*, host: str, token: str, warehouse_id: str) -> St
     return execute
 
 
+def _app_auth_token() -> str:
+    """Mint a short-lived bearer token from Databricks App OAuth credentials."""
+    try:
+        from databricks.sdk.core import Config
+    except ImportError as exc:  # pragma: no cover - only workspace mode
+        raise RuntimeError("Databricks App auth requires databricks-sdk") from exc
+    headers = Config().authenticate()
+    authorization = headers.get("Authorization", "")
+    if not authorization.startswith("Bearer "):
+        raise RuntimeError("Databricks App authentication did not return a bearer token")
+    return authorization.removeprefix("Bearer ")
+
+
 def _lit(value: str) -> str:
     """SQL string literal. Doubles embedded single quotes."""
     return "'" + value.replace("'", "''") + "'"
@@ -286,7 +299,8 @@ def store_from_env(env: dict, default_series_path: Path | str) -> SeriesStore:
     host = env.get("DATABRICKS_HOST")
     token = env.get("DATABRICKS_TOKEN")
     warehouse_id = env.get("DATABRICKS_WAREHOUSE_ID")
-    if host and token and warehouse_id:
+    if host and warehouse_id and (token or env.get("DATABRICKS_CLIENT_SECRET")):
+        token = token or _app_auth_token()
         return DatabricksSeriesStore(
             host=host,
             token=token,

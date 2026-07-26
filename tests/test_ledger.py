@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from app.ledger import LedgerResolver, LedgerSummary
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink, Series
+from app.verifier import PayoffVerifier
 
 
 def build_series(
@@ -99,6 +100,17 @@ def test_approving_verifier_protects_and_marks_the_link_verified():
     assert result.state == "suspended"
     assert result.payoff is not None
     assert result.payoff.verified is True
+
+
+def test_payoff_verifier_requires_downstream_cited_entity_matching_node():
+    series = build_series(
+        entries=[LedgerEntry(id="c-1", kind="contradiction", description="Asha claim", episodes=[1, 2], entities=["Asha"], excerpt_ids=["ex-1"])],
+        payoffs=[PayoffLink(node_id="n-30", target_id="c-1", episode=30, rationale="the truth is shown")],
+    )
+    series.nodes[0].entities = ["Asha"]
+    resolved = LedgerResolver(verifier=PayoffVerifier(series)).resolve_series(series)
+    assert resolved[0].state == "suspended"
+    assert resolved[0].payoff is not None and resolved[0].payoff.verified is True
 
 
 def test_unverified_payoff_still_pays_off_a_promise():

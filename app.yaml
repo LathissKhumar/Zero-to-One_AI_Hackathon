@@ -10,15 +10,19 @@ command:
 
 env:
   - name: DEMO_MODE
-    value: "true"
+    value: "false"
   - name: DATABRICKS_CATALOG
-    value: ""
+    value: "writers_room"
   - name: DATABRICKS_SCHEMA
-    value: ""
+    value: "canonpulse"
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
   # Foundation Model APIs endpoint. All product inference routes here, so calls
   # carry Unity Catalog lineage and MLflow traces rather than leaving the
   # platform. Leave empty to run the app in DEMO_MODE off committed data.
   - name: SERVING_MODEL_ENDPOINT
-    value: ""
+    valueFrom: serving-endpoint
   - name: MLFLOW_EXPERIMENT_ID
-    value: ""
+    valueFrom: mlflow-experiment
+  - name: MLFLOW_TRACKING_URI
+    value: "databricks"

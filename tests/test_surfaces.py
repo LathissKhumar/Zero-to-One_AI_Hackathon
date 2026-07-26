@@ -43,6 +43,5 @@ def test_localization_reports_translation_drift_without_mutating_source():
     report = LocalizationChecker().check(source, translated, _series("one"))
     assert report.language == "hi"
     assert any("colour" in finding.dimension for finding in report.findings)
-    assert report.findings[0].citation_ids == ["x1"]
+    assert report.findings[0].citation_ids == ["x1", "translation-hi-1"]
     assert source.text == "The red locket is found."
-

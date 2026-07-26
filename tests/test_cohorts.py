@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.cohorts import COHORTS, blind_variants, divergence_by_episode
+from app.cohorts import COHORTS, blind_variants, divergence_by_episode, structural_reaction
 
 
 def test_five_cohorts_weight_different_things():
@@ -60,3 +60,18 @@ def test_divergence_finds_where_cohorts_disagree():
     ]
     divergence = divergence_by_episode(reactions)
     assert divergence[12] > divergence[13]
+
+
+def test_structural_reactions_change_with_weighted_features_not_prose_profiles():
+    features = {
+        "open_obligation_count": 4,
+        "mean_urgency": 4,
+        "broken_count": 0,
+        "overdue_count": 1,
+        "sentiment_velocity": 0.6,
+        "perceived_time_jump": 0.0,
+    }
+    reactions = [structural_reaction(cohort, 12, features) for cohort in COHORTS]
+    assert len({round(reaction.engagement, 6) for reaction in reactions}) >= 3
+    assert all(reaction.feature_rationale for reaction in reactions)
+    assert all(reaction.backend == "local-structural" for reaction in reactions)

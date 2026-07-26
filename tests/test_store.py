@@ -104,6 +104,19 @@ def test_store_from_env_selects_databricks_when_fully_configured():
     # supplied, and .load() is never called in this test.
 
 
+def test_store_from_env_accepts_databricks_app_oauth_configuration(monkeypatch):
+    monkeypatch.setattr("app.store._app_auth_token", lambda: "short-lived")
+    store = store_from_env(
+        {
+            "DATABRICKS_HOST": "https://example.cloud.databricks.com",
+            "DATABRICKS_CLIENT_SECRET": "injected-by-app",
+            "DATABRICKS_WAREHOUSE_ID": "wh123",
+        },
+        default_series_path=SERIES_PATH,
+    )
+    assert isinstance(store, DatabricksSeriesStore)
+
+
 # ---------------------------------------------------------------------------
 # DatabricksSeriesStore, exercised via a fake transport (no network)
 # ---------------------------------------------------------------------------

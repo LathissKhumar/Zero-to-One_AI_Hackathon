@@ -1,9 +1,9 @@
 # Session Handoff — CanonPulse
 
-**Written:** 2026-07-26, updated after the final whole-branch review.
+**Written:** 2026-07-26, updated after the complete-scope implementation pass.
 **Branch:** `feat/extraction-eval` @ `ce0f2c8` (pushed), 18 commits ahead of `main`.
-**Suite:** 124 passing (`uv run --group dev pytest -q`). Working tree clean except two untracked files — see §7.
-**Plan status:** all 4 tasks of `2026-07-26-canonpulse-extraction-eval.md` complete; final review's blocking findings fixed.
+**Suite:** 168 passing (`uv run --group dev pytest -q --disable-warnings`). The working tree contains the implementation/spec changes listed by `git status`.
+**Plan status:** extraction/evaluation work and the complete-scope local implementation pass are complete. Databricks App deployment is live and verified.
 
 You are picking up a hackathon build mid-flight. Read §1 and §3 before touching anything.
 
@@ -134,7 +134,7 @@ host `dbc-53cf8438-33aa.cloud.databricks.com`. Warehouse `c4cfcc95726ac7d5`
 | `sql/cohort_reactions.sql` | ✅ verified end to end — 20 structured verdicts, 5 cohorts × 4 episodes, cohorts genuinely disagreeing |
 | `sql/extract_graph.sql` | ✅ verified — `parse_extraction_row` accepts the output (ep 3: 1 node/1 entry; ep 47: 4 nodes/1 entry). Before the fix every row would have been rejected. Slow: nested strict schema takes minutes over 220 episodes. |
 | `databricks bundle validate` | ✅ OK |
-| `databricks bundle deploy` | ❌ never run |
+| `databricks bundle deploy` | ✅ deployed and started — active deployment `01f18883d75c18a493de79d1a1d990a8`, app `canonpulse-dev` |
 | App reading from Databricks | ✅ **CLOSED** — `app/store.py` selects `DatabricksSeriesStore` from env; verified live loading 220 episodes from Unity Catalog, `verified` surviving as a real bool, headline identical to file mode, all endpoints 200, `/api/series` reports `"source":"databricks"` |
 
 **Three defects that only live deployment could find** (fixed in `28c852c`), all in files
@@ -151,7 +151,7 @@ host `dbc-53cf8438-33aa.cloud.databricks.com`. Warehouse `c4cfcc95726ac7d5`
 
 **Model availability — verified by probing every endpoint.** `databricks-gpt-5-6-luna`, `databricks-gpt-5-6-sol` and `databricks-claude-sonnet-5` all return `PERMISSION_DENIED` ("rate limit of 0") on this workspace tier — **luna is unusable**, for batch *and* direct invocation. Working: `gpt-oss-20b`, `gpt-oss-120b`, `llama-3-3-70b-instruct`, `gemma-3-12b`. `gpt-oss-120b` is the best available and is still an OpenAI-family model served by Databricks, so the OpenAI-judge story survives.
 
-**Remaining for the track prize:** `databricks bundle deploy` so the app runs on Databricks Apps rather than locally against the workspace.
+**Databricks App deployment is now live:** `https://canonpulse-dev-7474643976895292.aws.databricksapps.com`. The app is `RUNNING`, compute is `ACTIVE`, and its bound resources are the SQL warehouse, `databricks-gpt-oss-20b` serving endpoint, and MLflow experiment. The public URL requires Databricks OAuth, so an unauthenticated curl returning 401 is expected.
 The repo vendors the AI Dev Kit's guidance at `.agents/skills/databricks-*`; read
 `databricks-apps-python`, `databricks-bundles` and `mlflow-onboarding` before deploying.
 Note the CLI suggests `databricks aitools install` for those skills.
@@ -170,15 +170,15 @@ Note the CLI suggests `databricks aitools install` for those skills.
 - `AGENTS.md` — build/test/style conventions, Codex reads it natively. Safe to commit.
 - `PRODUCT.md` — **do not commit as-is.** Two sections are now false: it still describes the superseded single-1.0 metric framing this branch replaced, and it lists MLflow runs under "Real and committed" though Databricks has never executed. Fix both first.
 
-**Deferred Minor findings** (full list with rationale in the ledger):
+**Previously deferred findings addressed in the complete-scope pass:**
 
 - `LedgerEntry.excerpt_ids` is model-trusted in both `LLMExtractor` and `DatabricksExtractor`, unlike `PayoffLink.verified` which is force-overridden. `PRODUCT.md` promises every finding carries an excerpt. `app/evaluation.py` has an entity fallback, so not a regression — but worth a guard.
 - `app/static/app.js` builds DOM via `innerHTML` from server strings. Harmless on synthetic fixtures; a real XSS vector the moment the product ingests actual writer scripts, which is its stated purpose.
-- The two-speed ingest described in the spec (fast synopsis pass, deep backfill) is not implemented. A cold user with 300 episodes has no working upload path.
+- Two-speed ingest is implemented locally as an idempotent submission job with synopsis-ready and deep-promotion states; the Databricks Delta job remains the production batch adapter.
 - `data/series/last_monsoon.json` node summaries sometimes state a defect outright (*"Despite swearing weeks ago that she cannot swim, Tara dives…"*), because they are generator output conditioned on the manifest. This makes "derived from episode text" weaker than it sounds and is an optimistic bias on the end-to-end number. Documented in `app/evaluation.py`; do not quietly rely on it.
-- Cohorts (`app/cohorts.py`) are built and tested but deliberately unwired from the served product. The cohort SQL prompts on prose profiles rather than the structural weight vectors that make cohorts differ — fix that if wiring them in.
+- Cohorts are served through `/api/cohorts`; local reactions use structural weights and the governed SQL prompt carries the same weights/features rather than prose profiles.
 
-**Not implemented from the spec's architecture diagram:** the non-linear scrambler, micro-foreshadowing injection, and the five Writers Room craft personas. These were pre-declared cut-gate items, not oversights.
+The complete-scope pass now includes immutable presentation scrambles, reversible micro-foreshadowing proposals, five structured Writers Room personas, repair variants with frozen-model scoring, writer/showrunner/localization surfaces, discovery retrieval, and UI security hardening. Live LLM measurement remains opt-in and credential-gated; no result is fabricated when credentials are absent.
 
 ---
 

@@ -122,7 +122,12 @@ class DatabricksExtractor:
             try:
                 nodes = [NarrativeNode.model_validate(item) for item in parsed.get("nodes", [])]
                 entries = [LedgerEntry.model_validate(item) for item in parsed.get("entries", [])]
-                payoffs = [PayoffLink.model_validate(item) for item in parsed.get("payoffs", [])]
+                # The model cannot self-authorize a payoff. Verification is a
+                # separate graph step and must remain false at this seam.
+                payoffs = [
+                    PayoffLink.model_validate({**item, "verified": False})
+                    for item in parsed.get("payoffs", [])
+                ]
                 excerpts = [Excerpt.model_validate(item) for item in parsed.get("excerpts", [])]
             except ValidationError:
                 result.rejected += 1
