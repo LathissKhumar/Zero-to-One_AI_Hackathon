@@ -14,6 +14,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from app.heuristic_extractor import HeuristicExtractor
 from app.ledger import LedgerResolver
 from app.narrative_models import Excerpt, ResolvedEntry, Series
 
@@ -172,6 +173,31 @@ class LocalizationChecker:
         names = {node_entity.lower() for node in series.nodes if node.episode == source_excerpt.episode for node_entity in node.entities}
         if names and not names & translated_words:
             findings.append(LocalizationFinding(dimension="entity_name", severity="error", message="the translation does not preserve a named entity from the source episode", citation_ids=citation_ids))
+
+        # Graph-derived parity check: extract a one-off mini-graph from the
+        # translated text and compare its entity count against the source
+        # node's. Still heuristic (no cross-language embeddings -- out of
+        # scope), but it is graph-derived rather than pure word-overlap.
+        source_entity_count = len(names)
+        translated_extraction = HeuristicExtractor().extract(
+            [{"episode": translated.episode, "synopsis": translated.text}]
+        )
+        translated_entity_count = len(
+            {entity for node in translated_extraction.nodes for entity in node.entities}
+        )
+        if source_entity_count and translated_entity_count != source_entity_count:
+            findings.append(
+                LocalizationFinding(
+                    dimension="graph_parity",
+                    severity="warning",
+                    message=(
+                        f"translated episode's extracted entity count ({translated_entity_count}) "
+                        f"does not match the source episode's ({source_entity_count})"
+                    ),
+                    citation_ids=citation_ids,
+                )
+            )
+
         source_findings = [
             item for item in LedgerResolver().resolve_series(series, as_of=source_excerpt.episode)
             if source_excerpt.episode in item.entry.episodes and item.state != "paid"

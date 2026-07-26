@@ -51,6 +51,16 @@ def test_debt_board_index_is_zero_for_an_empty_board():
     assert board.narrative_debt_index == 0.0
 
 
+def test_localization_check_flags_entity_count_mismatch_via_graph_parity():
+    series = _series("one")
+    source_excerpt = series.excerpts[0]
+    translated = LocalizationEpisode(episode=1, language="es", text="se encontro un objeto sin nombre reconocible.")
+
+    report = LocalizationChecker().check(source_excerpt, translated, series)
+    dims = {finding.dimension for finding in report.findings}
+    assert "graph_parity" in dims
+
+
 def test_localization_reports_translation_drift_without_mutating_source():
     source = _series("one").excerpts[0]
     translated = LocalizationEpisode(episode=1, language="hi", text="The blue locket is found.")
