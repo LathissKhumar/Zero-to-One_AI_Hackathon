@@ -191,7 +191,7 @@ class IngestionCoordinator:
             episode = self._episode(job_id, item.episode_number)
             self.repository.update_work_item(job_id, item.episode_number, "fast", "running")
             try:
-                self.extractor.extract_fast(episode)
+                self.extractor.extract_fast(episode, job_id)
             except Exception as exc:  # noqa: BLE001 - persisted as row-level failure
                 self.repository.update_work_item(job_id, item.episode_number, "fast", "failed", str(exc))
             else:
@@ -211,7 +211,7 @@ class IngestionCoordinator:
             episode = self._episode(job_id, item.episode_number)
             self.repository.update_work_item(job_id, item.episode_number, "deep", "running")
             try:
-                self.extractor.extract_deep(episode)
+                self.extractor.extract_deep(episode, job_id)
             except Exception as exc:  # noqa: BLE001 - persisted as row-level failure
                 self.repository.update_work_item(job_id, item.episode_number, "deep", "failed", str(exc))
             else:
@@ -257,8 +257,8 @@ class IngestionCoordinator:
 
 
 class _DefaultIngestionExtractor:
-    def extract_fast(self, episode: EpisodeInput) -> None:
+    def extract_fast(self, episode: EpisodeInput, job_id: str) -> None:
         return None
 
-    def extract_deep(self, episode: EpisodeInput) -> None:
+    def extract_deep(self, episode: EpisodeInput, job_id: str) -> None:
         return None

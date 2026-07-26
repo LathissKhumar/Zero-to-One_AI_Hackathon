@@ -10,6 +10,8 @@ from app.ingestion_models import (
 )
 from app.ingestion_repository import InMemorySubmissionRepository
 from app.ingestion import IngestionCoordinator
+from app.extraction import ExtractionResult
+from app.narrative_models import NarrativeNode
 
 
 def test_ndjson_parser_rejects_duplicate_episode_numbers():
@@ -44,12 +46,40 @@ class _Extractor:
     def __init__(self, failing_episode_numbers: set[int] | None = None):
         self.failing_episode_numbers = failing_episode_numbers or set()
 
-    def extract_fast(self, episode: EpisodeInput) -> None:
+    def extract_fast(self, episode: EpisodeInput, job_id: str) -> None:
         return None
 
-    def extract_deep(self, episode: EpisodeInput) -> None:
+    def extract_deep(self, episode: EpisodeInput, job_id: str) -> None:
         if episode.episode_number in self.failing_episode_numbers:
             raise TimeoutError("temporary extraction failure")
+
+
+def test_repository_accumulates_extraction_results_per_stage():
+    repository = InMemorySubmissionRepository()
+    submission = SubmissionInput(
+        series_id="s1",
+        title="S",
+        genre="thriller",
+        episodes=[EpisodeInput(episode_number=1, text="one"), EpisodeInput(episode_number=2, text="two")],
+    )
+    job = repository.create_submission(submission, source_hash="abc")
+
+    repository.record_extraction(
+        job.job_id, 1, "deep",
+        ExtractionResult(nodes=[NarrativeNode(id="n1", episode=1, perceived_index=1, summary="a")]),
+    )
+    repository.record_extraction(
+        job.job_id, 2, "deep",
+        ExtractionResult(nodes=[NarrativeNode(id="n2", episode=2, perceived_index=2, summary="b")], rejected=1),
+    )
+
+    accumulated = repository.accumulated_result(job.job_id, "deep")
+    assert [node.id for node in accumulated.nodes] == ["n1", "n2"]
+    assert accumulated.rejected == 1
+
+    empty = repository.accumulated_result(job.job_id, "fast")
+    assert empty.nodes == []
+    assert empty.rejected == 0
 
 
 def test_deep_retry_only_reprocesses_failed_items():

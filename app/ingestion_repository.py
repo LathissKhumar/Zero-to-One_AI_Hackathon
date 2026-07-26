@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 from typing import Protocol
 
+from app.extraction import ExtractionResult
 from app.ingestion_models import EpisodeWorkItem, IngestionJob, SubmissionInput
 
 
@@ -17,6 +18,10 @@ class SubmissionRepository(Protocol):
 
     def promote_fast_ledger(self, job_id: str) -> None: ...
 
+    def record_extraction(self, job_id: str, episode_number: int, stage: str, result: ExtractionResult) -> None: ...
+
+    def accumulated_result(self, job_id: str, stage: str) -> ExtractionResult: ...
+
 
 class InMemorySubmissionRepository:
     """Deterministic adapter for local mode and unit tests."""
@@ -25,6 +30,7 @@ class InMemorySubmissionRepository:
         self.jobs: dict[str, IngestionJob] = {}
         self.work_items: dict[tuple[str, int, str], EpisodeWorkItem] = {}
         self._source_jobs: dict[tuple[str, str], str] = {}
+        self._extractions: dict[tuple[str, str], ExtractionResult] = {}
 
     def create_submission(self, submission: SubmissionInput, source_hash: str) -> IngestionJob:
         key = (submission.series_id, source_hash)
@@ -58,3 +64,18 @@ class InMemorySubmissionRepository:
     def promote_fast_ledger(self, job_id: str) -> None:
         job = self.jobs[job_id]
         job.status = "fast_ready"
+
+    def record_extraction(self, job_id: str, episode_number: int, stage: str, result: ExtractionResult) -> None:
+        key = (job_id, stage)
+        existing = self._extractions.get(key)
+        if existing is None:
+            self._extractions[key] = result.model_copy(deep=True)
+            return
+        existing.nodes.extend(result.nodes)
+        existing.entries.extend(result.entries)
+        existing.payoffs.extend(result.payoffs)
+        existing.excerpts.extend(result.excerpts)
+        existing.rejected += result.rejected
+
+    def accumulated_result(self, job_id: str, stage: str) -> ExtractionResult:
+        return self._extractions.get((job_id, stage), ExtractionResult()).model_copy(deep=True)
