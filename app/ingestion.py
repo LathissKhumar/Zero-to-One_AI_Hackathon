@@ -14,6 +14,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
+from app.extraction import ExtractionResult
 from app.heuristic_extractor import HeuristicExtractor
 from app.ingestion_models import (
     EpisodeInput,
@@ -23,6 +24,8 @@ from app.ingestion_models import (
     submission_source_hash,
 )
 from app.ingestion_repository import InMemorySubmissionRepository, SubmissionRepository
+from app.llm_config import openai_config
+from app.llm_extractor import LLMExtractor, Transport
 from app.narrative_models import Series
 
 
@@ -167,6 +170,63 @@ class SynopsisExtractor:
         return result
 
 
+def _series_from_submission_input(submission: SubmissionInput, result: ExtractionResult, *, source_version: str) -> Series:
+    writer_map = {str(episode.episode_number): episode.writer_id for episode in submission.episodes}
+    language_map = {str(episode.episode_number): episode.language for episode in submission.episodes}
+    return Series(
+        id=submission.series_id,
+        title=submission.title,
+        genre=submission.genre,
+        total_episodes=max(episode.episode_number for episode in submission.episodes),
+        ongoing=submission.ongoing,
+        nodes=result.nodes,
+        entries=result.entries,
+        payoffs=result.payoffs,
+        excerpts=result.excerpts,
+        source_version=source_version,
+        episode_writers=writer_map,
+        episode_languages=language_map,
+    )
+
+
+class RealIngestionExtractor:
+    """Fast/deep extractor wired into IngestionCoordinator's real lifecycle.
+
+    Fast stays HeuristicExtractor-over-synopsis-only (confidence-scaled), same
+    as SynopsisExtractor. Deep uses LLMExtractor (OpenAI) when OPENAI_API_KEY
+    is configured; otherwise it falls back to HeuristicExtractor over the full
+    body -- degraded, never faked, and ExtractionResult.backend (None for
+    Heuristic, "openai" for LLMExtractor) tells a caller which one ran.
+    """
+
+    def __init__(self, repository: SubmissionRepository, transport: Transport | None = None) -> None:
+        self._repository = repository
+        self._transport = transport
+
+    def extract_fast(self, episode: EpisodeInput, job_id: str) -> None:
+        result = HeuristicExtractor().extract(
+            [{"episode": episode.episode_number, "synopsis": episode.synopsis or ""}]
+        )
+        for entry in result.entries:
+            entry.confidence = 0.4
+        self._repository.record_extraction(job_id, episode.episode_number, "fast", result)
+
+    def extract_deep(self, episode: EpisodeInput, job_id: str) -> None:
+        config = openai_config()
+        rows = [{"episode": episode.episode_number, "body": episode.text}]
+        if config is None:
+            result = HeuristicExtractor().extract(rows)
+        else:
+            result = LLMExtractor(
+                endpoint=config.endpoint,
+                token=config.token,
+                model=config.model,
+                cache_path="data/extraction_cache/deep_ingest_openai.json",
+                transport=self._transport,
+            ).extract(rows)
+        self._repository.record_extraction(job_id, episode.episode_number, "deep", result)
+
+
 class IngestionCoordinator:
     """Resumable fast/deep lifecycle over a repository-backed submission."""
 
@@ -239,6 +299,12 @@ class IngestionCoordinator:
                     if item.status in {"queued", "stale"}:
                         self.repository.update_work_item(job_id, item.episode_number, stage, "cancelled")
         return self._status(job_id)
+
+    def series(self, job_id: str, stage: str = "deep") -> Series:
+        submission = self._submissions[job_id]
+        result = self.repository.accumulated_result(job_id, stage)
+        source_version = hashlib.sha256(f"{job_id}:{stage}".encode()).hexdigest()
+        return _series_from_submission_input(submission, result, source_version=source_version)
 
     def _episode(self, job_id: str, episode_number: int) -> EpisodeInput:
         return next(item for item in self._submissions[job_id].episodes if item.episode_number == episode_number)

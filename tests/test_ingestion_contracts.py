@@ -82,6 +82,79 @@ def test_repository_accumulates_extraction_results_per_stage():
     assert empty.rejected == 0
 
 
+from app.ingestion import RealIngestionExtractor
+from app.narrative_models import Series
+
+
+def test_real_extractor_fills_fast_stage_from_synopsis_with_scaled_confidence():
+    repository = InMemorySubmissionRepository()
+    submission = SubmissionInput(
+        series_id="s1", title="S", genre="thriller",
+        episodes=[EpisodeInput(episode_number=1, text="Full body text.", synopsis="Ana promises to return.")],
+    )
+    job = repository.create_submission(submission, source_hash="abc")
+    extractor = RealIngestionExtractor(repository)
+
+    extractor.extract_fast(submission.episodes[0], job.job_id)
+
+    result = repository.accumulated_result(job.job_id, "fast")
+    assert len(result.entries) >= 1
+    assert all(entry.confidence == 0.4 for entry in result.entries)
+
+
+def test_real_extractor_deep_stage_falls_back_to_heuristic_without_openai_key(monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    repository = InMemorySubmissionRepository()
+    submission = SubmissionInput(
+        series_id="s1", title="S", genre="thriller",
+        episodes=[EpisodeInput(episode_number=1, text="Ana promises to return to the ferry.")],
+    )
+    job = repository.create_submission(submission, source_hash="abc")
+    extractor = RealIngestionExtractor(repository)
+
+    extractor.extract_deep(submission.episodes[0], job.job_id)
+
+    result = repository.accumulated_result(job.job_id, "deep")
+    assert result.backend is None  # HeuristicExtractor sets no backend label
+
+
+def test_real_extractor_deep_stage_uses_llm_when_openai_key_present(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+
+    def fake_transport(*, endpoint, token, model, prompt):
+        return '{"nodes": [], "entries": [], "payoffs": [], "excerpts": []}'
+
+    repository = InMemorySubmissionRepository()
+    submission = SubmissionInput(
+        series_id="s1", title="S", genre="thriller",
+        episodes=[EpisodeInput(episode_number=1, text="Ana promises to return.")],
+    )
+    job = repository.create_submission(submission, source_hash="abc")
+    extractor = RealIngestionExtractor(repository, transport=fake_transport)
+
+    extractor.extract_deep(submission.episodes[0], job.job_id)
+
+    result = repository.accumulated_result(job.job_id, "deep")
+    assert result.backend == "openai"
+
+
+def test_coordinator_series_assembles_from_accumulated_deep_result():
+    repository = InMemorySubmissionRepository()
+    submission = SubmissionInput(
+        series_id="s1", title="S", genre="thriller",
+        episodes=[EpisodeInput(episode_number=1, text="Ana promises to return to the ferry.")],
+    )
+    coordinator = IngestionCoordinator(repository=repository, extractor=RealIngestionExtractor(repository))
+    job = coordinator.submit(submission)
+    coordinator.run_fast(job.job_id)
+    coordinator.run_deep(job.job_id)
+
+    series = coordinator.series(job.job_id)
+    assert isinstance(series, Series)
+    assert series.id == "s1"
+    assert series.total_episodes == 1
+
+
 def test_deep_retry_only_reprocesses_failed_items():
     submission = SubmissionInput(
         series_id="s1",
