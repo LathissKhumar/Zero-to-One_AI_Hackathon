@@ -22,26 +22,12 @@ from pydantic import BaseModel
 from sklearn.ensemble import GradientBoostingRegressor
 
 from app.corpus import assign_grouped_split
+from app.feature_schema import FEATURE_ORDER, FEATURE_SCHEMA_VERSION, FeatureVector, encode_features
 from app.narrative_models import BoundaryFeatures, Series
 
 # Column order is the training contract. Changing it silently scrambles inputs,
 # so BoundaryFeatures.to_vector() is tested against this list.
-FEATURE_ORDER: tuple[str, ...] = (
-    "open_obligation_count",
-    "mean_urgency",
-    "max_obligation_age",
-    "mean_obligation_age",
-    "overdue_count",
-    "planting_recency",
-    "suspended_density",
-    "broken_count",
-    "sentiment_velocity",
-    "perceived_time_jump",
-    "active_thread_count",
-)
-
 MODEL_VERSION = "continuation-gbr-v1"
-FEATURE_SCHEMA_VERSION = "structural-v1"
 
 # The interval is the empirical p90 of |predicted - actual| on the held-out
 # books, converted from z-score space into the displayed rate via the same
@@ -56,6 +42,21 @@ CI_METHOD = "p90_held_out_residual"
 # rates.
 _FALLBACK_CENTER = 0.5
 _FALLBACK_SCALE = 0.25
+
+
+class ModelBundle:
+    """Frozen estimator plus the exact schema it was trained against."""
+
+    def __init__(self, model, schema_version: str = FEATURE_SCHEMA_VERSION) -> None:
+        self.model = model
+        self.schema_version = schema_version
+
+    def predict(self, vector: FeatureVector) -> float:
+        if vector.schema_version != self.schema_version:
+            raise ValueError(
+                f"schema_version mismatch: expected {self.schema_version}, got {vector.schema_version}"
+            )
+        return float(self.model.predict([list(vector.values)])[0])
 
 
 class TrainingReport(BaseModel):
@@ -202,7 +203,24 @@ class ContinuationPredictor:
 
     @staticmethod
     def _matrix(rows: list[dict]) -> list[list[float]]:
-        return [[float(row[name]) for name in FEATURE_ORDER] for row in rows]
+        return [[float(_canonical_row(row)[name]) for name in FEATURE_ORDER] for row in rows]
+
+
+def _canonical_row(row: dict) -> dict[str, float]:
+    """Accept the pre-v2 persisted columns while training the v2 contract."""
+    aliases = {
+        "min_payoff_distance": "max_obligation_age",
+        "mean_payoff_distance": "mean_obligation_age",
+        "suspended_edge_density": "suspended_density",
+        "broken_edge_count": "broken_count",
+        "character_thread_count": "active_thread_count",
+    }
+    canonical = dict(row)
+    for new_name, old_name in aliases.items():
+        if new_name not in canonical:
+            canonical[new_name] = canonical.get(old_name, 0.0)
+    canonical.setdefault("fair_clue_density", 0.0)
+    return canonical
 
 
 def train_predictor(

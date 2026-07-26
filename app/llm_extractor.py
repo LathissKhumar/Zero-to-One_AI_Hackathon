@@ -40,7 +40,8 @@ from typing import Protocol
 
 from pydantic import ValidationError
 
-from app.extraction import ExtractionResult, parse_extraction_row
+from app.extraction import ExtractionResult, attach_provenance, parse_extraction_row
+from app.extraction_models import ExtractionContext
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink
 
 # Same keys and field lists as sql/extract_graph.sql's ai_query prompt, so the
@@ -162,7 +163,7 @@ class LLMExtractor:
         if self._cache_path and self._cache_path.exists():
             self._cache = json.loads(self._cache_path.read_text(encoding="utf-8"))
 
-    def extract(self, episodes: list[dict]) -> ExtractionResult:
+    def extract(self, episodes: list[dict], context: ExtractionContext | None = None) -> ExtractionResult:
         result = ExtractionResult(backend=self.backend)
         cache_dirty = False
 
@@ -219,6 +220,8 @@ class LLMExtractor:
                 json.dumps(self._cache, indent=2, sort_keys=True), encoding="utf-8"
             )
 
+        if context is not None:
+            attach_provenance(result, episodes, context)
         return result
 
     @staticmethod

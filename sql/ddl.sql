@@ -33,6 +33,46 @@ USING DELTA
 PARTITIONED BY (series_id)
 COMMENT 'Raw writer submission. Two-speed ingest: synopsis first, body backfilled.';
 
+CREATE TABLE IF NOT EXISTS canonpulse_submission (
+    series_id       STRING NOT NULL,
+    version_id      STRING NOT NULL,
+    source_hash     STRING NOT NULL,
+    title           STRING NOT NULL,
+    genre           STRING NOT NULL,
+    ongoing         BOOLEAN NOT NULL,
+    created_at      TIMESTAMP NOT NULL DEFAULT current_timestamp()
+)
+USING DELTA
+PARTITIONED BY (series_id)
+COMMENT 'Immutable uploaded submission versions keyed by source hash.';
+
+CREATE TABLE IF NOT EXISTS canonpulse_ingestion_job (
+    job_id              STRING NOT NULL,
+    series_id           STRING NOT NULL,
+    version_id          STRING NOT NULL,
+    source_hash         STRING NOT NULL,
+    status              STRING NOT NULL,
+    completed_episodes  INT NOT NULL DEFAULT 0,
+    failed_episodes     ARRAY<INT>,
+    created_at          TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    finished_at         TIMESTAMP
+)
+USING DELTA
+PARTITIONED BY (series_id);
+
+CREATE TABLE IF NOT EXISTS canonpulse_episode_work_item (
+    job_id          STRING NOT NULL,
+    episode         INT NOT NULL,
+    stage           STRING NOT NULL,
+    status          STRING NOT NULL,
+    attempt_count   INT NOT NULL DEFAULT 0,
+    error           STRING,
+    started_at      TIMESTAMP,
+    finished_at     TIMESTAMP
+)
+USING DELTA
+PARTITIONED BY (job_id);
+
 CREATE TABLE IF NOT EXISTS series (
     series_id       STRING  NOT NULL,
     title           STRING  NOT NULL,
@@ -75,6 +115,67 @@ CREATE TABLE IF NOT EXISTS excerpts (
 USING DELTA
 PARTITIONED BY (series_id)
 COMMENT 'Citation anchors. No ledger claim may surface without one.';
+
+CREATE TABLE IF NOT EXISTS canonpulse_extraction_run (
+    run_id          STRING NOT NULL,
+    series_id       STRING NOT NULL,
+    version_id      STRING NOT NULL,
+    source_hash     STRING NOT NULL,
+    model_name      STRING NOT NULL,
+    prompt_version  STRING NOT NULL,
+    started_at      TIMESTAMP NOT NULL,
+    finished_at     TIMESTAMP NOT NULL,
+    latency_ms      DOUBLE NOT NULL,
+    attempt         INT NOT NULL,
+    status          STRING NOT NULL
+)
+USING DELTA
+PARTITIONED BY (series_id);
+
+CREATE TABLE IF NOT EXISTS canonpulse_extraction_row (
+    run_id          STRING NOT NULL,
+    series_id       STRING NOT NULL,
+    version_id      STRING NOT NULL,
+    episode         INT NOT NULL,
+    status          STRING NOT NULL,
+    failure_code    STRING,
+    failure_message STRING,
+    retryable       BOOLEAN,
+    citation_ids    ARRAY<STRING>
+)
+USING DELTA
+PARTITIONED BY (run_id);
+
+CREATE TABLE IF NOT EXISTS canonpulse_retrieval_source (
+    source_id       STRING NOT NULL,
+    series_id       STRING NOT NULL,
+    version_id      STRING NOT NULL,
+    language        STRING NOT NULL,
+    text            STRING NOT NULL,
+    permission_key  STRING NOT NULL,
+    obligation_ids  ARRAY<STRING>,
+    source_hash     STRING NOT NULL,
+    updated_at      TIMESTAMP NOT NULL DEFAULT current_timestamp()
+)
+USING DELTA
+PARTITIONED BY (series_id);
+
+CREATE TABLE IF NOT EXISTS canonpulse_operational_events (
+    event_name      STRING NOT NULL,
+    request_id      STRING NOT NULL,
+    run_id          STRING NOT NULL,
+    series_id       STRING NOT NULL,
+    version_id      STRING NOT NULL,
+    source_version  STRING NOT NULL,
+    model_version   STRING NOT NULL,
+    latency_ms      DOUBLE NOT NULL,
+    status          STRING NOT NULL,
+    cost_usd        DOUBLE NOT NULL,
+    metadata        MAP<STRING, STRING>,
+    created_at      TIMESTAMP NOT NULL DEFAULT current_timestamp()
+)
+USING DELTA
+PARTITIONED BY (series_id);
 
 -- Contradictions and promises, pre-resolution.
 CREATE TABLE IF NOT EXISTS ledger_entries (
@@ -129,16 +230,15 @@ CREATE TABLE IF NOT EXISTS boundary_features (
     episode               INT    NOT NULL,
     open_obligation_count INT,
     mean_urgency          DOUBLE,
-    max_obligation_age    INT,
-    mean_obligation_age   DOUBLE,
-    overdue_count         INT,
+    min_payoff_distance   DOUBLE,
+    mean_payoff_distance  DOUBLE,
     planting_recency      INT,
-    suspended_density     DOUBLE,
-    broken_count          INT,
+    suspended_edge_density DOUBLE,
+    broken_edge_count     INT,
     fair_clue_density     DOUBLE,
     sentiment_velocity    DOUBLE,
     perceived_time_jump   DOUBLE,
-    active_thread_count   INT
+    character_thread_count INT
 )
 USING DELTA
 PARTITIONED BY (series_id);

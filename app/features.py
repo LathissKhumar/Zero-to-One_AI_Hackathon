@@ -47,11 +47,19 @@ class FeatureExtractor:
         suspended = [item for item in resolved if item.state == "suspended"]
         broken = [item for item in resolved if item.state == "broken"]
         overdue = [item for item in open_entries if item.overdue]
+        payoff_distances = self._payoff_distances(series, episode)
+        fair_density = self._fair_clue_density(resolved)
 
         return BoundaryFeatures(
             episode=episode,
             open_obligation_count=len(open_entries),
             mean_urgency=fmean(urgencies) if urgencies else 0.0,
+            min_payoff_distance=min(payoff_distances) if payoff_distances else float(episode + 1),
+            mean_payoff_distance=fmean(payoff_distances) if payoff_distances else float(episode + 1),
+            suspended_edge_density=len(suspended) / episode,
+            broken_edge_count=len(broken),
+            fair_clue_density=fair_density,
+            character_thread_count=self._active_threads(open_entries),
             max_obligation_age=max(ages) if ages else 0,
             mean_obligation_age=fmean(ages) if ages else 0.0,
             overdue_count=len(overdue),
@@ -62,6 +70,29 @@ class FeatureExtractor:
             perceived_time_jump=self._perceived_time_jump(series.nodes, episode),
             active_thread_count=self._active_threads(open_entries),
         )
+
+    @staticmethod
+    def _payoff_distances(series: Series, episode: int) -> list[int]:
+        """Distance to a scheduled downstream payoff, or the no-schedule sentinel."""
+        distances = []
+        for entry in series.entries:
+            if entry.kind != "promise" or entry.origin_episode > episode:
+                continue
+            future = [
+                link.episode - episode
+                for link in series.payoffs
+                if link.target_id == entry.id and link.episode == episode
+            ]
+            distances.append(min(future) if future else episode + 1)
+        return distances
+
+    @staticmethod
+    def _fair_clue_density(resolved) -> float:
+        reveals = [item for item in resolved if item.payoff is not None]
+        if not reveals:
+            return 0.0
+        fair = [item for item in reveals if len(item.citations) >= 2]
+        return len(fair) / len(reveals)
 
     @staticmethod
     def _planting_recency(resolved, episode: int) -> int:

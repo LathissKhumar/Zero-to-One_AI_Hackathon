@@ -16,6 +16,8 @@ from statistics import pstdev
 
 from pydantic import BaseModel
 
+from app.retrieval_models import CohortEvaluation, CohortRequest, ReactionRow
+
 
 class Cohort(BaseModel):
     id: str
@@ -35,6 +37,47 @@ COHORTS: tuple[Cohort, ...] = (
     Cohort(id="night", name="The Late-Night Listener",
            weights={"clarity": 0.5, "emotional_payoff": 0.3, "urgency": 0.2}),
 )
+
+
+class CohortRunner:
+    """Generate synthetic reactions without exposing variant labels to the scorer."""
+
+    def __init__(self, scorer=None) -> None:
+        self.scorer = scorer or (lambda boundary, persona_id, variant_id: 0.5)
+
+    def generate(self, request: CohortRequest) -> list[ReactionRow]:
+        rows: list[ReactionRow] = []
+        for boundary in request.boundaries:
+            for persona_id in request.personas:
+                for variant_id in ("original", "rewrite"):
+                    rows.append(
+                        ReactionRow(
+                            cohort_id=persona_id,
+                            boundary=boundary,
+                            persona_id=persona_id,
+                            variant_id=variant_id,
+                            score=float(self.scorer(boundary, persona_id, variant_id)),
+                            prompt_version="cohort-v1",
+                        )
+                    )
+        return rows
+
+
+class BlindEvaluator:
+    def __init__(self, seed: int = 42) -> None:
+        self.seed = seed
+
+    def evaluate(self, rows: list[ReactionRow]) -> CohortEvaluation:
+        variant_ids = [row.variant_id for row in rows]
+        presented = list(variant_ids)
+        random.Random(self.seed).shuffle(presented)
+        if presented == variant_ids and len(presented) > 1:
+            presented.reverse()
+        return CohortEvaluation(
+            presented_variant_ids=tuple(presented),
+            original_variant_ids=tuple(variant_ids),
+            seed=self.seed,
+        )
 
 
 class CohortReaction(BaseModel):
@@ -61,9 +104,9 @@ def structural_reaction(cohort: Cohort, episode: int, features: dict[str, float]
     signals = {
         "urgency": min(1.0, max(0.0, features.get("mean_urgency", 0.0) / 5.0)),
         "open_obligations": 1.0 / (1.0 + max(0.0, features.get("open_obligation_count", 0.0))),
-        "fairness": 1.0 / (1.0 + max(0.0, features.get("broken_count", 0.0) + features.get("overdue_count", 0.0))),
+        "fairness": 1.0 / (1.0 + max(0.0, features.get("broken_edge_count", features.get("broken_count", 0.0)))),
         "emotional_payoff": min(1.0, max(0.0, 0.5 + features.get("sentiment_velocity", 0.0))),
-        "consistency": 1.0 / (1.0 + max(0.0, features.get("broken_count", 0.0))),
+        "consistency": 1.0 / (1.0 + max(0.0, features.get("broken_edge_count", features.get("broken_count", 0.0)))),
         "clarity": 1.0 / (1.0 + max(0.0, features.get("perceived_time_jump", 0.0) * 10.0)),
     }
     total_weight = sum(cohort.weights.values()) or 1.0

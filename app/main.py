@@ -1,34 +1,40 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime, timezone
+from time import monotonic
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FutureTimeoutError
 from functools import lru_cache
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 import app.demo_mode as demo_mode
 from app.corpus import normalize_within_book
 from app.demo_mode import golden_path
+from app.auth_context import actor_from_request, authorize_series, request_id as request_id_for
 from app.evaluation import EndToEndReport, evaluate_series
 from app.cohorts import COHORTS, divergence_by_episode, structural_reaction
 from app.discovery import EvidenceRepository, discover
 from app.features import FeatureExtractor
 from app.foreshadowing import ForeshadowingEngine, ForeshadowingProposal
+from app.health import check_liveness, check_readiness
 from app.heuristic_extractor import HeuristicExtractor
-from app.ingestion import IngestJob, IngestService, Submission
+from app.ingestion import IngestJob, IngestService, IngestionCoordinator, Submission
+from app.ingestion_models import IngestionJob, IngestionStatus, SubmissionInput
 from app.ledger import LedgerResolver, LedgerSummary
 from app.manifest import load_manifest
 from app.memory import MemoryQuery
 from app.narrative_models import ResolvedEntry, Series
+from app.observability import EVENT_SINK, OperationalEvent, RunContext
 from app.personas import WritersRoom
 from app.prepublish import PrePublishChecker, PrePublishRequest, PrePublishReport
 from app.predictor import FEATURE_SCHEMA_VERSION, MODEL_VERSION, ContinuationPredictor, train_predictor
 from app.rewrite import EditAttribution, RewriteReport, attribute_delta
-from app.store import SeriesStore, store_from_env
+from app.store import ApprovalAuditStore, SeriesStore, store_from_env
 from app.scrambler import Scrambler
 from app.surfaces import DebtBoardQuery, HandoffQuery, LocalizationChecker, LocalizationEpisode
 from app.training_corpus import generate_synthetic_corpus
@@ -170,13 +176,37 @@ def _predictor() -> ContinuationPredictor:
 def create_app() -> FastAPI:
     app = FastAPI(title="CanonPulse", version="0.2.0")
     ingest_service = IngestService()
+    ingestion_coordinator = IngestionCoordinator()
+    approval_store = ApprovalAuditStore()
 
     @app.middleware("http")
     async def add_request_id(request, call_next):
         import uuid
 
         request_id = request.headers.get("x-request-id") or str(uuid.uuid4())
+        request.state.request_id = request_id
+        started = datetime.now(timezone.utc)
+        timer = monotonic()
         response = await call_next(request)
+        EVENT_SINK.emit(
+            OperationalEvent(
+                event_name="request",
+                context=RunContext(
+                    request_id=request_id,
+                    run_id=request_id,
+                    series_id=request.headers.get("x-series-id", "unknown"),
+                    version_id=request.headers.get("x-version-id", "unknown"),
+                    source_version="unknown",
+                    model_version=MODEL_VERSION,
+                ),
+                started_at=started,
+                finished_at=datetime.now(timezone.utc),
+                latency_ms=(monotonic() - timer) * 1000,
+                status="ok" if response.status_code < 400 else "failed",
+                cost_usd=0.0,
+                metadata={"path": request.url.path, "status_code": str(response.status_code)},
+            )
+        )
         response.headers["x-request-id"] = request_id
         return response
 
@@ -195,6 +225,17 @@ def create_app() -> FastAPI:
             # to read the lakehouse while quietly serving the file.
             "source": _store().backend,
         }
+
+    @app.get("/health/live")
+    def health_live() -> dict:
+        return check_liveness().model_dump()
+
+    @app.get("/health/ready")
+    def health_ready() -> dict:
+        report = check_readiness()
+        from fastapi.responses import JSONResponse
+
+        return JSONResponse(status_code=200 if report.status == "ready" else 503, content=report.model_dump())
 
     @app.get("/api/audit", response_model=AuditResponse)
     def audit() -> AuditResponse:
@@ -247,6 +288,70 @@ def create_app() -> FastAPI:
     @app.post("/api/submissions", response_model=IngestJob, status_code=201)
     def submit_series(payload: Submission) -> IngestJob:
         return ingest_service.submit(payload)
+
+    @app.post("/api/v2/ingestions", response_model=IngestionJob, status_code=202)
+    def create_ingestion(payload: SubmissionInput) -> IngestionJob:
+        return ingestion_coordinator.submit(payload)
+
+    @app.get("/api/v2/ingestions/{job_id}", response_model=IngestionStatus)
+    def ingestion_status(job_id: str) -> IngestionStatus:
+        try:
+            return ingestion_coordinator._status(job_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.post("/api/v2/ingestions/{job_id}/cancel", response_model=IngestionStatus)
+    def cancel_ingestion(job_id: str) -> IngestionStatus:
+        try:
+            return ingestion_coordinator.cancel(job_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.post("/api/v2/ingestions/{job_id}/retry", response_model=IngestionStatus)
+    def retry_ingestion(job_id: str) -> IngestionStatus:
+        try:
+            return ingestion_coordinator.retry(job_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/api/v2/series/{series_id}/version/{version_id}")
+    def scoped_series(series_id: str, version_id: str, request: Request) -> dict:
+        try:
+            authorize_series(actor_from_request(request), series_id, version_id)
+        except PermissionError as exc:
+            raise HTTPException(status_code=403, detail={"code": "unauthorized", "message": str(exc)}) from exc
+        current = _series()
+        return {
+            "request_id": request.state.request_id,
+            "series_id": series_id,
+            "version_id": version_id,
+            "title": current.title,
+            "genre": current.genre,
+            "total_episodes": current.total_episodes,
+        }
+
+    @app.post("/api/v2/series/{series_id}/versions/{version_id}/issues/{issue_id}/approve")
+    def approve_issue(series_id: str, version_id: str, issue_id: str, request: Request) -> dict:
+        try:
+            actor = actor_from_request(request)
+            authorize_series(actor, series_id, version_id)
+        except PermissionError as exc:
+            raise HTTPException(status_code=403, detail={"code": "unauthorized", "message": str(exc)}) from exc
+        event = approval_store.approve(series_id, version_id, issue_id, actor.actor_id, request.state.request_id)
+        return {"request_id": request.state.request_id, "series_id": series_id, "version_id": version_id, "event": event.model_dump(mode="json")}
+
+    @app.get("/api/v2/series/{series_id}/versions/{version_id}/audit")
+    def approval_audit(series_id: str, version_id: str, request: Request) -> dict:
+        try:
+            authorize_series(actor_from_request(request), series_id, version_id)
+        except PermissionError as exc:
+            raise HTTPException(status_code=403, detail={"code": "unauthorized", "message": str(exc)}) from exc
+        return {
+            "request_id": request.state.request_id,
+            "series_id": series_id,
+            "version_id": version_id,
+            "events": [event.model_dump(mode="json") for event in approval_store.events(series_id, version_id)],
+        }
 
     @app.get("/api/submissions/{job_id}", response_model=IngestJob)
     def submission_status(job_id: str) -> IngestJob:

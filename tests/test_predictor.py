@@ -3,7 +3,8 @@ from __future__ import annotations
 import pytest
 
 from app.features import FeatureExtractor
-from app.predictor import ContinuationPredictor, FEATURE_ORDER, train_predictor
+from app.feature_schema import FEATURE_ORDER, FEATURE_SCHEMA_VERSION, FeatureVector
+from app.predictor import ContinuationPredictor, ModelBundle, FEATURE_ORDER as PREDICTOR_FEATURE_ORDER, train_predictor
 from tests.test_ledger import build_series
 
 
@@ -37,6 +38,16 @@ def test_feature_order_matches_the_model_contract():
     """Column order is the training contract; a mismatch silently scrambles inputs."""
     vector = FeatureExtractor().extract(build_series(), episode=5).to_vector()
     assert list(vector.keys()) == list(FEATURE_ORDER)
+    assert PREDICTOR_FEATURE_ORDER == FEATURE_ORDER
+
+
+def test_model_rejects_legacy_feature_schema():
+    bundle = ModelBundle(model=object(), schema_version=FEATURE_SCHEMA_VERSION)
+    legacy = FeatureVector(
+        values=(0.0,) * len(FEATURE_ORDER), platform="arxiv", schema_version="structural-v1"
+    )
+    with pytest.raises(ValueError, match="schema_version"):
+        bundle.predict(legacy)
 
 
 def test_training_reports_held_out_error():

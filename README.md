@@ -1,5 +1,15 @@
 # CanonPulse
 
+Implementation scope is tracked in [`canonpulse-16h-plan.md`](canonpulse-16h-plan.md); the eight execution plans are under [`docs/superpowers/plans/`](docs/superpowers/plans/).
+
+Validate locally with:
+
+```bash
+uv run --group dev pytest
+```
+
+The demo series, cohort reactions, and continuation predictions are synthetic and are not observed reader behavior.
+
 > Every clue, vow, wound, threat, and romance arc is a promise made to a reader. CanonPulse tells a writer which of those promises are broken, which are intentional twists still waiting on their payoff, and which are overdue — with the exact episodes to prove it.
 
 CanonPulse is a standalone, platform-independent review system for serialized fiction. A writer submits a full series (up to roughly 300 episodes) and gets back:

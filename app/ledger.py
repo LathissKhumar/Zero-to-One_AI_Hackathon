@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from app.extraction import ExtractionResult
 from app.narrative_models import (
     Excerpt,
     LedgerEntry,
@@ -36,6 +37,30 @@ GRACE_BY_URGENCY: dict[int, int] = {5: 10, 4: 20, 3: 40, 2: 80, 1: 150}
 MIN_PAYOFF_GAP = 1
 
 Verifier = Callable[[PayoffLink, LedgerEntry], bool]
+
+
+class Ledger:
+    """Mutable graph sink that accepts only citation-backed extraction rows."""
+
+    def __init__(self) -> None:
+        self.nodes = []
+        self.entries = []
+        self.payoffs = []
+        self.excerpts = []
+
+    def add_extraction(self, result: ExtractionResult) -> None:
+        if result.metadata is None:
+            raise ValueError("extraction metadata is required")
+        cited_episodes = {citation.episode_number for citation in result.citations}
+        item_episodes = {node.episode for node in result.nodes}
+        item_episodes.update(episode for entry in result.entries for episode in entry.episodes)
+        item_episodes.update(payoff.episode for payoff in result.payoffs)
+        if not item_episodes.issubset(cited_episodes):
+            raise ValueError("every graph item requires a matching source citation")
+        self.nodes.extend(result.nodes)
+        self.entries.extend(result.entries)
+        self.payoffs.extend(result.payoffs)
+        self.excerpts.extend(result.excerpts)
 
 
 class LedgerResolver:

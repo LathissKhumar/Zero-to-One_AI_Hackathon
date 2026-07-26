@@ -65,6 +65,21 @@
     <p class="caption disclosure" id="prediction-disclosure"></p>
   </section>
 
+  <section class="panel workflow" id="health-panel">
+    <h2>Series health</h2>
+    <p id="health-status" class="caption">loading health checks…</p>
+  </section>
+
+  <section class="panel workflow" id="heatmap-panel">
+    <h2>Obligation heatmap</h2>
+    <div id="obligation-heatmap" aria-live="polite">loading obligation boundaries…</div>
+  </section>
+
+  <section class="panel workflow" id="comparison-panel">
+    <h2>Baseline comparison</h2>
+    <p id="comparison-status" class="caption">loading baseline and CanonPulse comparison…</p>
+  </section>
+
   <section class="findings-heading">
     <h2>Every finding, with its evidence</h2>
     <p>Click a card to see the citations behind the verdict. Real holes offer a
@@ -86,15 +101,16 @@
       <article><h3>Writer Handoff Sheet</h3><p id="handoff-surface">Loading inherited obligations…</p></article>
       <article><h3>Showrunner Debt Board</h3><p id="debt-surface">Loading portfolio risk…</p></article>
       <article><h3>Localization Continuity</h3><p id="localization-surface">Compare a translated episode against source facts.</p></article>
-      <article><h3>Audience simulation</h3><p id="cohort-surface">Loading five structural cohorts…</p></article>
-      <article><h3>Discovery / Explain Why</h3><p id="discovery-surface">Loading obligation-shape discovery…</p></article>
+      <article id="cohort-panel"><h3>Audience simulation</h3><p id="cohort-surface">Loading five structural cohorts…</p></article>
+      <article id="discovery-panel"><h3>Discovery / Explain Why</h3><p id="discovery-surface">Loading obligation-shape discovery…</p></article>
     </div>
   </section>
 
-  <aside id="evidence" hidden>
+  <aside id="evidence-drawer" hidden>
     <button id="evidence-close" aria-label="Close evidence">×</button>
     <div id="evidence-body"></div>
     <div id="rewrite-body"></div>
+    <button id="approve-issue" type="button">Approve issue</button>
   </aside>
 
   <footer>

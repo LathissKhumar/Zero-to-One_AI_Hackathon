@@ -15,6 +15,14 @@ from typing import Literal
 from pydantic import BaseModel, Field, model_validator
 
 from app.heuristic_extractor import HeuristicExtractor
+from app.ingestion_models import (
+    EpisodeInput,
+    IngestionJob,
+    IngestionStatus,
+    SubmissionInput,
+    submission_source_hash,
+)
+from app.ingestion_repository import InMemorySubmissionRepository, SubmissionRepository
 from app.narrative_models import Series
 
 
@@ -157,3 +165,100 @@ class SynopsisExtractor:
             entry.confidence = 0.4
         result.backend = self.backend
         return result
+
+
+class IngestionCoordinator:
+    """Resumable fast/deep lifecycle over a repository-backed submission."""
+
+    def __init__(self, repository: SubmissionRepository | None = None, extractor=None) -> None:
+        self.repository = repository or InMemorySubmissionRepository()
+        self.extractor = extractor or _DefaultIngestionExtractor()
+        self._submissions: dict[str, SubmissionInput] = {}
+
+    def submit(self, submission: SubmissionInput) -> IngestionJob:
+        source_hash = submission_source_hash(submission)
+        job = self.repository.create_submission(submission, source_hash)
+        self._submissions[job.job_id] = submission
+        return job
+
+    def run_fast(self, job_id: str) -> IngestionStatus:
+        job = self.repository.jobs[job_id] if isinstance(self.repository, InMemorySubmissionRepository) else None
+        if job and job.status == "cancelled":
+            return self._status(job_id)
+        for item in self.repository.list_work_items(job_id, "fast"):
+            if item.status == "complete":
+                continue
+            episode = self._episode(job_id, item.episode_number)
+            self.repository.update_work_item(job_id, item.episode_number, "fast", "running")
+            try:
+                self.extractor.extract_fast(episode)
+            except Exception as exc:  # noqa: BLE001 - persisted as row-level failure
+                self.repository.update_work_item(job_id, item.episode_number, "fast", "failed", str(exc))
+            else:
+                self.repository.update_work_item(job_id, item.episode_number, "fast", "complete")
+        self.repository.promote_fast_ledger(job_id)
+        return self._status(job_id)
+
+    def run_deep(self, job_id: str, episode_numbers: list[int] | None = None) -> IngestionStatus:
+        job = self.repository.jobs[job_id] if isinstance(self.repository, InMemorySubmissionRepository) else None
+        if job and job.status == "cancelled":
+            return self._status(job_id)
+        if job:
+            job.status = "deep_running"
+        for item in self.repository.list_work_items(job_id, "deep"):
+            if item.status == "complete" or (episode_numbers is not None and item.episode_number not in episode_numbers):
+                continue
+            episode = self._episode(job_id, item.episode_number)
+            self.repository.update_work_item(job_id, item.episode_number, "deep", "running")
+            try:
+                self.extractor.extract_deep(episode)
+            except Exception as exc:  # noqa: BLE001 - persisted as row-level failure
+                self.repository.update_work_item(job_id, item.episode_number, "deep", "failed", str(exc))
+            else:
+                self.repository.update_work_item(job_id, item.episode_number, "deep", "complete")
+        if job:
+            failed = [item.episode_number for item in self.repository.list_work_items(job_id, "deep") if item.status == "failed"]
+            job.failed_episodes = failed
+            job.completed_episodes = sum(item.status == "complete" for item in self.repository.list_work_items(job_id, "deep"))
+            job.status = "partial" if failed else "complete"
+        return self._status(job_id)
+
+    def retry(self, job_id: str) -> IngestionStatus:
+        failed = [item.episode_number for item in self.repository.list_work_items(job_id, "deep") if item.status in {"failed", "stale"}]
+        status = self.run_deep(job_id, failed)
+        if isinstance(self.repository, InMemorySubmissionRepository):
+            self.repository.jobs[job_id].reprocessed_episodes = failed
+            status.reprocessed_episodes = failed
+        return status
+
+    def cancel(self, job_id: str) -> IngestionStatus:
+        if isinstance(self.repository, InMemorySubmissionRepository):
+            self.repository.jobs[job_id].status = "cancelled"
+            for stage in ("fast", "deep"):
+                for item in self.repository.list_work_items(job_id, stage):
+                    if item.status in {"queued", "stale"}:
+                        self.repository.update_work_item(job_id, item.episode_number, stage, "cancelled")
+        return self._status(job_id)
+
+    def _episode(self, job_id: str, episode_number: int) -> EpisodeInput:
+        return next(item for item in self._submissions[job_id].episodes if item.episode_number == episode_number)
+
+    def _status(self, job_id: str) -> IngestionStatus:
+        if isinstance(self.repository, InMemorySubmissionRepository):
+            job = self.repository.jobs[job_id]
+            return IngestionStatus(
+                job_id=job.job_id,
+                status=job.status,
+                completed_episodes=job.completed_episodes,
+                failed_episodes=job.failed_episodes,
+                reprocessed_episodes=job.reprocessed_episodes,
+            )
+        raise RuntimeError("status adapter is not configured")
+
+
+class _DefaultIngestionExtractor:
+    def extract_fast(self, episode: EpisodeInput) -> None:
+        return None
+
+    def extract_deep(self, episode: EpisodeInput) -> None:
+        return None

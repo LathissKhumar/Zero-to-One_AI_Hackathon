@@ -9,8 +9,12 @@ const STATE_LABEL = {
 const STATE_ORDER = { broken: 0, suspended: 1, outstanding: 2 };
 
 let currentSeries = null;
+const uiState = { loading: false, error: null };
 
 async function load() {
+  uiState.loading = true;
+  uiState.error = null;
+  try {
   const [series, audit, discrimination] = await Promise.all([
     fetch("/api/series").then((response) => response.json()),
     fetch("/api/audit").then((response) => response.json()),
@@ -29,6 +33,20 @@ async function load() {
   renderDiscrimination(discrimination);
   loadPrediction(series.total_episodes - 1);
   loadSurfaceSummaries(series.total_episodes);
+  document.getElementById("health-status").textContent = "ready · cited ledger and model surfaces loaded";
+  document.getElementById("comparison-status").textContent = `${audit.headline.baseline_flags} baseline flags compared with ${audit.headline.real_holes} real holes`;
+  document.getElementById("obligation-heatmap").textContent = `${audit.findings.length} cited obligations available across the series`;
+  } catch (error) {
+    uiState.error = error;
+    const status = document.getElementById("health-status");
+    status.textContent = "error loading series";
+    const retry = document.createElement("button");
+    retry.textContent = "Retry";
+    retry.addEventListener("click", load);
+    status.appendChild(retry);
+  } finally {
+    uiState.loading = false;
+  }
 }
 
 async function loadSurfaceSummaries(totalEpisodes) {
@@ -152,7 +170,7 @@ function payoffSpan(finding) {
 }
 
 function showEvidence(finding) {
-  const drawer = document.getElementById("evidence");
+  const drawer = document.getElementById("evidence-drawer");
   const body = document.getElementById("evidence-body");
   const rewriteBody = document.getElementById("rewrite-body");
   drawer.hidden = false;
@@ -291,7 +309,7 @@ function renderRewriteReport(report) {
 }
 
 function closeEvidence() {
-  document.getElementById("evidence").hidden = true;
+  document.getElementById("evidence-drawer").hidden = true;
 }
 
 document.getElementById("evidence-close").addEventListener("click", closeEvidence);

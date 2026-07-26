@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from app.features import FeatureExtractor
+from app.feature_schema import FEATURE_ORDER
 from app.narrative_models import LedgerEntry, NarrativeNode, PayoffLink
 from tests.test_ledger import build_series
 
@@ -78,3 +79,11 @@ def test_feature_vector_excludes_the_episode_index():
     vector = FeatureExtractor().extract(build_series(), episode=10).to_vector()
     assert "episode" not in vector
     assert all(isinstance(value, float) for value in vector.values())
+
+
+def test_feature_vector_uses_canonical_payoff_and_clue_names():
+    vector = FeatureExtractor().extract(build_series(), episode=10).to_vector()
+    assert tuple(vector) == FEATURE_ORDER
+    assert "min_payoff_distance" in vector
+    assert "mean_payoff_distance" in vector
+    assert "fair_clue_density" in vector

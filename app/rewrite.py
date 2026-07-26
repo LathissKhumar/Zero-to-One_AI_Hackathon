@@ -22,8 +22,19 @@ from app.predictor import FEATURE_ORDER
 # are deliberately excluded: the trained model treats "something is still owed"
 # as a live-interest signal, not a defect, so its direction is not asserted here.
 _WORSENS_IF_INCREASED: frozenset[str] = frozenset(
-    {"broken_count", "overdue_count", "max_obligation_age", "mean_obligation_age", "planting_recency"}
+    {
+        "broken_edge_count", "min_payoff_distance", "mean_payoff_distance",
+        "planting_recency", "fair_clue_density",
+    }
 )
+
+_FEATURE_ALIASES = {
+    "broken_count": "broken_edge_count",
+    "max_obligation_age": "min_payoff_distance",
+    "mean_obligation_age": "mean_payoff_distance",
+    "suspended_density": "suspended_edge_density",
+    "active_thread_count": "character_thread_count",
+}
 
 
 class EditAttribution(BaseModel):
@@ -42,6 +53,7 @@ class EditAttribution(BaseModel):
     @field_validator("feature_moved")
     @classmethod
     def _must_name_a_real_feature(cls, value: str) -> str:
+        value = _FEATURE_ALIASES.get(value, value)
         if value not in FEATURE_ORDER:
             raise ValueError(
                 f"'{value}' is not a recognised feature -- the model was never "

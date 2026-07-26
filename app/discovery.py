@@ -34,6 +34,7 @@ class DiscoveryMatch(BaseModel):
     dimensions: list[str]
     explanation: str
     citation_ids: list[str]
+    obligation_ids: list[str] = Field(default_factory=list)
 
 
 class DiscoveryResult(BaseModel):
@@ -111,5 +112,8 @@ def discover(series: Series, query: str) -> DiscoveryResult:
         if any(word in query.lower() for word in ("rain", "slow", "sunday")):
             dimensions.append("atmospheric_pace")
         top = hits[0]
-        match = DiscoveryMatch(series_id=series.id, title=series.title, score=top.score, dimensions=dimensions, explanation=f"Matched {', '.join(dimensions)} using Ep {top.episode} evidence.", citation_ids=[top.excerpt_id])
+        obligation_ids = [
+            entry.id for entry in series.entries if top.excerpt_id in entry.excerpt_ids
+        ]
+        match = DiscoveryMatch(series_id=series.id, title=series.title, score=top.score, dimensions=dimensions, explanation=f"Matched {', '.join(dimensions)} using Ep {top.episode} evidence.", citation_ids=[top.excerpt_id], obligation_ids=obligation_ids)
     return DiscoveryResult(query=query, matches=[match] if match else [])

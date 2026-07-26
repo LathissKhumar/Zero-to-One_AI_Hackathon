@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from app.cohorts import COHORTS, blind_variants, divergence_by_episode, structural_reaction
+from app.cohorts import COHORTS, BlindEvaluator, CohortRunner, blind_variants, divergence_by_episode, structural_reaction
+from app.retrieval_models import CohortRequest
 
 
 def test_five_cohorts_weight_different_things():
@@ -75,3 +76,13 @@ def test_structural_reactions_change_with_weighted_features_not_prose_profiles()
     assert len({round(reaction.engagement, 6) for reaction in reactions}) >= 3
     assert all(reaction.feature_rationale for reaction in reactions)
     assert all(reaction.backend == "local-structural" for reaction in reactions)
+
+
+def test_blind_evaluator_is_reproducible_and_strips_variant_labels():
+    request = CohortRequest(series_id="s", version_id="v1", boundaries=(1, 2), personas=("p1",), seed=11)
+    rows = CohortRunner(lambda boundary, persona_id, variant_id: 0.4).generate(request)
+    first = BlindEvaluator(seed=11).evaluate(rows)
+    second = BlindEvaluator(seed=11).evaluate(rows)
+    assert first == second
+    assert first.presented_variant_ids != first.original_variant_ids
+    assert first.synthetic is True

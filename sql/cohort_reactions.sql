@@ -16,8 +16,9 @@ SELECT
       'Do not infer a real audience or use prose style. Cohort weights: ', to_json(c.weights),
       '. Features: open_obligation_count=', CAST(b.open_obligation_count AS STRING),
       ', mean_urgency=', CAST(b.mean_urgency AS STRING),
-      ', overdue_count=', CAST(b.overdue_count AS STRING),
-      ', broken_count=', CAST(b.broken_count AS STRING),
+      ', min_payoff_distance=', CAST(b.min_payoff_distance AS STRING),
+      ', fair_clue_density=', CAST(b.fair_clue_density AS STRING),
+      ', broken_edge_count=', CAST(b.broken_edge_count AS STRING),
       ', sentiment_velocity=', CAST(b.sentiment_velocity AS STRING),
       ', perceived_time_jump=', CAST(b.perceived_time_jump AS STRING),
       '. Return engagement 0-1, vote continue/hesitate/stop, a concise structural reaction, and citation ids from episode ', CAST(b.episode AS STRING), '.'

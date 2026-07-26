@@ -112,6 +112,9 @@ def generate_synthetic_corpus(
             sentiment_velocity = round(rng.uniform(-1.2, 1.2), 3)
             perceived_time_jump = round(rng.uniform(0, 0.4), 3)
             active_thread_count = min(open_obligation_count, rng.randint(0, 5))
+            min_payoff_distance = 0 if chapter == 1 else chapter + 1
+            mean_payoff_distance = chapter + 1
+            fair_clue_density = round(rng.uniform(0.0, 1.0), 3)
 
             noise = rng.uniform(-NOISE_SPREAD, NOISE_SPREAD)
             raw_rate = (
@@ -142,6 +145,12 @@ def generate_synthetic_corpus(
                     "sentiment_velocity": sentiment_velocity,
                     "perceived_time_jump": perceived_time_jump,
                     "active_thread_count": active_thread_count,
+                    "min_payoff_distance": min_payoff_distance,
+                    "mean_payoff_distance": mean_payoff_distance,
+                    "suspended_edge_density": suspended_density,
+                    "broken_edge_count": broken_count,
+                    "fair_clue_density": fair_clue_density,
+                    "character_thread_count": active_thread_count,
                 }
             )
 

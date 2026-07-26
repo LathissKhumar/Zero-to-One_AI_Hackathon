@@ -16,6 +16,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from app.feature_schema import FEATURE_ORDER
+
 EntryKind = Literal["contradiction", "promise"]
 
 # Ledger states. A contradiction resolves to suspended or broken; a promise to
@@ -49,6 +51,7 @@ class NarrativeNode(BaseModel):
     entities: list[str] = Field(default_factory=list)
     valence: float = Field(default=0.0, ge=-1.0, le=1.0)
     excerpt_id: str | None = None
+    hidden_in_perceived: bool = False
 
     @property
     def is_time_displaced(self) -> bool:
@@ -148,6 +151,14 @@ class BoundaryFeatures(BaseModel):
     episode: int
     open_obligation_count: int = 0
     mean_urgency: float = 0.0
+    min_payoff_distance: float = 0.0
+    mean_payoff_distance: float = 0.0
+    suspended_edge_density: float = 0.0
+    broken_edge_count: int = 0
+    fair_clue_density: float = 0.0
+    character_thread_count: int = 0
+    # Deprecated serialized fields remain readable for older API clients. They
+    # are intentionally excluded from the model vector below.
     max_obligation_age: int = 0
     mean_obligation_age: float = 0.0
     overdue_count: int = 0
@@ -160,8 +171,17 @@ class BoundaryFeatures(BaseModel):
 
     def to_vector(self) -> dict[str, float]:
         """Ordered mapping for the model. Key order is the training contract."""
-        return {
-            name: float(getattr(self, name))
-            for name in type(self).model_fields
-            if name != "episode"
+        values = {
+            "open_obligation_count": self.open_obligation_count,
+            "mean_urgency": self.mean_urgency,
+            "min_payoff_distance": self.min_payoff_distance or float(self.max_obligation_age),
+            "mean_payoff_distance": self.mean_payoff_distance or self.mean_obligation_age,
+            "planting_recency": self.planting_recency,
+            "suspended_edge_density": self.suspended_edge_density or self.suspended_density,
+            "broken_edge_count": self.broken_edge_count or self.broken_count,
+            "fair_clue_density": self.fair_clue_density,
+            "sentiment_velocity": self.sentiment_velocity,
+            "perceived_time_jump": self.perceived_time_jump,
+            "character_thread_count": self.character_thread_count or self.active_thread_count,
         }
+        return {name: float(values[name]) for name in FEATURE_ORDER}

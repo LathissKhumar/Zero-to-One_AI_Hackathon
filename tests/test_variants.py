@@ -7,6 +7,7 @@ from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, Series
 from app.personas import PERSONAS, WritersRoom
 from app.scrambler import Scrambler
 from app.variants import RepairEngine
+from app.variant_models import VariantOperation
 from app.corpus import normalize_within_book
 from app.predictor import ContinuationPredictor
 from app.training_corpus import generate_synthetic_corpus
@@ -54,6 +55,15 @@ def test_scrambler_preserves_true_graph_and_rejects_invalid_order():
     assert [node.perceived_index for node in variant.series.nodes] == [2, 1]
     with pytest.raises(ValueError, match="permutation"):
         Scrambler().scramble(source, [1, 1])
+
+
+@pytest.mark.parametrize("kind", ["swap_order", "hide_clue", "reveal_clue"])
+def test_scramble_preserves_true_graph_for_each_typed_operation(kind):
+    source = _series()
+    operation = VariantOperation(kind=kind, node_ids=("n1", "n2"), seed=3)
+    variant = Scrambler().scramble_perceived(source, operation)
+    assert variant.true_graph_hash == Scrambler.graph_hash(source)
+    assert variant.operation.kind == kind
 
 
 def test_foreshadowing_is_reversible_and_targets_an_open_obligation():

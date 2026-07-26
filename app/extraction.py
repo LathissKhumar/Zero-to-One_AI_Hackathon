@@ -10,12 +10,15 @@ at 300 episodes that difference is what makes series-scale analysis tractable.
 from __future__ import annotations
 
 import json
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Protocol
 
 from pydantic import BaseModel, Field, ValidationError
 
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink
+from app.extraction_models import ExtractionContext, ExtractionFailure, ExtractionRunMetadata, SourceCitation
 
 
 class ExtractionResult(BaseModel):
@@ -29,6 +32,53 @@ class ExtractionResult(BaseModel):
     # sets this to "databricks" or "openai" so a number produced off-platform
     # can never be silently presented as the governed on-platform result.
     backend: str | None = None
+    citations: list[SourceCitation] = Field(default_factory=list)
+    metadata: ExtractionRunMetadata | None = None
+    failures: list[ExtractionFailure] = Field(default_factory=list)
+
+    def retryable_failures(self) -> list[ExtractionFailure]:
+        return [failure for failure in self.failures if failure.retryable]
+
+
+def attach_provenance(
+    result: ExtractionResult,
+    episodes: list[dict],
+    context: ExtractionContext,
+    *,
+    run_id: str | None = None,
+    started_at: datetime | None = None,
+    latency_ms: float | None = None,
+    attempt: int = 1,
+) -> ExtractionResult:
+    """Bind every extracted excerpt to an immutable source version."""
+    source_text = {
+        int(row["episode"]): str(row.get("synopsis") or row.get("body") or "")
+        for row in episodes
+        if isinstance(row, dict) and row.get("episode") is not None
+    }
+    result.citations = [
+        SourceCitation.from_text(
+            series_id=context.series_id,
+            version_id=context.version_id,
+            episode_number=excerpt.episode,
+            text=source_text.get(excerpt.episode, excerpt.text),
+        )
+        for excerpt in result.excerpts
+    ]
+    started = started_at or datetime.now(timezone.utc)
+    elapsed = latency_ms if latency_ms is not None else 0.0
+    result.metadata = ExtractionRunMetadata(
+        run_id=run_id or f"extract-{context.version_id}-{context.source_hash[:8]}",
+        source_hash=context.source_hash,
+        version_id=context.version_id,
+        model_name=context.model_name,
+        prompt_version=context.prompt_version,
+        started_at=started,
+        finished_at=started,
+        latency_ms=elapsed,
+        attempt=attempt,
+    )
+    return result
 
 
 class Extractor(Protocol):

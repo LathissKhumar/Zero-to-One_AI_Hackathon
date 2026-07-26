@@ -186,15 +186,15 @@ def load(warehouse: Warehouse, catalog: str, schema: str) -> dict[str, int]:
     counts["boundary_features"] = warehouse.insert_batched(
         f"{fq}.boundary_features",
         ["series_id", "episode", "open_obligation_count", "mean_urgency",
-         "max_obligation_age", "mean_obligation_age", "overdue_count",
-         "planting_recency", "suspended_density", "broken_count",
-         "sentiment_velocity", "perceived_time_jump", "active_thread_count"],
+         "min_payoff_distance", "mean_payoff_distance", "planting_recency",
+         "suspended_edge_density", "broken_edge_count", "fair_clue_density",
+         "sentiment_velocity", "perceived_time_jump", "character_thread_count"],
         [
             [sql_str(sid), str(f.episode), str(f.open_obligation_count),
-             str(f.mean_urgency), str(f.max_obligation_age), str(f.mean_obligation_age),
-             str(f.overdue_count), str(f.planting_recency), str(f.suspended_density),
-             str(f.broken_count), str(f.sentiment_velocity), str(f.perceived_time_jump),
-             str(f.active_thread_count)]
+             str(f.mean_urgency), str(f.min_payoff_distance), str(f.mean_payoff_distance),
+             str(f.planting_recency), str(f.suspended_edge_density), str(f.broken_edge_count),
+             str(f.fair_clue_density), str(f.sentiment_velocity), str(f.perceived_time_jump),
+             str(f.character_thread_count)]
             for f in feature_rows
         ],
     )

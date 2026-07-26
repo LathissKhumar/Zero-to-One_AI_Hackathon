@@ -31,11 +31,50 @@ import urllib.request
 from pathlib import Path
 from typing import Protocol
 
+from datetime import datetime, timezone
+
+from pydantic import BaseModel
+
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink, Series
 from app.series_loader import load_series
 
 DEFAULT_CATALOG = "writers_room"
 DEFAULT_SCHEMA = "canonpulse"
+
+
+class ApprovalEvent(BaseModel):
+    series_id: str
+    version_id: str
+    issue_id: str
+    actor_id: str
+    action: str = "approve"
+    request_id: str
+    created_at: datetime
+
+
+class ApprovalAuditStore:
+    """Version-scoped, idempotent approval event store for API workflows."""
+
+    def __init__(self) -> None:
+        self._events: dict[tuple[str, str, str, str], ApprovalEvent] = {}
+
+    def approve(self, series_id: str, version_id: str, issue_id: str, actor_id: str, request_id: str) -> ApprovalEvent:
+        key = (series_id, version_id, issue_id, actor_id)
+        self._events.setdefault(
+            key,
+            ApprovalEvent(
+                series_id=series_id,
+                version_id=version_id,
+                issue_id=issue_id,
+                actor_id=actor_id,
+                request_id=request_id,
+                created_at=datetime.now(timezone.utc),
+            ),
+        )
+        return self._events[key].model_copy(deep=True)
+
+    def events(self, series_id: str, version_id: str) -> list[ApprovalEvent]:
+        return [event.model_copy(deep=True) for event in self._events.values() if event.series_id == series_id and event.version_id == version_id]
 
 
 class SeriesStore(Protocol):

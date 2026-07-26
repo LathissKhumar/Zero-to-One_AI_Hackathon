@@ -101,7 +101,8 @@ from __future__ import annotations
 
 import re
 
-from app.extraction import ExtractionResult
+from app.extraction import ExtractionResult, attach_provenance
+from app.extraction_models import ExtractionContext
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink
 
 _STOPWORDS = frozenset(
@@ -238,7 +239,7 @@ class _PendingNegation:
 class HeuristicExtractor:
     """See module docstring for the complete, exhaustive rule list."""
 
-    def extract(self, episodes: list[dict]) -> ExtractionResult:
+    def extract(self, episodes: list[dict], context: ExtractionContext | None = None) -> ExtractionResult:
         result = ExtractionResult()
         rows: list[tuple[int, str, dict]] = []
 
@@ -367,6 +368,8 @@ class HeuristicExtractor:
                     resolved_target_ids.add(entry.id)
                     break
 
+        if context is not None:
+            attach_provenance(result, episodes, context)
         return result
 
     @staticmethod
