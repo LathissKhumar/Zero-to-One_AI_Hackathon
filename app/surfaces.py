@@ -71,8 +71,13 @@ class DebtBoardItem(BaseModel):
 
 
 class DebtBoard(BaseModel):
+    """`narrative_debt_index` is the mean per-item `risk` across all open
+    entries on the board (0.0 when empty) -- the spec names this NDI without
+    defining a formula; this is the explicit, stated one."""
+
     items: list[DebtBoardItem] = Field(default_factory=list)
     total_open: int
+    narrative_debt_index: float = 0.0
     filters: dict[str, str | int | None] = Field(default_factory=dict)
 
 
@@ -110,7 +115,13 @@ class DebtBoardQuery:
                 risk = float(entry.entry.urgency * (1 + age / 10) + (10 if entry.overdue else 0))
                 items.append(DebtBoardItem(series_id=series.id, title=series.title, genre=series.genre, writer_id=owner, entry=entry, risk=risk, source_version=series.source_version))
         items.sort(key=lambda item: (-item.risk, item.series_id, item.entry.entry.id))
-        return DebtBoard(items=items, total_open=len(items), filters={"writer_id": writer_id, "state": state, "genre": genre, "urgency": urgency})
+        ndi = sum(item.risk for item in items) / len(items) if items else 0.0
+        return DebtBoard(
+            items=items,
+            total_open=len(items),
+            narrative_debt_index=ndi,
+            filters={"writer_id": writer_id, "state": state, "genre": genre, "urgency": urgency},
+        )
 
 
 class LocalizationEpisode(BaseModel):

@@ -37,6 +37,20 @@ def test_debt_board_does_not_merge_series_ids():
     assert board.total_open == 2
 
 
+def test_debt_board_reports_a_named_narrative_debt_index():
+    board = DebtBoardQuery().aggregate([(_series("one"), {})])
+    if board.items:
+        expected = sum(item.risk for item in board.items) / len(board.items)
+        assert board.narrative_debt_index == expected
+    else:
+        assert board.narrative_debt_index == 0.0
+
+
+def test_debt_board_index_is_zero_for_an_empty_board():
+    board = DebtBoardQuery().aggregate([], series_ids=set())
+    assert board.narrative_debt_index == 0.0
+
+
 def test_localization_reports_translation_drift_without_mutating_source():
     source = _series("one").excerpts[0]
     translated = LocalizationEpisode(episode=1, language="hi", text="The blue locket is found.")
