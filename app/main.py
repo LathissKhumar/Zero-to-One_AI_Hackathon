@@ -27,8 +27,10 @@ from app.features import FeatureExtractor
 from app.foreshadowing import ForeshadowingEngine, ForeshadowingProposal
 from app.health import check_liveness, check_readiness
 from app.heuristic_extractor import HeuristicExtractor
-from app.ingestion import IngestJob, IngestService, IngestionCoordinator, Submission
+from app.document_ingestion import normalize_parsed_document
+from app.ingestion import IngestJob, IngestService, IngestionCoordinator, RealIngestionExtractor, Submission
 from app.ingestion_models import IngestionJob, IngestionStatus, SubmissionInput
+from app.ingestion_repository import InMemorySubmissionRepository
 from app.ledger import LedgerResolver, LedgerSummary
 from app.manifest import load_manifest
 from app.memory import MemoryQuery
@@ -96,6 +98,16 @@ class LocalizationRequest(BaseModel):
     episode: int
     language: str
     text: str
+
+
+class DocumentIngestRequest(BaseModel):
+    parsed: dict
+    source_path: str
+    series_id: str
+    title: str
+    genre: str
+    language: str = "en"
+    ongoing: bool = True
 
 
 @lru_cache(maxsize=1)
@@ -180,7 +192,11 @@ def _predictor() -> ContinuationPredictor:
 def create_app() -> FastAPI:
     app = FastAPI(title="CanonPulse", version="0.2.0")
     ingest_service = IngestService()
-    ingestion_coordinator = IngestionCoordinator()
+    _ingestion_repository = InMemorySubmissionRepository()
+    ingestion_coordinator = IngestionCoordinator(
+        repository=_ingestion_repository,
+        extractor=RealIngestionExtractor(_ingestion_repository),
+    )
     approval_store = ApprovalAuditStore()
 
     @app.middleware("http")
@@ -317,6 +333,34 @@ def create_app() -> FastAPI:
             return ingestion_coordinator.retry(job_id)
         except KeyError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/api/v2/ingestions/{job_id}/series")
+    def ingestion_series(job_id: str) -> dict:
+        try:
+            return ingestion_coordinator.series(job_id).model_dump()
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.post("/api/ingest/document", status_code=202)
+    def ingest_document(payload: DocumentIngestRequest) -> dict:
+        try:
+            normalized = normalize_parsed_document(
+                payload.parsed,
+                source_path=payload.source_path,
+                series_id=payload.series_id,
+                title=payload.title,
+                genre=payload.genre,
+                ongoing=payload.ongoing,
+                language=payload.language,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        job = ingestion_coordinator.submit(normalized.submission)
+        return {
+            "job": job.model_dump(mode="json"),
+            "review_required": normalized.review_required,
+            "warnings": normalized.warnings,
+        }
 
     @app.get("/api/v2/series/{series_id}/version/{version_id}")
     def scoped_series(series_id: str, version_id: str, request: Request) -> dict:
