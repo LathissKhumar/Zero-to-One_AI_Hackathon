@@ -36,7 +36,9 @@ from app.manifest import load_manifest
 from app.memory import MemoryQuery
 from app.narrative_models import ResolvedEntry, Series
 from app.observability import EVENT_SINK, OperationalEvent, RunContext
-from app.personas import WritersRoom
+from app.llm_agents import LLMPersonaHandler
+from app.llm_config import openai_config
+from app.personas import AgentRunner, PERSONAS, WritersRoom, run_writers_room
 from app.prepublish import PrePublishChecker, PrePublishRequest, PrePublishReport
 from app.predictor import FEATURE_SCHEMA_VERSION, MODEL_VERSION, ContinuationPredictor, train_predictor
 from app.rewrite import EditAttribution, RewriteReport, attribute_delta
@@ -499,9 +501,26 @@ def create_app() -> FastAPI:
         return proposal.model_dump()
 
     @app.get("/api/writers-room")
-    def writers_room(episode: int | None = Query(default=None, ge=1)) -> dict:
+    def writers_room(episode: int | None = Query(default=None, ge=1), use_llm: bool = Query(default=False)) -> dict:
         current = _series()
-        return {"series_id": current.id, "annotations": [item.model_dump() for item in WritersRoom().review(current, episode)]}
+        if not use_llm:
+            return {"series_id": current.id, "backend": "deterministic-structured", "annotations": [item.model_dump() for item in WritersRoom().review(current, episode)]}
+
+        config = openai_config()
+        if config is None:
+            raise HTTPException(status_code=422, detail="use_llm=true requires OPENAI_API_KEY to be configured")
+        handler = LLMPersonaHandler(
+            endpoint=config.endpoint, token=config.token, model=config.model,
+            cache_path="data/extraction_cache/writers_room_openai.json",
+        )
+        result = run_writers_room(current, PERSONAS, runner=AgentRunner(handler))
+        return {
+            "series_id": current.id,
+            "backend": handler.backend,
+            "annotations": [annotation.model_dump() for annotation in result.annotations],
+            "timeouts": result.timeouts,
+            "disagreements": [item.model_dump() for item in result.disagreements],
+        }
 
     @app.get("/api/discrimination", response_model=EndToEndReport)
     def discrimination() -> EndToEndReport:

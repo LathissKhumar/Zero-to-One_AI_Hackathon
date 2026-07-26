@@ -20,11 +20,11 @@ class Persona(BaseModel):
 
 
 PERSONAS: tuple[Persona, ...] = (
-    Persona(id="continuity", name="Continuity Editor", focus="contradiction and chronology risk"),
-    Persona(id="mystery", name="Mystery Architect", focus="clue fairness and reveal timing"),
-    Persona(id="emotion", name="Emotional Arc Editor", focus="relationship and emotional obligations"),
-    Persona(id="showrunner", name="Serial Showrunner", focus="urgency, momentum, and debt portfolio"),
-    Persona(id="localization", name="Localization Editor", focus="culture, language, and translation risk"),
+    Persona(id="director", name="Director", focus="macro narrative pacing and structural vision"),
+    Persona(id="editor", name="Editor", focus="prose tightness, dialogue flow, and scene transitions"),
+    Persona(id="critic", name="Critic", focus="cliches, tropes, and narrative logic gaps"),
+    Persona(id="psychologist", name="Psychologist", focus="character motivation and emotional logic"),
+    Persona(id="historian", name="Historian", focus="lore consistency, world-building rules, and continuity across languages"),
 )
 
 

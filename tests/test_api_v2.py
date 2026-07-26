@@ -261,6 +261,12 @@ def test_cohorts_and_writers_room_are_structured_and_disclosed(client):
     assert len(room.json()["annotations"]) == 5
 
 
+def test_writers_room_llm_path_requires_openai_key(client, monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    response = client.get("/api/writers-room", params={"use_llm": True})
+    assert response.status_code == 422
+
+
 def test_diagnostics_reports_model_and_source_provenance(client):
     payload = client.get("/api/diagnostics").json()
     assert payload["series_source"] == "file"
