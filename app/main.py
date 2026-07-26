@@ -304,7 +304,12 @@ def create_app() -> FastAPI:
                     f"received {payload.episode} after {current.total_episodes}"
                 ),
             )
-        report = PrePublishChecker().check(current, payload)
+        report, candidate_series = PrePublishChecker().check(current, payload)
+        if report.complete:
+            predictor = _predictor()
+            before = predictor.predict(FeatureExtractor().extract(current, current.total_episodes))
+            after = predictor.predict(FeatureExtractor().extract(candidate_series, payload.episode))
+            report = report.model_copy(update={"retention_delta": after.value - before.value, "prediction": after})
         return report.model_copy(update={"source": _store().backend})
 
     @app.post("/api/submissions", response_model=IngestJob, status_code=201)

@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from app.heuristic_extractor import HeuristicExtractor
 from app.ledger import LedgerResolver
 from app.narrative_models import ResolvedEntry, Series
+from app.predictor import Prediction
 
 
 class PrePublishRequest(BaseModel):
@@ -21,6 +22,8 @@ class PrePublishReport(BaseModel):
     complete: bool
     extraction_rejected: int
     findings: list[ResolvedEntry]
+    retention_delta: float | None = None
+    prediction: Prediction | None = None
 
 
 class PrePublishChecker:
@@ -29,7 +32,7 @@ class PrePublishChecker:
     def __init__(self, extractor: HeuristicExtractor | None = None) -> None:
         self._extractor = extractor or HeuristicExtractor()
 
-    def check(self, series: Series, request: PrePublishRequest) -> PrePublishReport:
+    def check(self, series: Series, request: PrePublishRequest) -> tuple[PrePublishReport, Series]:
         rows = [
             {"episode": excerpt.episode, "synopsis": excerpt.text}
             for excerpt in sorted(series.excerpts, key=lambda item: item.episode)
@@ -53,10 +56,11 @@ class PrePublishChecker:
             for item in resolved
             if item.entry.latest_episode == request.episode and item.state != "paid"
         ]
-        return PrePublishReport(
+        report = PrePublishReport(
             series_id=series.id,
             candidate_episode=request.episode,
             complete=extraction.rejected == 0,
             extraction_rejected=extraction.rejected,
             findings=findings,
         )
+        return report, candidate_series
