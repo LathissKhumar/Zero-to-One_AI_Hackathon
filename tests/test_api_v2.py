@@ -274,6 +274,28 @@ def test_repair_route_requires_openai_key_when_text_omitted(client, monkeypatch)
     assert "OPENAI_API_KEY" in response.json()["detail"]
 
 
+def test_training_rows_blend_in_real_corpus_when_available(monkeypatch, tmp_path):
+    (tmp_path / "1.txt").write_text(
+        "CHAPTER I\nAna promises she will return one day.\nCHAPTER II\nThe key is finally found.\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("app.main.GUTENBERG_RAW_PATH", tmp_path)
+    from app.main import _training_rows
+
+    rows = _training_rows()
+    assert any(row.get("platform") == "gutenberg" for row in rows)
+    assert any(row.get("platform") != "gutenberg" for row in rows)
+
+
+def test_training_rows_are_synthetic_only_without_a_real_corpus_directory(monkeypatch, tmp_path):
+    monkeypatch.setattr("app.main.GUTENBERG_RAW_PATH", tmp_path / "does-not-exist")
+    from app.main import _training_rows
+
+    rows = _training_rows()
+    assert rows
+    assert all(row.get("platform") != "gutenberg" for row in rows)
+
+
 def test_diagnostics_reports_model_and_source_provenance(client):
     payload = client.get("/api/diagnostics").json()
     assert payload["series_source"] == "file"

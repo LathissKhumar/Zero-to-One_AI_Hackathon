@@ -45,6 +45,7 @@ from app.rewrite import EditAttribution, RewriteReport, attribute_delta
 from app.store import ApprovalAuditStore, SeriesStore, store_from_env
 from app.scrambler import Scrambler
 from app.surfaces import DebtBoardQuery, HandoffQuery, LocalizationChecker, LocalizationEpisode
+from app.real_corpus import load_real_corpus_rows
 from app.training_corpus import generate_synthetic_corpus
 from app.variants import RepairEngine
 from app.verifier import PayoffVerifier
@@ -185,10 +186,27 @@ def _predictor() -> ContinuationPredictor:
     and README -- so the pipeline runs end to end without a real reader-
     retention dataset, which does not exist in this repo.
     """
-    rows = normalize_within_book(generate_synthetic_corpus())
+    rows = _training_rows()
     experiment = os.environ.get("MLFLOW_EXPERIMENT_ID") or None
     predictor, _report = train_predictor(rows, experiment=experiment)
     return predictor
+
+
+# scripts/fetch_gutenberg_corpus.py downloads real public-domain novels here;
+# untracked (~12MB, fully reproducible), so a fresh checkout trains
+# synthetic-only until someone runs that script -- degrades, never fails.
+GUTENBERG_RAW_PATH = Path("data/gutenberg_raw")
+
+
+def _training_rows() -> list[dict]:
+    """Synthetic rows plus real-prose rows (app/real_corpus.py) when present.
+
+    Both carry structural features honestly -- synthetic's are fabricated by
+    a stated formula, real_corpus's come from actually running the extractor
+    -- and both still use a synthetic continue_rate label, so blending them
+    does not change what PREDICTION_DISCLOSURE has to say.
+    """
+    return normalize_within_book(generate_synthetic_corpus() + load_real_corpus_rows(GUTENBERG_RAW_PATH))
 
 
 def create_app() -> FastAPI:

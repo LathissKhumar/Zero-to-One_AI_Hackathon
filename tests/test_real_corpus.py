@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.real_corpus import build_real_corpus_rows
+from app.real_corpus import build_real_corpus_rows, load_real_corpus_rows, split_into_chapters
 
 
 def test_build_real_corpus_rows_runs_real_extraction_on_real_prose():
@@ -36,3 +36,20 @@ def test_build_real_corpus_rows_handles_multiple_books_independently():
     rows = build_real_corpus_rows(chapters_by_book)
     book_ids = {row["book_id"] for row in rows}
     assert book_ids == {"gutenberg-one", "gutenberg-two"}
+
+
+def test_load_real_corpus_rows_returns_empty_list_when_directory_missing(tmp_path):
+    assert load_real_corpus_rows(tmp_path / "does-not-exist") == []
+
+
+def test_load_real_corpus_rows_reads_and_splits_real_text_files(tmp_path):
+    (tmp_path / "1.txt").write_text(
+        "CHAPTER I\nFirst chapter body.\nCHAPTER II\nSecond chapter body.\n", encoding="utf-8"
+    )
+    (tmp_path / "2.txt").write_text("Just one block, no chapter markers.", encoding="utf-8")
+
+    rows = load_real_corpus_rows(tmp_path)
+    book_ids = {row["book_id"] for row in rows}
+    assert book_ids == {"gutenberg-1", "gutenberg-2"}
+    assert len([row for row in rows if row["book_id"] == "gutenberg-1"]) == 2
+    assert len([row for row in rows if row["book_id"] == "gutenberg-2"]) == 1

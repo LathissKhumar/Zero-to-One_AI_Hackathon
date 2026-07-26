@@ -21,9 +21,15 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 import time
 import urllib.request
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+
+from app.real_corpus import split_into_chapters  # noqa: E402
 
 MIRROR_BASE = "https://mirror.cs.odu.edu/gutenberg"
 REQUEST_PACE_SECONDS = 2.0
@@ -56,9 +62,6 @@ BOOK_IDS: tuple[int, ...] = (
 
 _START_MARKER = re.compile(r"\*\*\*\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.IGNORECASE)
 _END_MARKER = re.compile(r"\*\*\*\s*END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.IGNORECASE)
-_CHAPTER_HEADING = re.compile(
-    r"^\s*(?:CHAPTER|Chapter)\s+[IVXLCDM\d]+\.?\s*$", re.MULTILINE
-)
 
 
 def gutenberg_path(book_id: int) -> str:
@@ -77,15 +80,6 @@ def strip_gutenberg_boilerplate(text: str) -> str:
     end = _END_MARKER.search(text)
     body = text[start.end() : end.start()] if start and end else text
     return body.strip()
-
-
-def split_into_chapters(text: str) -> list[str]:
-    """Split on 'CHAPTER <roman-or-digit>' headings. Falls back to the whole
-    text as one chapter when no heading matches -- still real prose, just
-    with one boundary instead of many."""
-    pieces = _CHAPTER_HEADING.split(text)
-    chapters = [piece.strip() for piece in pieces if piece.strip()]
-    return chapters if chapters else [text]
 
 
 def fetch_book_text(book_id: int, *, mirror_base: str = MIRROR_BASE) -> str:

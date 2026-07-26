@@ -20,7 +20,9 @@ like training_corpus.py's rows.
 from __future__ import annotations
 
 import random
+import re
 from math import sqrt
+from pathlib import Path
 
 from app.features import FeatureExtractor
 from app.heuristic_extractor import HeuristicExtractor
@@ -36,6 +38,33 @@ from app.training_corpus import (
 )
 
 PLATFORM = "gutenberg"
+
+_CHAPTER_HEADING = re.compile(r"^\s*(?:CHAPTER|Chapter)\s+[IVXLCDM\d]+\.?\s*$", re.MULTILINE)
+
+
+def split_into_chapters(text: str) -> list[str]:
+    """Split on 'CHAPTER <roman-or-digit>' headings. Falls back to the whole
+    text as one chapter when no heading matches -- still real prose, just
+    with one boundary instead of many."""
+    pieces = _CHAPTER_HEADING.split(text)
+    chapters = [piece.strip() for piece in pieces if piece.strip()]
+    return chapters if chapters else [text]
+
+
+def load_real_corpus_rows(raw_dir: Path) -> list[dict]:
+    """Read every *.txt in raw_dir (one file per book) and build real corpus
+    rows from them. Empty list -- not an error -- when the directory is
+    absent or has no books yet, so a fresh checkout without the (untracked,
+    ~12MB, script-downloaded) corpus degrades to synthetic-only training
+    rather than failing to start."""
+    raw_dir = Path(raw_dir)
+    if not raw_dir.is_dir():
+        return []
+    chapters_by_book = {
+        path.stem: split_into_chapters(path.read_text(encoding="utf-8"))
+        for path in sorted(raw_dir.glob("*.txt"))
+    }
+    return build_real_corpus_rows(chapters_by_book)
 
 
 def _continue_rate(features: dict, *, seed: int) -> float:
