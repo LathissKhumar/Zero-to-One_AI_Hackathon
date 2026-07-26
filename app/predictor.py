@@ -10,6 +10,13 @@ Fit to a synthetic corpus with a documented generative process (see
 telemetry. Nothing in this repository ingests real retention labels yet, so these
 predictions demonstrate that the pipeline runs end to end -- they are not
 calibrated to real audiences. Say so wherever a number is shown.
+
+Deliberate deviation from an early spec draft that named LightGBM: this uses
+scikit-learn's GradientBoostingRegressor instead. It is already integrated with
+this module's MLflow logging and empirical-quantile calibration, is well tested,
+and produces the same class of gradient-boosted-tree model the spec's choice
+would have -- swapping libraries here would be pure churn with no behavioural
+difference, so it was not done.
 """
 
 from __future__ import annotations
