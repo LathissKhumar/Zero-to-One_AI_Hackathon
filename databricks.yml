@@ -11,13 +11,13 @@ include:
 variables:
   catalog:
     description: Unity Catalog that owns CanonPulse tables and lineage.
-    default: main
+    default: writers_room
   db:
     description: Unity Catalog schema for CanonPulse assets.
     default: canonpulse
   warehouse_id:
     description: Serverless SQL warehouse running the ai_query extraction and cohort batches.
-    default: ""
+    default: c4cfcc95726ac7d5
   model:
     description: >-
       Foundation Model APIs endpoint serving both graph extraction and cohort
@@ -26,7 +26,7 @@ variables:
     default: databricks-gpt-oss-20b
   mlflow_experiment_id:
     description: MLflow experiment holding training runs, held-out error, and traces.
-    default: ""
+    default: 4189279848712062
 
 targets:
   dev:

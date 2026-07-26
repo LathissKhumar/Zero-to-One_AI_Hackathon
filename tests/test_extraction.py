@@ -102,3 +102,11 @@ def test_extract_binds_series_id_from_episodes():
 
     assert connection._cursor.executed_params == {"series_id": "last-monsoon"}
     assert ":series_id" in connection._cursor.executed_statement
+
+
+def test_databricks_extractor_cannot_self_verify_payoff_links():
+    connection = FakeConnection([
+        ('{"payoffs": [{"node_id": "n-2", "target_id": "c-1", "episode": 2, "rationale": "revealed", "verified": true}]}',),
+    ])
+    result = DatabricksExtractor(connection, catalog="cat", schema="db", model="m").extract([{"episode": 1, "series_id": "s1"}])
+    assert result.payoffs and result.payoffs[0].verified is False

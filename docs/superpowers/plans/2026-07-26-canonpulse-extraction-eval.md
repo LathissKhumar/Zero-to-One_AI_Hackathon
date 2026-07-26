@@ -67,6 +67,15 @@ A rule-based extractor that reads episode text and emits a graph. It exists beca
 
 - [ ] **Step 1: Write the failing tests**
 
+> **Corrected after review.** The fixture originally written here paraphrased
+> `twist-02` and `twist-05` from `data/manifest/last_monsoon.yaml` — same
+> characters, same swim→dive beat, same cassette reveal. Requiring the extractor
+> to pass it reintroduced, through the brief, exactly the answer-key circularity
+> this plan exists to remove. **The fixture must share no characters, objects or
+> beats with any manifest.** Invent an unrelated scenario that still exercises a
+> promise being opened, a negated capability later contradicted, and a resolution
+> that pays something off. Do not consult a manifest while writing it.
+
 ```python
 # tests/test_heuristic_extractor.py
 from __future__ import annotations
@@ -76,12 +85,9 @@ from app.heuristic_extractor import HeuristicExtractor
 
 
 def episodes() -> list[dict]:
-    return [
-        {"series_id": "s", "episode": 1, "synopsis": "Asha finds a cassette. She promises to play it when the rain returns."},
-        {"series_id": "s", "episode": 3, "synopsis": "Tara admits she never learned to swim."},
-        {"series_id": "s", "episode": 20, "synopsis": "Tara dives into the black channel water."},
-        {"series_id": "s", "episode": 30, "synopsis": "The cassette finally plays. It was never her father's voice."},
-    ]
+    """Scenario authored independently of every manifest. See the note above:
+    a fixture drawn from the answer key silently tunes the extractor to it."""
+    ...  # unrelated genre, names and props; see tests/test_heuristic_extractor.py
 
 
 def test_extraction_conforms_to_the_extractor_protocol():
@@ -247,7 +253,51 @@ git commit -m "feat: score discrimination end to end through extraction, not jus
 
 ---
 
-### Task 3: Adversarial series
+### Task 3: LLM extractor (replaces the adversarial series)
+
+> **Scope change, decided after Task 2 reported its numbers.** Task 3 was
+> originally a hand-authored 40-episode adversarial series. Task 2 showed the
+> heuristic extractor recovers **0 of 6** holes and locates only 3 of 11
+> contradiction-class items, so a second series would cost significant authoring
+> time to confirm a zero already established. The superseded task text is kept
+> below for the record.
+>
+> What the eval is missing is not another series — it is the extractor the
+> product actually claims to use. `HeuristicExtractor` is a deliberate floor.
+> An LLM extractor turns the headline from a bare `0.0` into
+> "heuristic floor 0.0, model extractor X", which is the number that makes the
+> product's claim and the strongest argument for running on Databricks.
+
+**Files:**
+- Create: `app/llm_extractor.py`, `tests/test_llm_extractor.py`, `scripts/measure_llm_extraction.py`
+- Create: `data/extraction_cache/last_monsoon_llm.json` (committed response cache)
+- Modify: `pyproject.toml` if an HTTP client is needed in the main dependency group
+
+**Interfaces:**
+- Produces: `LLMExtractor(endpoint, token, model, cache_path=None).extract(episodes) -> ExtractionResult`, conforming to the existing `Extractor` protocol
+
+**Design constraints that make or break this task:**
+
+1. **One client, two backends.** Databricks Foundation Model APIs and OpenAI both speak OpenAI-compatible chat completions, so a single implementation differing only by base URL and token serves both. The Databricks path is the product path; the OpenAI path exists only so the number can be measured before a workspace is authenticated. Make which one ran visible in the result and in any reported number — a figure produced off-platform must never be presented as the governed path.
+
+2. **No network in tests, ever.** Tests inject a fake transport or read the committed cache. A test that needs credentials is a test that will fail in front of a judge.
+
+3. **Cache responses to disk, committed.** 220 episodes is 220 calls. Re-measuring must be free and reproducible, and the cache is what lets a reviewer verify the reported number without spending anything. Key entries by a hash of (model, prompt), so changing either invalidates cleanly.
+
+4. **The extractor must not see the answer key.** Same rule that governs `HeuristicExtractor`: prompts are written against the episode text and the schema, never against `data/manifest/last_monsoon.yaml`. A prompt tuned until it recovers the manifest reproduces the circularity this whole plan exists to remove.
+
+5. **Malformed model output increments `rejected` rather than raising**, matching `app/extraction.py`'s existing contract. Emitted `PayoffLink`s carry `verified=False`.
+
+- [ ] **Step 1:** Write failing tests using a fake transport: protocol conformance, deterministic replay from cache, malformed-response rejection, `verified=False` on emitted links, and that no network call occurs when the cache is warm.
+- [ ] **Step 2:** Run red.
+- [ ] **Step 3:** Implement `LLMExtractor`. Prompt asks for the same JSON shape `sql/extract_graph.sql` requests, so the local and Databricks paths stay one schema.
+- [ ] **Step 4:** Run green.
+- [ ] **Step 5:** Write `scripts/measure_llm_extraction.py` — runs the extractor over the demo series, writes the cache, prints the two-number comparison against `HeuristicExtractor`. Report the cost.
+- [ ] **Step 6:** Commit code and cache separately from any measured-number claim.
+
+---
+
+### Task 3 (SUPERSEDED): Adversarial series
 
 A second series the Last Monsoon generator did not produce, so the resolver faces defect shapes it was not built around.
 
@@ -390,3 +440,10 @@ git commit -m "feat: report ledger correctness and end-to-end discrimination sep
 **Type consistency.** `ExtractionResult`, `Series`, `Manifest`, `DiscriminationReport` are used with the field names defined in the committed modules. `evaluate_series` and `EndToEndReport` are used consistently across Tasks 2, 3 and 4.
 
 **Known risk.** Task 2's `test_the_extracted_score_is_strictly_weaker_than_the_authored_one` will fail if the heuristic extractor happens to recover the graph perfectly. That would mean the extractor was tuned to the answer key, which Task 1 Step 3 forbids — so the failure is informative, and the fix is to weaken the tuning, never to weaken the assertion.
+
+**Review correction, carried into Task 4.** The original Task 1 fixture was drawn
+from the manifest (see the note in Task 1 Step 1). Even after correcting it, any
+extractor rule that happens to align with `twist-02` or `twist-05` should be
+treated as an easy case by construction. When Task 4 reports the end-to-end
+number, say which manifest items the extractor recovers — a clean recovery of
+those two specifically is weaker evidence than recovery of the other nine.

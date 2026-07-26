@@ -160,6 +160,54 @@ header h1 {
   color: #9fc9a4;
 }
 
+/* ---- Two honest numbers, never shown unlabelled ---- */
+
+.panel.discrimination {
+  width: min(1100px, calc(100% - 48px));
+  margin: 22px auto 0;
+}
+
+.panel.discrimination .caption {
+  max-width: 720px;
+}
+
+.metric-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.metric {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.metric-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.metric-values {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-explainer {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 /* ---- Predicted continuation ---- */
 
 .panel.prediction {
@@ -208,6 +256,25 @@ header h1 {
 
 .repair-button:hover {
   filter: brightness(1.08);
+}
+
+.surface-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.surface-grid article {
+  border: 1px solid var(--line, #d8d4ce);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.surface-grid input {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
 }
 
 #rewrite-body {
@@ -503,4 +570,22 @@ footer p {
   #evidence {
     width: 100%;
   }
+}
+
+/* Provenance label for the top comparison panel. Same visual register as the
+   discrimination cards' labels: it has to read as a caveat on the number, not
+   as decoration under the header. */
+.provenance {
+  max-width: 70ch;
+  margin: 0 auto 0.9rem;
+  padding: 0.55rem 0.8rem;
+  border-left: 3px solid var(--muted, #8a8f98);
+  color: var(--muted, #8a8f98);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.provenance a {
+  color: inherit;
+  text-decoration: underline;
 }

@@ -24,6 +24,11 @@ class ExtractionResult(BaseModel):
     payoffs: list[PayoffLink] = Field(default_factory=list)
     excerpts: list[Excerpt] = Field(default_factory=list)
     rejected: int = 0
+    # None for extractors with no notion of a backend (FakeExtractor,
+    # HeuristicExtractor, DatabricksExtractor's own SQL path). LLMExtractor
+    # sets this to "databricks" or "openai" so a number produced off-platform
+    # can never be silently presented as the governed on-platform result.
+    backend: str | None = None
 
 
 class Extractor(Protocol):
@@ -117,7 +122,12 @@ class DatabricksExtractor:
             try:
                 nodes = [NarrativeNode.model_validate(item) for item in parsed.get("nodes", [])]
                 entries = [LedgerEntry.model_validate(item) for item in parsed.get("entries", [])]
-                payoffs = [PayoffLink.model_validate(item) for item in parsed.get("payoffs", [])]
+                # The model cannot self-authorize a payoff. Verification is a
+                # separate graph step and must remain false at this seam.
+                payoffs = [
+                    PayoffLink.model_validate({**item, "verified": False})
+                    for item in parsed.get("payoffs", [])
+                ]
                 excerpts = [Excerpt.model_validate(item) for item in parsed.get("excerpts", [])]
             except ValidationError:
                 result.rejected += 1

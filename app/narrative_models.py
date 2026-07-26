@@ -85,6 +85,7 @@ class LedgerEntry(BaseModel):
     urgency: int = Field(default=3, ge=1, le=5)
     promise_kind: PromiseKind | None = None
     entities: list[str] = Field(default_factory=list)
+    confidence: float = Field(default=1.0, ge=0.0, le=1.0)
 
     @property
     def origin_episode(self) -> int:
@@ -127,6 +128,9 @@ class Series(BaseModel):
     entries: list[LedgerEntry] = Field(default_factory=list)
     payoffs: list[PayoffLink] = Field(default_factory=list)
     excerpts: list[Excerpt] = Field(default_factory=list)
+    source_version: str = "demo"
+    episode_writers: dict[str, str] = Field(default_factory=dict)
+    episode_languages: dict[str, str] = Field(default_factory=dict)
 
 
 class BoundaryFeatures(BaseModel):

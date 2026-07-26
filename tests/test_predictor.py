@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from app.features import FeatureExtractor
-from app.predictor import ContinuationPredictor, FEATURE_ORDER
+from app.predictor import ContinuationPredictor, FEATURE_ORDER, train_predictor
 from tests.test_ledger import build_series
 
 
@@ -137,3 +137,17 @@ def test_confidence_interval_is_named_and_not_mae_over_four():
     assert report.residual_quantile_z >= 0.0
     prediction = predictor.predict(FeatureExtractor().extract(build_series(), episode=5))
     assert prediction.ci_method == report.ci_method
+
+
+def test_governed_training_logs_and_returns_a_usable_predictor(tmp_path):
+    """Configured runtime training records a run without changing prediction use."""
+    import mlflow
+
+    mlflow.set_tracking_uri(f"sqlite:///{tmp_path / 'mlflow.db'}")
+    predictor, report = train_predictor(training_rows(), experiment="canonpulse-test")
+
+    assert predictor.model is not None
+    assert report.model_version
+    runs = mlflow.search_runs(experiment_names=["canonpulse-test"])
+    assert len(runs) == 1
+    assert runs.iloc[0]["metrics.held_out_mae"] >= 0

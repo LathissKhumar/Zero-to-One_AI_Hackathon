@@ -13,6 +13,14 @@
     <p id="series-line">Loading series…</p>
   </header>
 
+  <!-- Provenance label is required, not decorative. This panel is the largest
+       thing on screen and it scores the hand-authored graph, so without it a
+       reader takes the traversal result for what the product extracted. The
+       whole two-number section below exists because those differ. -->
+  <p class="provenance">Scored on the hand-authored graph &mdash; graph traversal only,
+     not extraction. For what the system recovers from raw episode text, see
+     <a href="#discrimination">discrimination</a> below.</p>
+
   <section class="split">
     <article class="panel baseline">
       <h2>Baseline checker</h2>
@@ -28,6 +36,26 @@
       </ul>
       <p class="caption">Same story. The payoff test tells them apart.</p>
     </article>
+  </section>
+
+  <section class="panel discrimination" id="discrimination">
+    <h2>Two numbers, not one</h2>
+    <p class="caption">
+      A single figure invites you to read the higher one as the headline.
+      These measure different things and are never shown without these labels.
+    </p>
+    <div class="metric-pair">
+      <div class="metric" id="metric-ledger">
+        <p class="metric-label">Ledger &mdash; graph traversal only</p>
+        <p class="metric-values" id="ledger-values">&mdash;</p>
+        <p class="metric-explainer" id="ledger-explainer"></p>
+      </div>
+      <div class="metric" id="metric-extracted">
+        <p class="metric-label">End to end &mdash; from raw episode text</p>
+        <p class="metric-values" id="extracted-values">&mdash;</p>
+        <p class="metric-explainer" id="extracted-explainer"></p>
+      </div>
+    </div>
   </section>
 
   <section class="panel prediction" id="prediction">
@@ -49,6 +77,19 @@
   </section>
 
   <section id="findings"></section>
+
+  <section class="panel surfaces" id="writer-surfaces">
+    <h2>Writer room surfaces</h2>
+    <p class="caption">One versioned ledger, five workflows. Every result remains a simulation or a cited continuity check.</p>
+    <div class="surface-grid">
+      <article><h3>Series Memory</h3><label for="memory-query">Ask the ledger</label><input id="memory-query" value="what did we plant" /><button id="memory-search">Search</button><p id="memory-surface">Search the series ledger and source citations.</p></article>
+      <article><h3>Writer Handoff Sheet</h3><p id="handoff-surface">Loading inherited obligations…</p></article>
+      <article><h3>Showrunner Debt Board</h3><p id="debt-surface">Loading portfolio risk…</p></article>
+      <article><h3>Localization Continuity</h3><p id="localization-surface">Compare a translated episode against source facts.</p></article>
+      <article><h3>Audience simulation</h3><p id="cohort-surface">Loading five structural cohorts…</p></article>
+      <article><h3>Discovery / Explain Why</h3><p id="discovery-surface">Loading obligation-shape discovery…</p></article>
+    </div>
+  </section>
 
   <aside id="evidence" hidden>
     <button id="evidence-close" aria-label="Close evidence">×</button>

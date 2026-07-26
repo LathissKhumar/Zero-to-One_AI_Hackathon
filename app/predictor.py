@@ -22,7 +22,7 @@ from pydantic import BaseModel
 from sklearn.ensemble import GradientBoostingRegressor
 
 from app.corpus import assign_grouped_split
-from app.narrative_models import BoundaryFeatures
+from app.narrative_models import BoundaryFeatures, Series
 
 # Column order is the training contract. Changing it silently scrambles inputs,
 # so BoundaryFeatures.to_vector() is tested against this list.
@@ -41,6 +41,7 @@ FEATURE_ORDER: tuple[str, ...] = (
 )
 
 MODEL_VERSION = "continuation-gbr-v1"
+FEATURE_SCHEMA_VERSION = "structural-v1"
 
 # The interval is the empirical p90 of |predicted - actual| on the held-out
 # books, converted from z-score space into the displayed rate via the same
@@ -66,6 +67,7 @@ class TrainingReport(BaseModel):
     train_books: list[str]
     test_books: list[str]
     model_version: str = MODEL_VERSION
+    feature_schema_version: str = FEATURE_SCHEMA_VERSION
 
 
 class Prediction(BaseModel):
@@ -74,6 +76,15 @@ class Prediction(BaseModel):
     upper_ci: float
     clamped: bool
     ci_method: str = CI_METHOD
+    model_version: str = MODEL_VERSION
+    feature_schema_version: str = FEATURE_SCHEMA_VERSION
+
+
+class VariantScore(BaseModel):
+    episode: int
+    original: Prediction
+    variant: Prediction
+    delta: float
     model_version: str = MODEL_VERSION
 
 
@@ -160,6 +171,25 @@ class ContinuationPredictor:
             clamped=clamped,
         )
 
+    def score_variant(self, original: Series, variant: Series, episode: int) -> VariantScore:
+        """Score both graphs with this already-fitted model instance.
+
+        Keeping the method on the predictor makes it impossible for a caller
+        to accidentally train a second model for the counterfactual. The only
+        changing input is the structural graph projected at the same boundary.
+        """
+        from app.features import FeatureExtractor
+
+        original_prediction = self.predict(FeatureExtractor().extract(original, episode))
+        variant_prediction = self.predict(FeatureExtractor().extract(variant, episode))
+        return VariantScore(
+            episode=episode,
+            original=original_prediction,
+            variant=variant_prediction,
+            delta=variant_prediction.value - original_prediction.value,
+            model_version=original_prediction.model_version,
+        )
+
     def log_model_to_mlflow(self, name: str = "model") -> None:
         """Log the fitted estimator to the active MLflow run.
 
@@ -173,6 +203,43 @@ class ContinuationPredictor:
     @staticmethod
     def _matrix(rows: list[dict]) -> list[list[float]]:
         return [[float(row[name]) for name in FEATURE_ORDER] for row in rows]
+
+
+def train_predictor(
+    rows: list[dict], experiment: str | None = None
+) -> tuple[ContinuationPredictor, TrainingReport]:
+    """Train the runtime predictor, optionally recording a governed MLflow run.
+
+    Local demo mode passes no experiment and remains offline. Workspace mode
+    supplies an experiment name or ID, which makes model provenance an actual
+    runtime property instead of a helper that exists only in tests.
+    """
+    predictor = ContinuationPredictor()
+    if not experiment:
+        return predictor, predictor.train(rows)
+
+    if experiment.isdigit():
+        run_context = mlflow.start_run(experiment_id=experiment, run_name=MODEL_VERSION)
+    else:
+        mlflow.set_experiment(experiment)
+        run_context = mlflow.start_run(run_name=MODEL_VERSION)
+    with run_context as run:
+        report = predictor.train(rows)
+        mlflow.log_metric("held_out_mae", report.held_out_mae)
+        mlflow.log_metric("residual_quantile_z_p90", report.residual_quantile_z)
+        mlflow.log_param("train_rows", report.train_rows)
+        mlflow.log_param("test_rows", report.test_rows)
+        mlflow.log_param("split_strategy", "grouped_by_book_id")
+        mlflow.log_param("ci_method", report.ci_method)
+        mlflow.log_param("features", ",".join(FEATURE_ORDER))
+        mlflow.log_param("model_version", report.model_version)
+        mlflow.log_param("feature_schema_version", report.feature_schema_version)
+        predictor.log_model_to_mlflow(name="model")
+        # Keep this available to callers that need to connect a served
+        # prediction back to its training artifact without making the model
+        # itself depend on MLflow internals.
+        predictor.mlflow_run_id = run.info.run_id  # type: ignore[attr-defined]
+    return predictor, report
 
 
 def _to_probability(z: float, center: float, scale: float) -> tuple[float, bool]:
@@ -194,16 +261,5 @@ def _to_probability(z: float, center: float, scale: float) -> tuple[float, bool]
 
 def train_and_log(rows: list[dict], experiment: str) -> TrainingReport:
     """Train and record the run. This is the credibility artifact for judging."""
-    mlflow.set_experiment(experiment)
-    with mlflow.start_run(run_name=MODEL_VERSION):
-        predictor = ContinuationPredictor()
-        report = predictor.train(rows)
-        mlflow.log_metric("held_out_mae", report.held_out_mae)
-        mlflow.log_metric("residual_quantile_z_p90", report.residual_quantile_z)
-        mlflow.log_param("train_rows", report.train_rows)
-        mlflow.log_param("test_rows", report.test_rows)
-        mlflow.log_param("split_strategy", "grouped_by_book_id")
-        mlflow.log_param("ci_method", report.ci_method)
-        mlflow.log_param("features", ",".join(FEATURE_ORDER))
-        predictor.log_model_to_mlflow(name="model")
+    _predictor, report = train_predictor(rows, experiment)
     return report

@@ -44,6 +44,45 @@ class CohortReaction(BaseModel):
     vote: str
     reaction: str
     citation_ids: list[str] = []
+    feature_rationale: list[str] = []
+    backend: str = "local-structural"
+    variant: str = "original"
+    variant_blinded: bool = True
+
+
+def structural_reaction(cohort: Cohort, episode: int, features: dict[str, float]) -> CohortReaction:
+    """Score a boundary from structural signals only.
+
+    This is the deterministic local counterpart of the governed Databricks
+    cohort query. It intentionally does not inspect episode prose. The five
+    weight vectors therefore produce different reactions for reasons a writer
+    can inspect rather than because five prompts used different adjectives.
+    """
+    signals = {
+        "urgency": min(1.0, max(0.0, features.get("mean_urgency", 0.0) / 5.0)),
+        "open_obligations": 1.0 / (1.0 + max(0.0, features.get("open_obligation_count", 0.0))),
+        "fairness": 1.0 / (1.0 + max(0.0, features.get("broken_count", 0.0) + features.get("overdue_count", 0.0))),
+        "emotional_payoff": min(1.0, max(0.0, 0.5 + features.get("sentiment_velocity", 0.0))),
+        "consistency": 1.0 / (1.0 + max(0.0, features.get("broken_count", 0.0))),
+        "clarity": 1.0 / (1.0 + max(0.0, features.get("perceived_time_jump", 0.0) * 10.0)),
+    }
+    total_weight = sum(cohort.weights.values()) or 1.0
+    engagement = sum(cohort.weights.get(name, 0.0) * signals[name] for name in cohort.weights) / total_weight
+    if engagement >= 0.67:
+        vote = "continue"
+    elif engagement >= 0.42:
+        vote = "hesitate"
+    else:
+        vote = "stop"
+    rationale = [f"{name}={signals[name]:.2f} × weight {weight:.2f}" for name, weight in sorted(cohort.weights.items())]
+    return CohortReaction(
+        cohort_id=cohort.id,
+        episode=episode,
+        engagement=round(engagement, 6),
+        vote=vote,
+        reaction=f"{cohort.name} responds to the structural boundary with {vote}.",
+        feature_rationale=rationale,
+    )
 
 
 def blind_variants(rows: list[dict], seed: int = 42) -> tuple[list[dict], dict[int, int]]:
