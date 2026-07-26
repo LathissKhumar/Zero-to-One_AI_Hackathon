@@ -179,6 +179,18 @@ CREATE TABLE IF NOT EXISTS canonpulse_extraction_row (
 USING DELTA
 PARTITIONED BY (run_id);
 
+-- Durable handoff between a long-running governed ai_query and the ledger
+-- writer. The response is materialized before application-side validation so
+-- a client timeout cannot lose a completed model result.
+CREATE TABLE IF NOT EXISTS canonpulse_graph_response (
+    series_id   STRING NOT NULL,
+    episode     INT NOT NULL,
+    extraction  STRING NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT current_timestamp()
+)
+USING DELTA
+PARTITIONED BY (series_id);
+
 CREATE TABLE IF NOT EXISTS canonpulse_retrieval_source (
     source_id       STRING NOT NULL,
     series_id       STRING NOT NULL,

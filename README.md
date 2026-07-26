@@ -66,6 +66,22 @@ citations. A file named `episode-07.pdf` becomes episode 7; a document with
 `Episode 1`/`Episode 2` headings is split by those headings. Ambiguous files
 are marked for review instead of being assigned an invented episode number.
 
+Promote a parsed series into the CanonPulse ledger and run governed graph
+extraction with:
+
+```bash
+uv run python scripts/promote_document_series.py \
+  --warehouse <warehouse-id> \
+  --series-id <series-id> \
+  --title "<series title>" \
+  --genre "serialized fiction" \
+  --model <serving-endpoint>
+```
+
+The runner materializes the long-running model response in
+`canonpulse_graph_response` before validating and inserting nodes, excerpts,
+ledger entries, and unverified payoff links.
+
 ## Training data — read this before trusting a predicted number
 
 **There is no real reader-retention corpus in this repository.** Fetching the real corpora (arXiv 2412.15239, Qidian, Royal Road) needs network access and licensing judgement that is out of scope for this demo. Instead, `app/training_corpus.py` generates a **deterministic, offline, synthetic corpus** shaped like that telemetry would be: each row carries the full structural feature vector plus a `continue_rate` derived from a fully stated formula —
