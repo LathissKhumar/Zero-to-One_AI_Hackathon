@@ -185,6 +185,7 @@ PARTITIONED BY (run_id);
 CREATE TABLE IF NOT EXISTS canonpulse_graph_response (
     series_id   STRING NOT NULL,
     episode     INT NOT NULL,
+    chunk_index INT NOT NULL,
     extraction  STRING NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT current_timestamp()
 )

@@ -39,24 +39,27 @@ SELECT
               "true_time": {"type": ["number", "null"]},
               "summary": {"type": "string"},
               "entities": {"type": "array", "items": {"type": "string"}},
-              "valence": {"type": "number"}, "excerpt_id": {"type": ["string", "null"]}}}},
+              "valence": {"type": "number"}, "excerpt_id": {"type": ["string", "null"]}
+            }, "required": ["id", "episode", "perceived_index", "true_time", "summary", "entities", "valence", "excerpt_id"]}},
             "entries": {"type": "array", "items": {"type": "object", "properties": {
               "id": {"type": "string"}, "kind": {"type": "string"},
               "description": {"type": "string"},
               "episodes": {"type": "array", "items": {"type": "integer"}},
               "excerpt_ids": {"type": "array", "items": {"type": "string"}},
               "urgency": {"type": "integer"},
-              "entities": {"type": "array", "items": {"type": "string"}}}}},
+              "entities": {"type": "array", "items": {"type": "string"}}
+            }, "required": ["id", "kind", "description", "episodes", "excerpt_ids", "urgency", "entities"]}},
             "payoffs": {"type": "array", "items": {"type": "object", "properties": {
               "node_id": {"type": "string"}, "target_id": {"type": "string"},
-              "episode": {"type": "integer"}, "rationale": {"type": "string"}}}},
+              "episode": {"type": "integer"}, "rationale": {"type": "string"}
+            }, "required": ["node_id", "target_id", "episode", "rationale"]}},
             "excerpts": {"type": "array", "items": {"type": "object", "properties": {
               "id": {"type": "string"}, "episode": {"type": "integer"},
-              "text": {"type": "string"}}}}
+              "text": {"type": "string"}
+            }, "required": ["id", "episode", "text"]}}
           },
           "required": ["nodes", "entries", "payoffs", "excerpts"]
-        },
-        "strict": true
+        }
       }
     }'
   ) AS extraction

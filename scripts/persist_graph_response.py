@@ -12,12 +12,12 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from app.narrative_models import Excerpt, LedgerEntry, NarrativeNode, PayoffLink  # noqa: E402
-from scripts.promote_document_series import Warehouse, extraction_object, response_rows, sql_array, sql_str  # noqa: E402
+from scripts.promote_document_series import Warehouse, extraction_object, namespace_extraction, response_rows, sql_array, sql_str  # noqa: E402
 
 
 def persist(*, warehouse: Warehouse, catalog: str, schema: str, series_id: str, response_table: str, model: str) -> dict:
     fq = f"{catalog}.{schema}"
-    rows = response_rows(warehouse.execute(f"SELECT episode, extraction FROM {response_table}"))
+    rows = response_rows(warehouse.execute(f"SELECT episode, chunk_index, extraction FROM {response_table}"))
     if not rows:
         raise RuntimeError(f"no graph response rows in {response_table}")
 
@@ -43,6 +43,7 @@ def persist(*, warehouse: Warehouse, catalog: str, schema: str, series_id: str, 
         if parsed is None:
             rejected += 1
             continue
+        parsed = namespace_extraction(parsed, int(row.get("chunk_index") or 0))
         try:
             nodes.extend(NarrativeNode.model_validate(item) for item in parsed.get("nodes", []))
             entries.extend(LedgerEntry.model_validate(item) for item in parsed.get("entries", []))

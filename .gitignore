@@ -4,6 +4,9 @@ __pycache__/
 *.py[cod]
 .env
 mlruns/
+data/extraction_cache/*_databricks.json
+data/extraction_cache/*_openai.json
+data/gutenberg_raw/
 .agents/
 .ai-dev-kit/
 .codex/

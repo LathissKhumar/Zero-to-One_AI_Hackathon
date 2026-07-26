@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import time
@@ -54,6 +55,74 @@ def extraction_object(raw: object) -> dict | None:
     return None
 
 
+def namespace_extraction(parsed: dict, chunk_index: int) -> dict:
+    """Make IDs from independently extracted chunks collision-safe."""
+    if chunk_index == 0:
+        return parsed
+    prefix = f"chunk-{chunk_index}-"
+    result = dict(parsed)
+    node_ids = {str(item.get("id")): f"{prefix}{item.get('id')}" for item in parsed.get("nodes", [])}
+    entry_ids = {str(item.get("id")): f"{prefix}{item.get('id')}" for item in parsed.get("entries", [])}
+    excerpt_ids = {str(item.get("id")): f"{prefix}{item.get('id')}" for item in parsed.get("excerpts", [])}
+    result["nodes"] = [
+        {
+            **item,
+            "id": node_ids.get(str(item.get("id")), item.get("id")),
+            "excerpt_id": excerpt_ids.get(str(item.get("excerpt_id")), item.get("excerpt_id")),
+        }
+        for item in parsed.get("nodes", [])
+    ]
+    result["entries"] = [
+        {
+            **item,
+            "id": entry_ids.get(str(item.get("id")), item.get("id")),
+            "excerpt_ids": [excerpt_ids.get(str(value), value) for value in item.get("excerpt_ids", [])],
+        }
+        for item in parsed.get("entries", [])
+    ]
+    result["payoffs"] = [
+        {
+            **item,
+            "node_id": node_ids.get(str(item.get("node_id")), item.get("node_id")),
+            "target_id": node_ids.get(str(item.get("target_id")), item.get("target_id")),
+        }
+        for item in parsed.get("payoffs", [])
+    ]
+    result["excerpts"] = [
+        {**item, "id": excerpt_ids.get(str(item.get("id")), item.get("id"))}
+        for item in parsed.get("excerpts", [])
+    ]
+    return result
+
+
+def chunked_extraction_sql(template: str, *, catalog: str, schema: str, model: str, chunk_size: int = 1200) -> str:
+    """Build a bounded ai_query statement for long episode bodies."""
+    statement = template.replace("${catalog}", catalog).replace("${db}", schema).replace("${model}", model)
+    statement = statement.replace(
+        "coalesce(body, synopsis)",
+        f"substring(coalesce(body, synopsis), chunk_index * {chunk_size} + 1, {chunk_size})",
+    )
+    statement = re.sub(r"SELECT\s+episode,", "SELECT episode, chunk_index,", statement, count=1)
+    source = f"{catalog}.{schema}.episodes"
+    statement = re.sub(
+        rf"FROM {re.escape(source)}\s+WHERE series_id = :series_id\s+ORDER BY episode;?",
+        "FROM chunks\nWHERE series_id = :series_id\nORDER BY episode, chunk_index;",
+        statement,
+    )
+    cte = (
+        "WITH chunks AS (\n"
+        "  SELECT series_id, episode, body, synopsis, chunk_index\n"
+        f"  FROM {source}\n"
+        "  LATERAL VIEW posexplode(\n"
+        f"    sequence(0, CAST(CEIL(length(coalesce(body, synopsis)) / {float(chunk_size)}) AS INT) - 1)\n"
+        "  ) chunked AS chunk_index, chunk_offset\n"
+        ")\n"
+    )
+    # The caller embeds this SELECT inside a CTAS subquery. Keep it
+    # semicolon-free so the surrounding statement remains valid SQL.
+    return cte + statement.rstrip().rstrip(";")
+
+
 class Warehouse:
     def __init__(self, warehouse_id: str) -> None:
         self.warehouse_id = warehouse_id
@@ -97,6 +166,7 @@ def promote(
     title: str,
     genre: str,
     model: str,
+    chunk_size: int = 1200,
 ) -> dict:
     fq = f"{catalog}.{schema}"
     parsed_rows = response_rows(
@@ -131,7 +201,10 @@ def promote(
     source_hash = str(parsed_rows[0]["source_hash"])
     version_id = f"document-{source_hash[:16]}"
     run_id = f"extract-{uuid.uuid4().hex[:16]}"
-    for table in ("narrative_nodes", "excerpts", "ledger_entries", "payoff_links", "episodes", "series", "canonpulse_submission"):
+    for table in (
+        "narrative_nodes", "excerpts", "ledger_entries", "payoff_links", "episodes", "series",
+        "canonpulse_submission", "canonpulse_extraction_row", "canonpulse_extraction_run",
+    ):
         warehouse.execute(f"DELETE FROM {fq}.{table} WHERE series_id = {sql_str(series_id)}")
 
     warehouse.execute(
@@ -158,21 +231,21 @@ def promote(
             f"VALUES {', '.join(values)}"
         )
 
-    extraction_sql = (ROOT / "sql" / "extract_graph.sql").read_text(encoding="utf-8")
-    extraction_sql = extraction_sql.replace("${catalog}", catalog).replace("${db}", schema).replace("${model}", model).rstrip().rstrip(";")
+    extraction_template = (ROOT / "sql" / "extract_graph.sql").read_text(encoding="utf-8")
+    extraction_sql = chunked_extraction_sql(extraction_template, catalog=catalog, schema=schema, model=model, chunk_size=chunk_size)
     # Materialize the model response first. A long ai_query result can outlive
     # the client-side response window; Delta is the durable handoff between
     # governed inference and the application-side schema validator.
     response_table = f"{fq}.canonpulse_graph_response"
     warehouse.execute(
         f"CREATE OR REPLACE TABLE {response_table} AS "
-        f"SELECT {sql_str(series_id)} AS series_id, extracted.episode, CAST(extracted.extraction AS STRING) AS extraction "
+        f"SELECT {sql_str(series_id)} AS series_id, extracted.episode, extracted.chunk_index, CAST(extracted.extraction AS STRING) AS extraction "
         f"FROM ({extraction_sql}) extracted",
         [{"name": "series_id", "value": series_id}],
     )
     extraction_rows = response_rows(
         warehouse.execute(
-            f"SELECT episode, extraction FROM {response_table} WHERE series_id = :series_id",
+            f"SELECT episode, chunk_index, extraction FROM {response_table} WHERE series_id = :series_id",
             [{"name": "series_id", "value": series_id}],
         )
     )
@@ -187,6 +260,7 @@ def promote(
         if parsed is None:
             rejected += 1
             continue
+        parsed = namespace_extraction(parsed, int(row.get("chunk_index") or 0))
         try:
             nodes.extend(NarrativeNode.model_validate(item) for item in parsed.get("nodes", []))
             entries.extend(LedgerEntry.model_validate(item) for item in parsed.get("entries", []))
@@ -195,25 +269,46 @@ def promote(
         except Exception:  # noqa: BLE001 - one malformed model row is rejected, not fatal to the batch
             rejected += 1
 
-    for node in nodes:
-        warehouse.execute(
-            f"INSERT INTO {fq}.narrative_nodes (series_id, node_id, episode, perceived_index, true_time, summary, entities, valence, excerpt_id) "
-            f"VALUES ({sql_str(series_id)}, {sql_str(node.id)}, {node.episode}, {node.perceived_index}, {sql_str(node.true_time)}, {sql_str(node.summary)}, {sql_array(node.entities)}, {node.valence}, {sql_str(node.excerpt_id)})"
+    if nodes:
+        values = ", ".join(
+            "(" + ", ".join([
+                sql_str(series_id), sql_str(node.id), str(node.episode), str(node.perceived_index),
+                sql_str(node.true_time), sql_str(node.summary), sql_array(node.entities),
+                str(node.valence), sql_str(node.excerpt_id),
+            ]) + ")"
+            for node in nodes
         )
-    for excerpt in excerpts:
         warehouse.execute(
-            f"INSERT INTO {fq}.excerpts (series_id, excerpt_id, episode, text) "
-            f"VALUES ({sql_str(series_id)}, {sql_str(excerpt.id)}, {excerpt.episode}, {sql_str(excerpt.text)})"
+            f"INSERT INTO {fq}.narrative_nodes (series_id, node_id, episode, perceived_index, true_time, summary, entities, valence, excerpt_id) VALUES {values}"
         )
-    for entry in entries:
-        warehouse.execute(
-            f"INSERT INTO {fq}.ledger_entries (series_id, entry_id, kind, description, episodes, excerpt_ids, urgency, promise_kind, entities) "
-            f"VALUES ({sql_str(series_id)}, {sql_str(entry.id)}, {sql_str(entry.kind)}, {sql_str(entry.description)}, {sql_array(entry.episodes)}, {sql_array(entry.excerpt_ids)}, {entry.urgency}, {sql_str(entry.promise_kind)}, {sql_array(entry.entities)})"
+    if excerpts:
+        values = ", ".join(
+            "(" + ", ".join([sql_str(series_id), sql_str(excerpt.id), str(excerpt.episode), sql_str(excerpt.text)]) + ")"
+            for excerpt in excerpts
         )
-    for payoff in payoffs:
+        warehouse.execute(f"INSERT INTO {fq}.excerpts (series_id, excerpt_id, episode, text) VALUES {values}")
+    if entries:
+        values = ", ".join(
+            "(" + ", ".join([
+                sql_str(series_id), sql_str(entry.id), sql_str(entry.kind), sql_str(entry.description),
+                sql_array(entry.episodes), sql_array(entry.excerpt_ids), str(entry.urgency),
+                sql_str(entry.promise_kind), sql_array(entry.entities),
+            ]) + ")"
+            for entry in entries
+        )
         warehouse.execute(
-            f"INSERT INTO {fq}.payoff_links (series_id, node_id, target_id, episode, rationale, verified) "
-            f"VALUES ({sql_str(series_id)}, {sql_str(payoff.node_id)}, {sql_str(payoff.target_id)}, {payoff.episode}, {sql_str(payoff.rationale)}, false)"
+            f"INSERT INTO {fq}.ledger_entries (series_id, entry_id, kind, description, episodes, excerpt_ids, urgency, promise_kind, entities) VALUES {values}"
+        )
+    if payoffs:
+        values = ", ".join(
+            "(" + ", ".join([
+                sql_str(series_id), sql_str(payoff.node_id), sql_str(payoff.target_id), str(payoff.episode),
+                sql_str(payoff.rationale), "false",
+            ]) + ")"
+            for payoff in payoffs
+        )
+        warehouse.execute(
+            f"INSERT INTO {fq}.payoff_links (series_id, node_id, target_id, episode, rationale, verified) VALUES {values}"
         )
 
     now = datetime.now(timezone.utc).isoformat()
@@ -253,10 +348,11 @@ def main() -> int:
     parser.add_argument("--title", required=True)
     parser.add_argument("--genre", default="serialized fiction")
     parser.add_argument("--model", default="databricks-gpt-oss-20b")
+    parser.add_argument("--chunk-size", type=int, default=1200, help="Maximum characters per governed graph-extraction call")
     args = parser.parse_args()
     report = promote(
         Warehouse(args.warehouse), catalog=args.catalog, schema=args.schema, series_id=args.series_id,
-        title=args.title, genre=args.genre, model=args.model,
+        title=args.title, genre=args.genre, model=args.model, chunk_size=args.chunk_size,
     )
     print(json.dumps(report, indent=2))
     return 0
