@@ -267,6 +267,13 @@ def test_writers_room_llm_path_requires_openai_key(client, monkeypatch):
     assert response.status_code == 422
 
 
+def test_repair_route_requires_openai_key_when_text_omitted(client, monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    response = client.post("/api/repair", json={"target_entry_id": "no-such-entry", "node_id": "no-such-node"})
+    assert response.status_code == 422
+    assert "OPENAI_API_KEY" in response.json()["detail"]
+
+
 def test_diagnostics_reports_model_and_source_provenance(client):
     payload = client.get("/api/diagnostics").json()
     assert payload["series_source"] == "file"

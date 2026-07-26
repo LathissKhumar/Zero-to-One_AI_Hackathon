@@ -36,7 +36,7 @@ from app.manifest import load_manifest
 from app.memory import MemoryQuery
 from app.narrative_models import ResolvedEntry, Series
 from app.observability import EVENT_SINK, OperationalEvent, RunContext
-from app.llm_agents import LLMPersonaHandler
+from app.llm_agents import LLMPersonaHandler, propose_repair_text
 from app.llm_config import openai_config
 from app.personas import AgentRunner, PERSONAS, WritersRoom, run_writers_room
 from app.prepublish import PrePublishChecker, PrePublishRequest, PrePublishReport
@@ -83,7 +83,7 @@ class RewriteRequest(BaseModel):
 class RepairRequest(BaseModel):
     target_entry_id: str
     node_id: str
-    replacement_summary: str
+    replacement_summary: str | None = None
 
 
 class ScrambleRequest(BaseModel):
@@ -476,11 +476,29 @@ def create_app() -> FastAPI:
     @app.post("/api/repair")
     def repair(payload: RepairRequest) -> dict:
         current = _series()
+        replacement_summary = payload.replacement_summary
+        repair_backend = "caller-supplied"
+        if replacement_summary is None:
+            config = openai_config()
+            if config is None:
+                raise HTTPException(
+                    status_code=422,
+                    detail="replacement_summary was not supplied and OPENAI_API_KEY is not configured to generate one",
+                )
+            try:
+                replacement_summary, repair_backend = propose_repair_text(
+                    current, payload.target_entry_id, payload.node_id,
+                    endpoint=config.endpoint, token=config.token, model=config.model,
+                    cache_path="data/extraction_cache/repair_openai.json",
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=422, detail=str(exc)) from exc
         try:
-            variant = RepairEngine().repair(current, payload.target_entry_id, payload.node_id, payload.replacement_summary)
+            variant = RepairEngine().repair(current, payload.target_entry_id, payload.node_id, replacement_summary)
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         result = variant.model_dump()
+        result["repair_backend"] = repair_backend
         result["score"] = _predictor().score_variant(current, variant.series, current.total_episodes).model_dump()
         return result
 

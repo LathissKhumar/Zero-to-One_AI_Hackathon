@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 
-from app.llm_agents import LLMPersonaHandler
+import pytest
+
+from app.llm_agents import LLMPersonaHandler, propose_repair_text
 from app.personas import PERSONAS
 from tests.test_variants import _series
 
@@ -47,3 +49,30 @@ def test_llm_persona_handler_falls_back_when_model_returns_malformed_json():
 
     assert result["confidence"] == 0.0
     assert result["reason_codes"] == ("malformed_model_output",)
+
+
+def test_propose_repair_text_targets_a_broken_entry_node():
+    series = _series()
+    node = next(n for n in series.nodes if n.id == "n2")
+
+    def fake_transport(*, endpoint, token, model, prompt):
+        assert node.summary in prompt
+        return "  A corrected version of the scene.  "
+
+    text, backend = propose_repair_text(
+        series, "hole", "n2",
+        endpoint="https://api.openai.com/v1/chat/completions", token="sk-test", model="gpt-4o-mini",
+        transport=fake_transport,
+    )
+    assert text == "A corrected version of the scene."
+    assert backend == "openai"
+
+
+def test_propose_repair_text_rejects_unknown_entry():
+    series = _series()
+    with pytest.raises(ValueError, match="unknown ledger entry"):
+        propose_repair_text(
+            series, "no-such-entry", "n1",
+            endpoint="https://api.openai.com/v1/chat/completions", token="sk-test", model="gpt-4o-mini",
+            transport=lambda **kwargs: "x",
+        )
